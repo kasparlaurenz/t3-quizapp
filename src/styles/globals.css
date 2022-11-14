@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-900 text-white;
+  }
+}
+
+@layer components {
+  .reg-button {
+    @apply w-full rounded-md bg-neutral-600 p-2 text-white transition hover:bg-slate-600;
+  }
+}
