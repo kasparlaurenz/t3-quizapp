@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import { FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import NewQuestionInput from "../components/NewQuestionInput";
 import { trpc } from "../utils/trpc";
 

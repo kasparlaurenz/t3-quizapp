@@ -47,7 +47,10 @@ const AllQuestions: NextPage = () => {
           Return home
         </Link>
         {questions.map((question) => (
-          <div className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4">
+          <div
+            key={question.id}
+            className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
+          >
             <h2>{question.question}</h2>
             <button
               onClick={(e) => {
