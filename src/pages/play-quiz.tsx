@@ -1,12 +1,17 @@
+import { Answer, Question } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
-import AnswerButton from "../components/AnswerButton";
+import AnswerButton, { AnswerObjectType } from "../components/AnswerButton";
 import { trpc } from "../utils/trpc";
 
+type ActiveQuestion = Question & {
+  answers: Answer[];
+};
 const PlayQuiz: NextPage = () => {
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
   const {
     data: questions,
     isLoading,
@@ -20,6 +25,15 @@ const PlayQuiz: NextPage = () => {
   if (isError) {
     return <div>Error</div>;
   }
+
+  const handleAnswerClicked = (answer: AnswerObjectType) => {
+    if (answer.is_correct) {
+      setScore((prev) => prev + 1);
+      setCurQuestionIdx((prev) => prev + 1);
+    } else {
+      setCurQuestionIdx((prev) => prev + 1);
+    }
+  };
 
   return (
     <>
@@ -38,6 +52,12 @@ const PlayQuiz: NextPage = () => {
           Return home
         </Link>
 
+        {questions.length === curQuestionIdx + 1 ?? (
+          <div>
+            <p>test</p>
+          </div>
+        )}
+
         {questions.length > 0 && curQuestionIdx < questions.length ? (
           <div>
             <div className="flex flex-col items-center justify-center">
@@ -47,14 +67,37 @@ const PlayQuiz: NextPage = () => {
               </span>
               <p className="text-2xl">{questions[curQuestionIdx]?.question}?</p>
               <div className="mt-10 flex w-full items-center justify-between gap-4">
-                {questions[curQuestionIdx]?.answers.map((answer) => (
-                  <AnswerButton key={answer.id} answer={answer} />
-                ))}
+                {questions[curQuestionIdx]?.answers
+                  .sort(() => Math.random() - 0.5)
+                  .map((answer) => (
+                    <AnswerButton
+                      handleAnswerClicked={handleAnswerClicked}
+                      key={answer.id}
+                      answer={answer}
+                    />
+                  ))}
               </div>
             </div>
           </div>
+        ) : questions.length === curQuestionIdx ? (
+          <div className="mt-8">
+            <p className="text-lg">
+              You got{" "}
+              <span className="px-2 text-5xl font-bold text-blue-300">
+                {score}
+              </span>{" "}
+              of{" "}
+              <span className="px-2 text-5xl font-bold text-blue-300">
+                {" "}
+                {questions.length}
+              </span>{" "}
+              Questions correct{" "}
+            </p>
+          </div>
         ) : (
-          <p className="mt-6 text-lg text-red-400">No more questions to load</p>
+          <div>
+            <p>no more</p>
+          </div>
         )}
       </main>
     </>
