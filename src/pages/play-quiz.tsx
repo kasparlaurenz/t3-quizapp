@@ -17,11 +17,19 @@ const PlayQuiz: NextPage = () => {
   } = trpc.question.getQuestionsWithAnswers.useQuery();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
+        <div>Loading</div>
+      </main>
+    );
   }
 
   if (isError) {
-    return <div>Error</div>;
+    return (
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
+        <div>Error</div>
+      </main>
+    );
   }
 
   const handleAnswerClicked = (answer: AnswerObjectType) => {

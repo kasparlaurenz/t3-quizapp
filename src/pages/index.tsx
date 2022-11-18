@@ -13,17 +13,14 @@ const Home: NextPage = () => {
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-sky-300">QuizApp</h1>
 
-        <Link
-          className="reg-button mt-10 w-fit bg-blue-500 text-2xl hover:scale-110"
-          href="play-quiz"
-        >
+        <Link className="menu-button bg-blue-500" href="play-quiz">
           Play Game
         </Link>
-        <Link className="reg-button mt-10 w-fit" href="create-question">
+        <Link className="menu-button" href="create-question">
           Create Question
         </Link>
 
-        <Link className="reg-button mt-10 w-fit" href="all-questions">
+        <Link className="menu-button" href="all-questions">
           Show all questions
         </Link>
       </main>

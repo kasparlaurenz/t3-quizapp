@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import NewQuestionInput from "../components/NewQuestionInput";
 import { supabase } from "../utils/supabase";
 import { trpc } from "../utils/trpc";
@@ -20,6 +20,7 @@ const CreateQuestion: NextPage = () => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [image, setImage] = useState<File | undefined>();
   const [previewUrl, setPreviewUrl] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const createNewQuestion = trpc.question.createQuestion.useMutation();
 
@@ -57,6 +58,16 @@ const CreateQuestion: NextPage = () => {
     }
   };
 
+  const resetForm = () => {
+    setShowConfirm(true);
+    setNewQuestion(initialQuestionState);
+    if (fileInputRef.current !== null) {
+      fileInputRef.current.value = "";
+    }
+    setPreviewUrl("");
+    setImage(undefined);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const imageData = await uploadImage();
@@ -70,8 +81,7 @@ const CreateQuestion: NextPage = () => {
       incorrect_two: newQuestion.wrong_answer2.answer,
       correct: newQuestion.correct_answer.answer,
     });
-    setShowConfirm(true);
-    setNewQuestion(initialQuestionState);
+    resetForm();
   };
 
   return (
@@ -119,7 +129,13 @@ const CreateQuestion: NextPage = () => {
             <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
           )}
           <label htmlFor="image">Upload Image</label>
-          <input type="file" accept="image/*" onChange={onFileChange} />
+          <input
+            ref={fileInputRef}
+            name="image"
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+          />
         </div>
         <button type="submit" className="reg-button mt-8 w-fit">
           Create Question
