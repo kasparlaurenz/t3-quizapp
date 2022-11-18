@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import React, { FC, useState } from "react";
 import NewQuestionInput from "../components/NewQuestionInput";
@@ -114,7 +115,9 @@ const CreateQuestion: NextPage = () => {
           Correct Answer
         </NewQuestionInput>
         <div className="flex flex-col">
-          {image && <img className="my-2 w-[80px]" src={previewUrl} />}
+          {image && (
+            <Image alt="preview" className="my-2 w-[80px]" src={previewUrl} />
+          )}
           <label htmlFor="image">Upload Image</label>
           <input type="file" accept="image/*" onChange={onFileChange} />
         </div>
