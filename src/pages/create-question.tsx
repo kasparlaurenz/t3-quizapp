@@ -4,19 +4,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import NewQuestionInput from "../components/NewQuestionInput";
 import { trpc } from "../utils/trpc";
-
-type QuestionType = {
-  question: string;
-};
-
-export type AnswerType = {
-  answer: string;
-};
-export type QuestionWithAnswers = QuestionType & {
-  wrong_answer1: AnswerType;
-  wrong_answer2: AnswerType;
-  correct_answer: AnswerType;
-};
+import type { QuestionWithAnswers } from "../utils/types";
 
 const initialQuestionState = {
   question: "",

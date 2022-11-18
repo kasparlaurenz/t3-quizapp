@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { AnswerObjectType } from "../utils/types";
 
 interface AnswerProps {
   answer: {
@@ -8,12 +9,6 @@ interface AnswerProps {
   };
   handleAnswerClicked: (answer: AnswerObjectType) => void;
 }
-
-export type AnswerObjectType = {
-  id: string;
-  answer: string;
-  is_correct: boolean;
-};
 
 const Answer: FC<AnswerProps> = ({ answer, handleAnswerClicked }) => {
   return (

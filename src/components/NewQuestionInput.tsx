@@ -1,5 +1,5 @@
 import type { ChangeEvent, FC } from "react";
-import type { QuestionWithAnswers } from "../pages/create-question";
+import type { QuestionWithAnswers } from "../utils/types";
 import type { SetStateAction } from "react";
 
 interface NewQuestionInputProps {

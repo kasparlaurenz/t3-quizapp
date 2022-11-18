@@ -2,7 +2,8 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
-import AnswerButton, { AnswerObjectType } from "../components/AnswerButton";
+import AnswerButton from "../components/AnswerButton";
+import type { AnswerObjectType } from "../utils/types";
 import { trpc } from "../utils/trpc";
 
 const PlayQuiz: NextPage = () => {
