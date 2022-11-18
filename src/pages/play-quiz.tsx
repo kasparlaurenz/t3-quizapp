@@ -63,6 +63,9 @@ const PlayQuiz: NextPage = () => {
                 {curQuestionIdx + 1} / {questions.length}
               </span>
               <p className="text-2xl">{questions[curQuestionIdx]?.question}?</p>
+
+              <img src={questions[curQuestionIdx]?.imageUrl!} />
+
               <div className="mt-10 flex w-full items-center justify-between gap-4">
                 {questions[curQuestionIdx]?.answers
                   .sort(() => Math.random() - 0.5)

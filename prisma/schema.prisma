@@ -15,6 +15,7 @@ model Question {
   createdAt DateTime @default(now())
   question  String
   answers   Answer[]
+  imageUrl  String?
 }
 
 model Answer {
