@@ -63,32 +63,36 @@ const CreateQuestion: NextPage = () => {
       >
         <NewQuestionInput
           setNewQuestion={setNewQuestion}
-          type="question"
+          htmlFor="question"
           value={newQuestion.question}
         >
           Your Question
         </NewQuestionInput>
         <NewQuestionInput
           setNewQuestion={setNewQuestion}
-          type="wrong_answer1"
+          htmlFor="wrong_answer1"
           value={newQuestion.wrong_answer1.answer}
         >
           Wrong Answer 1
         </NewQuestionInput>
         <NewQuestionInput
           setNewQuestion={setNewQuestion}
-          type="wrong_answer2"
+          htmlFor="wrong_answer2"
           value={newQuestion.wrong_answer2.answer}
         >
           Wrong Answer 2
         </NewQuestionInput>
         <NewQuestionInput
           setNewQuestion={setNewQuestion}
-          type="correct_answer"
+          htmlFor="correct_answer"
           value={newQuestion.correct_answer.answer}
         >
           Correct Answer
         </NewQuestionInput>
+        <div className="flex flex-col">
+          <label htmlFor="image">Upload Image</label>
+          <input type="file" />
+        </div>
         <button type="submit" className="reg-button mt-8 w-fit">
           Create Question
         </button>
