@@ -116,7 +116,7 @@ const CreateQuestion: NextPage = () => {
         </NewQuestionInput>
         <div className="flex flex-col">
           {image && (
-            <Image alt="preview" className="my-2 w-[80px]" src={previewUrl} />
+            <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
           )}
           <label htmlFor="image">Upload Image</label>
           <input type="file" accept="image/*" onChange={onFileChange} />
