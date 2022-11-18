@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import NewQuestionInput from "../components/NewQuestionInput";
 import { supabase } from "../utils/supabase";
 import { trpc } from "../utils/trpc";
 import type { NextPage } from "next";
+import type { FC } from "react";
 import type { QuestionWithAnswers } from "../utils/types";
 
 const initialQuestionState = {
