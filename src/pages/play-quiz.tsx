@@ -1,4 +1,3 @@
-import { Answer, Question } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -6,9 +5,6 @@ import { useState } from "react";
 import AnswerButton, { AnswerObjectType } from "../components/AnswerButton";
 import { trpc } from "../utils/trpc";
 
-type ActiveQuestion = Question & {
-  answers: Answer[];
-};
 const PlayQuiz: NextPage = () => {
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
