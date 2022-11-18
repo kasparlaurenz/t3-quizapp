@@ -1,6 +1,8 @@
+import type { Question } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { supabase } from "../utils/supabase";
 import { trpc } from "../utils/trpc";
 
 const AllQuestions: NextPage = () => {
@@ -33,6 +35,18 @@ const AllQuestions: NextPage = () => {
     return <div>Error</div>;
   }
 
+  const handleClick = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    question: Question
+  ) => {
+    e.preventDefault();
+    deleteQuestion.mutate({
+      id: question.id,
+    });
+    const { data, error } = await supabase.storage
+      .from("question-images")
+      .remove([`${question.imageName}`]);
+  };
   return (
     <>
       <Head>
@@ -43,7 +57,7 @@ const AllQuestions: NextPage = () => {
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-sky-300">All questions</h1>
 
-        <Link className="reg-button mb-8 w-fit" href="/">
+        <Link className="reg-button my-6 w-fit" href="/">
           Return home
         </Link>
         {questions.map((question) => (
@@ -53,12 +67,7 @@ const AllQuestions: NextPage = () => {
           >
             <h2>{question.question}</h2>
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                deleteQuestion.mutate({
-                  id: question.id,
-                });
-              }}
+              onClick={(e) => handleClick(e, question)}
               className="reg-button flex w-8 items-center justify-center bg-red-400"
             >
               X

@@ -1,22 +1,22 @@
 import type { ChangeEvent, FC } from "react";
-import type { QuestionWithAnswers } from "../pages/create-question";
+import type { QuestionWithAnswers } from "../utils/types";
 import type { SetStateAction } from "react";
 
 interface NewQuestionInputProps {
   value: string;
   setNewQuestion: React.Dispatch<SetStateAction<QuestionWithAnswers>>;
-  type: string;
+  htmlFor: string;
   children: React.ReactNode;
 }
 
 const NewQuestionInput: FC<NewQuestionInputProps> = ({
   setNewQuestion,
   value,
-  type,
+  htmlFor,
   children,
 }) => {
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    switch (type) {
+    switch (htmlFor) {
       case "question":
         setNewQuestion((newQuestion) => ({
           ...newQuestion,
@@ -57,13 +57,13 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
   };
   return (
     <div className="flex flex-col">
-      <label htmlFor={type}>{children}</label>
+      <label htmlFor={htmlFor}>{children}</label>
       <textarea
         value={value}
         onChange={handleInputChange}
         className="bg-slate-700 p-2"
-        id={type}
-        required
+        id={htmlFor}
+        // required
       />
     </div>
   );

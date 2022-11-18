@@ -20,6 +20,8 @@ export const questionsRouter = router({
         incorrect_one: z.string(),
         incorrect_two: z.string(),
         correct: z.string(),
+        imageUrl: z.string(),
+        imageName: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -27,6 +29,8 @@ export const questionsRouter = router({
         await ctx.prisma.question.create({
           data: {
             question: input.question,
+            imageUrl: input.imageUrl,
+            imageName: input.imageName,
             answers: {
               create: [
                 { answer: input.incorrect_one, is_correct: false },

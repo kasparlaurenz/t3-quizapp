@@ -1,14 +1,12 @@
-import { Answer, Question } from "@prisma/client";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
-import AnswerButton, { AnswerObjectType } from "../components/AnswerButton";
+import AnswerButton from "../components/AnswerButton";
+import type { AnswerObjectType } from "../utils/types";
 import { trpc } from "../utils/trpc";
+import Image from "next/image";
 
-type ActiveQuestion = Question & {
-  answers: Answer[];
-};
 const PlayQuiz: NextPage = () => {
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
@@ -66,6 +64,14 @@ const PlayQuiz: NextPage = () => {
                 {curQuestionIdx + 1} / {questions.length}
               </span>
               <p className="text-2xl">{questions[curQuestionIdx]?.question}?</p>
+              {questions[curQuestionIdx] &&
+                questions[curQuestionIdx]?.imageUrl && (
+                  <img
+                    className="w-[300px]"
+                    alt={questions[curQuestionIdx]?.question || ""}
+                    src={questions[curQuestionIdx]?.imageUrl || ``}
+                  />
+                )}
               <div className="mt-10 flex w-full items-center justify-between gap-4">
                 {questions[curQuestionIdx]?.answers
                   .sort(() => Math.random() - 0.5)
