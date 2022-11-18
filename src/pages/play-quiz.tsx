@@ -5,6 +5,7 @@ import { useState } from "react";
 import AnswerButton from "../components/AnswerButton";
 import type { AnswerObjectType } from "../utils/types";
 import { trpc } from "../utils/trpc";
+import Image from "next/image";
 
 const PlayQuiz: NextPage = () => {
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
@@ -64,7 +65,8 @@ const PlayQuiz: NextPage = () => {
               </span>
               <p className="text-2xl">{questions[curQuestionIdx]?.question}?</p>
               {questions[curQuestionIdx]?.imageUrl ? (
-                <img
+                <Image
+                  alt={questions[curQuestionIdx]?.question!}
                   className="mt-6 w-[500px]"
                   src={questions[curQuestionIdx]?.imageUrl!}
                 />

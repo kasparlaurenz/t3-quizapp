@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useState } from "react";
 import NewQuestionInput from "../components/NewQuestionInput";
 import { supabase } from "../utils/supabase";
 import { trpc } from "../utils/trpc";
