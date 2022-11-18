@@ -16,6 +16,7 @@ model Question {
   question  String
   answers   Answer[]
   imageUrl  String?
+  imageName String?
 }
 
 model Answer {

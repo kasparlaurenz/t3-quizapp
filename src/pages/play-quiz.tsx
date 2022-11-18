@@ -63,8 +63,14 @@ const PlayQuiz: NextPage = () => {
                 {curQuestionIdx + 1} / {questions.length}
               </span>
               <p className="text-2xl">{questions[curQuestionIdx]?.question}?</p>
-
-              <img src={questions[curQuestionIdx]?.imageUrl!} />
+              {questions[curQuestionIdx]?.imageUrl ? (
+                <img
+                  className="mt-6 w-[500px]"
+                  src={questions[curQuestionIdx]?.imageUrl!}
+                />
+              ) : (
+                ""
+              )}
 
               <div className="mt-10 flex w-full items-center justify-between gap-4">
                 {questions[curQuestionIdx]?.answers

@@ -19,7 +19,6 @@ const CreateQuestion: NextPage = () => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [image, setImage] = useState<File | undefined>();
   const [previewUrl, setPreviewUrl] = useState<string>("");
-  const [imagePublicUrl, setImagePublicUrl] = useState<string>("");
 
   const createNewQuestion = trpc.question.createQuestion.useMutation();
 
@@ -33,7 +32,7 @@ const CreateQuestion: NextPage = () => {
     setPreviewUrl(URL.createObjectURL(file as Blob));
   };
 
-  const uploadImage = useCallback(async () => {
+  const uploadImage = async () => {
     if (image) {
       const imageName = `${Date.now()}_${image.name}`;
       const { data, error } = await supabase.storage
@@ -48,18 +47,24 @@ const CreateQuestion: NextPage = () => {
         const res = supabase.storage
           .from("question-images")
           .getPublicUrl(imageName);
-        const url = res.data.publicUrl;
-        setImagePublicUrl(url);
+        const publicUrl = res.data.publicUrl;
+        return {
+          publicUrl: publicUrl,
+          imageName: imageName,
+        };
       }
     }
-  }, [image]);
+  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    uploadImage();
+    const imageData = await uploadImage();
+    const publicUrl = imageData?.publicUrl;
+    const imageName = imageData?.imageName;
     createNewQuestion.mutate({
       question: newQuestion.question,
-      imageUrl: imagePublicUrl,
+      imageUrl: publicUrl ?? "",
+      imageName: imageName ?? "",
       incorrect_one: newQuestion.wrong_answer1.answer,
       incorrect_two: newQuestion.wrong_answer2.answer,
       correct: newQuestion.correct_answer.answer,
