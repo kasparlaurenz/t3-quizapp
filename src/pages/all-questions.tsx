@@ -1,9 +1,9 @@
-import type { Question } from "@prisma/client";
-import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { supabase } from "../utils/supabase";
 import { trpc } from "../utils/trpc";
+import type { Question } from "@prisma/client";
+import type { NextPage } from "next";
 
 const AllQuestions: NextPage = () => {
   const utils = trpc.useContext();
