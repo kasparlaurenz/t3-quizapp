@@ -63,7 +63,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
         onChange={handleInputChange}
         className="bg-slate-700 p-2"
         id={htmlFor}
-        // required
+        required
       />
     </div>
   );

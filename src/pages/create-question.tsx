@@ -128,7 +128,9 @@ const CreateQuestion: NextPage = () => {
           {image && (
             <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
           )}
-          <label htmlFor="image">Upload Image</label>
+          <label htmlFor="image">
+            Upload Image <span className="italic">(optional)</span>
+          </label>
           <input
             ref={fileInputRef}
             name="image"
