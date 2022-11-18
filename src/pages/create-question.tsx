@@ -126,7 +126,10 @@ const CreateQuestion: NextPage = () => {
         </NewQuestionInput>
         <div className="flex flex-col">
           {image && (
-            <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
+            // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
+            <div className="relative my-2 h-[70px] w-[90px]">
+              <Image layout="fill" src={previewUrl} alt="previe-image" />
+            </div>
           )}
           <label htmlFor="image">
             Upload Image <span className="italic">(optional)</span>

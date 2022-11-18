@@ -70,11 +70,19 @@ const PlayQuiz: NextPage = () => {
               <p className="text-2xl">{questions[curQuestionIdx]?.question}?</p>
               {questions[curQuestionIdx] &&
                 questions[curQuestionIdx]?.imageUrl && (
-                  <img
-                    className="w-[300px]"
-                    alt={questions[curQuestionIdx]?.question || ""}
-                    src={questions[curQuestionIdx]?.imageUrl || ``}
-                  />
+                  // <img
+                  //   className="w-[300px]"
+                  //   alt={questions[curQuestionIdx]?.question || ""}
+                  //   src={questions[curQuestionIdx]?.imageUrl || ``}
+                  // />
+                  <div className="relative h-[500px] w-[500px]">
+                    <Image
+                      layout="fill"
+                      objectFit="contain"
+                      src={questions[curQuestionIdx]?.imageUrl || ``}
+                      alt={questions[curQuestionIdx]?.question || ""}
+                    />
+                  </div>
                 )}
               <div className="mt-10 flex w-full items-center justify-between gap-4">
                 {questions[curQuestionIdx]?.answers
