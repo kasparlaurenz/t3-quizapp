@@ -86,7 +86,7 @@ const CreateQuestion: NextPage = () => {
 
   return (
     <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-      <Link className="reg-button mb-8 w-fit" href="/">
+      <Link className="menu-button" href="/">
         Return home
       </Link>
       {showConfirm && (
@@ -137,7 +137,7 @@ const CreateQuestion: NextPage = () => {
             onChange={onFileChange}
           />
         </div>
-        <button type="submit" className="reg-button mt-8 w-fit">
+        <button type="submit" className="menu-button">
           Create Question
         </button>
       </form>

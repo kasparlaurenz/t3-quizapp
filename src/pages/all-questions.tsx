@@ -68,20 +68,30 @@ const AllQuestions: NextPage = () => {
         <Link className="reg-button my-6 w-fit" href="/">
           Return home
         </Link>
-        {questions.map((question) => (
-          <div
-            key={question.id}
-            className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
-          >
-            <h2>{question.question}</h2>
-            <button
-              onClick={(e) => handleClick(e, question)}
-              className="reg-button flex w-8 items-center justify-center bg-red-400"
+
+        {questions.length > 0 ? (
+          questions.map((question) => (
+            <div
+              key={question.id}
+              className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
             >
-              X
-            </button>
+              <h2>{question.question}</h2>
+              <button
+                onClick={(e) => handleClick(e, question)}
+                className="reg-button flex w-8 items-center justify-center bg-red-400"
+              >
+                X
+              </button>
+            </div>
+          ))
+        ) : (
+          <div className="flex flex-col items-center">
+            <p className="mt-5 text-3xl font-bold text-red-500">No questions</p>
+            <Link className="menu-button" href="create-question">
+              Create Question
+            </Link>
           </div>
-        ))}
+        )}
       </main>
     </>
   );

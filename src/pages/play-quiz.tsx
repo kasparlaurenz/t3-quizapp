@@ -50,11 +50,7 @@ const PlayQuiz: NextPage = () => {
 
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-sky-300">QuizApp</h1>
-
-        <Link className="reg-button mt-10 w-fit" href="create-question">
-          Create Question
-        </Link>
-        <Link className="reg-button mt-8 w-fit" href="/">
+        <Link className="menu-button" href="/">
           Return home
         </Link>
 
@@ -93,7 +89,7 @@ const PlayQuiz: NextPage = () => {
               </div>
             </div>
           </div>
-        ) : questions.length === curQuestionIdx ? (
+        ) : questions.length === curQuestionIdx && questions.length > 0 ? (
           <div className="mt-8">
             <p className="text-lg">
               You got{" "}
@@ -109,8 +105,11 @@ const PlayQuiz: NextPage = () => {
             </p>
           </div>
         ) : (
-          <div>
-            <p>no more</p>
+          <div className="flex flex-col items-center">
+            <p className="mt-5 text-3xl font-bold text-red-500">No questions</p>
+            <Link className="menu-button" href="create-question">
+              Create Question
+            </Link>
           </div>
         )}
       </main>
