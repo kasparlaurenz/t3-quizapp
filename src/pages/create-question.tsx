@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
+
 import NewQuestionInput from "../components/NewQuestionInput";
+import Header from "../components/Header";
 import { supabase } from "../utils/supabase";
 import { trpc } from "../utils/trpc";
+
 import type { NextPage } from "next";
 import type { FC } from "react";
 import type { QuestionWithAnswers } from "../utils/types";
@@ -86,68 +89,71 @@ const CreateQuestion: NextPage = () => {
   };
 
   return (
-    <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-      <Link className="menu-button" href="/">
-        Return home
-      </Link>
-      {showConfirm && (
-        <>
-          <ConfirmModal handleModal={handleModal} />
-          <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
-        </>
-      )}
-      <form className="w-1/2" action="submit" onSubmit={handleSubmit}>
-        <NewQuestionInput
-          setNewQuestion={setNewQuestion}
-          htmlFor="question"
-          value={newQuestion.question}
-        >
-          Your Question
-        </NewQuestionInput>
-        <NewQuestionInput
-          setNewQuestion={setNewQuestion}
-          htmlFor="wrong_answer1"
-          value={newQuestion.wrong_answer1.answer}
-        >
-          Wrong Answer 1
-        </NewQuestionInput>
-        <NewQuestionInput
-          setNewQuestion={setNewQuestion}
-          htmlFor="wrong_answer2"
-          value={newQuestion.wrong_answer2.answer}
-        >
-          Wrong Answer 2
-        </NewQuestionInput>
-        <NewQuestionInput
-          setNewQuestion={setNewQuestion}
-          htmlFor="correct_answer"
-          value={newQuestion.correct_answer.answer}
-        >
-          Correct Answer
-        </NewQuestionInput>
-        <div className="flex flex-col">
-          {image && (
-            // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
-            <div className="relative my-2 h-[70px] w-[90px]">
-              <Image layout="fill" src={previewUrl} alt="previe-image" />
-            </div>
-          )}
-          <label htmlFor="image">
-            Upload Image <span className="italic">(optional)</span>
-          </label>
-          <input
-            ref={fileInputRef}
-            name="image"
-            type="file"
-            accept="image/*"
-            onChange={onFileChange}
-          />
-        </div>
-        <button type="submit" className="menu-button">
-          Create Question
-        </button>
-      </form>
-    </main>
+    <>
+      <Header>Create Question</Header>
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
+        <Link className="menu-button" href="/">
+          Return home
+        </Link>
+        {showConfirm && (
+          <>
+            <ConfirmModal handleModal={handleModal} />
+            <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
+          </>
+        )}
+        <form className="w-1/2" action="submit" onSubmit={handleSubmit}>
+          <NewQuestionInput
+            setNewQuestion={setNewQuestion}
+            htmlFor="question"
+            value={newQuestion.question}
+          >
+            Your Question
+          </NewQuestionInput>
+          <NewQuestionInput
+            setNewQuestion={setNewQuestion}
+            htmlFor="wrong_answer1"
+            value={newQuestion.wrong_answer1.answer}
+          >
+            Wrong Answer 1
+          </NewQuestionInput>
+          <NewQuestionInput
+            setNewQuestion={setNewQuestion}
+            htmlFor="wrong_answer2"
+            value={newQuestion.wrong_answer2.answer}
+          >
+            Wrong Answer 2
+          </NewQuestionInput>
+          <NewQuestionInput
+            setNewQuestion={setNewQuestion}
+            htmlFor="correct_answer"
+            value={newQuestion.correct_answer.answer}
+          >
+            Correct Answer
+          </NewQuestionInput>
+          <div className="flex flex-col">
+            {image && (
+              // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
+              <div className="relative my-2 h-[70px] w-[90px]">
+                <Image layout="fill" src={previewUrl} alt="previe-image" />
+              </div>
+            )}
+            <label htmlFor="image">
+              Upload Image <span className="italic">(optional)</span>
+            </label>
+            <input
+              ref={fileInputRef}
+              name="image"
+              type="file"
+              accept="image/*"
+              onChange={onFileChange}
+            />
+          </div>
+          <button type="submit" className="menu-button">
+            Create Question
+          </button>
+        </form>
+      </main>
+    </>
   );
 };
 
