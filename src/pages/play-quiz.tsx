@@ -1,12 +1,11 @@
-import Head from "next/head";
+import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import AnswerButton from "../components/AnswerButton";
+import Header from "../components/Header";
 import { trpc } from "../utils/trpc";
 import type { AnswerObjectType } from "../utils/types";
-import type { NextPage } from "next";
-import Header from "../components/Header";
 
 const PlayQuiz: NextPage = () => {
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
