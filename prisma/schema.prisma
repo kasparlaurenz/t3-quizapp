@@ -17,6 +17,9 @@ model Question {
   answers   Answer[]
   imageUrl  String?
   imageName String?
+
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapterId String
 }
 
 model Answer {
@@ -25,4 +28,10 @@ model Answer {
   is_correct Boolean
   question   Question @relation(references: [id], fields: [questionId], onDelete: Cascade)
   questionId String
+}
+
+model Chapter {
+  id       String     @id @default(cuid())
+  number   Int
+  question Question[]
 }
