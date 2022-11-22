@@ -1,4 +1,4 @@
-import { Question } from "@prisma/client";
+import { Chapter, Question } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,14 +23,16 @@ const DeleteQuestion: NextPage = () => {
   const deleteQuestion = trpc.question.deleteQuestion.useMutation({
     onMutate: () => {
       utils.question.getQuestions.cancel();
-      const optimisticUpdate = utils.question.getQuestions.getData();
+      const optimisticUpdate = utils.question.getQuestionsByChapter.getData({
+        chapter: parseInt(chapter),
+      });
 
       if (optimisticUpdate) {
-        utils.question.getQuestions.setData(optimisticUpdate);
+        utils.question.getQuestionsByChapter.setData(optimisticUpdate);
       }
     },
     onSettled: () => {
-      utils.question.getQuestions.invalidate();
+      utils.question.getQuestionsByChapter.invalidate();
     },
   });
 
@@ -58,12 +60,11 @@ const DeleteQuestion: NextPage = () => {
     deleteQuestion.mutate({
       id: question.id,
     });
-    const { data, error } = await supabase.storage
+    await supabase.storage
       .from("question-images")
       .remove([`${question.imageName}`]);
   };
 
-  console.log(questions);
   return (
     <>
       <Header>Delete Questions</Header>
@@ -85,6 +86,11 @@ const DeleteQuestion: NextPage = () => {
               className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
             >
               <h2>{question.question}</h2>
+              {question.imageUrl ? (
+                <p className="font-bold italic text-red-300">has image</p>
+              ) : (
+                ""
+              )}
               <button
                 onClick={(e) => handleClick(e, question)}
                 className="reg-button flex w-8 items-center justify-center bg-red-400"
