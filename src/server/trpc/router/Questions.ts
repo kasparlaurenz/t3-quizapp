@@ -3,6 +3,9 @@ import { z } from "zod";
 import { router, publicProcedure } from "../trpc";
 
 export const questionsRouter = router({
+  getQuestions: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.question.findMany();
+  }),
   getQuestionsWithAnswers: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.question.findMany({
       include: {
@@ -10,9 +13,18 @@ export const questionsRouter = router({
       },
     });
   }),
-  getQuestions: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.question.findMany();
-  }),
+  getQuestionsByChapter: publicProcedure
+    .input(z.object({ chapter: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.question.findMany({
+        where: {
+          chapter: {
+            number: input.chapter,
+          },
+        },
+      });
+    }),
+
   createQuestion: publicProcedure
     .input(
       z.object({
@@ -22,6 +34,7 @@ export const questionsRouter = router({
         correct: z.string(),
         imageUrl: z.string(),
         imageName: z.string(),
+        chapter: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -31,6 +44,16 @@ export const questionsRouter = router({
             question: input.question,
             imageUrl: input.imageUrl,
             imageName: input.imageName,
+            chapter: {
+              connectOrCreate: {
+                where: {
+                  number: input.chapter,
+                },
+                create: {
+                  number: input.chapter,
+                },
+              },
+            },
             answers: {
               create: [
                 { answer: input.incorrect_one, is_correct: false },
@@ -60,5 +83,46 @@ export const questionsRouter = router({
         },
       });
       return question;
+    }),
+  getChapters: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.chapter.findMany({
+      orderBy: {
+        number: "asc",
+      },
+    });
+  }),
+  deleteChapter: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const chapter = await ctx.prisma.chapter.delete({
+        where: {
+          id: input.id,
+        },
+        include: {
+          questions: true,
+        },
+      });
+      return chapter;
+    }),
+  createChapter: publicProcedure
+    .input(
+      z.object({
+        chapter: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.chapter.create({
+          data: {
+            number: input.chapter,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }),
 });

@@ -14,11 +14,11 @@ const Home: NextPage = () => {
           Play Game
         </Link>
         <Link className="menu-button" href="create-question">
-          Create Question
+          New Question
         </Link>
 
-        <Link className="menu-button" href="all-questions">
-          Show all questions
+        <Link className="menu-button" href="delete-question">
+          Remove
         </Link>
       </main>
     </>

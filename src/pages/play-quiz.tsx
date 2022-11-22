@@ -47,15 +47,9 @@ const PlayQuiz: NextPage = () => {
 
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-sky-300">QuizApp</h1>
-        <Link className="menu-button" href="/">
-          Return home
+        <Link className="menu-button bg-slate-400 text-gray-900" href="/">
+          Menu
         </Link>
-
-        {questions.length === curQuestionIdx + 1 ?? (
-          <div>
-            <p>test</p>
-          </div>
-        )}
 
         {questions.length > 0 && curQuestionIdx < questions.length ? (
           <div>
