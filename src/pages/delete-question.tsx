@@ -1,7 +1,7 @@
 import { Chapter } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
-import DeleteButton from "../components/DeleteButton";
+import DeleteButton from "../components/Buttons/DeleteButton";
 import Header from "../components/Header";
 import { trpc } from "../utils/trpc";
 

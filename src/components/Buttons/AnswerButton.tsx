@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { AnswerObjectType } from "../utils/types";
+import type { AnswerObjectType } from "../../utils/types";
 
 interface AnswerProps {
   answer: {

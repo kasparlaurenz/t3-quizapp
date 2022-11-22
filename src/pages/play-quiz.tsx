@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import AnswerButton from "../components/AnswerButton";
+import AnswerButton from "../components/Buttons/AnswerButton";
 import Header from "../components/Header";
 import { trpc } from "../utils/trpc";
 import type { AnswerObjectType } from "../utils/types";

@@ -2,7 +2,7 @@ import { Chapter, Question } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import DeleteButton from "../../../components/DeleteButton";
+import DeleteButton from "../../../components/Buttons/DeleteButton";
 import Header from "../../../components/Header";
 import { supabase } from "../../../utils/supabase";
 import { trpc } from "../../../utils/trpc";
