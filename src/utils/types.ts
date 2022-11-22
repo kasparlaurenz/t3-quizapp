@@ -16,4 +16,5 @@ export type QuestionWithAnswers = QuestionType & {
   wrong_answer1: AnswerType;
   wrong_answer2: AnswerType;
   correct_answer: AnswerType;
+  chapter: number | null;
 };

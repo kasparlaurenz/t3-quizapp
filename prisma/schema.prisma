@@ -14,24 +14,26 @@ model Question {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   question  String
-  answers   Answer[]
   imageUrl  String?
   imageName String?
 
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  answers   Answer[]
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
 }
 
 model Answer {
-  id         String   @id @default(cuid())
+  id         String  @id @default(cuid())
   answer     String
   is_correct Boolean
+
   question   Question @relation(references: [id], fields: [questionId], onDelete: Cascade)
   questionId String
 }
 
 model Chapter {
-  id       String     @id @default(cuid())
-  number   Int
-  question Question[]
+  id     String @id @default(cuid())
+  number Int    @unique
+
+  questions Question[]
 }

@@ -17,6 +17,12 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
 }) => {
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     switch (htmlFor) {
+      case "chapter":
+        setNewQuestion((newQuestion) => ({
+          ...newQuestion,
+          chapter: e.target.value,
+        }));
+        break;
       case "question":
         setNewQuestion((newQuestion) => ({
           ...newQuestion,

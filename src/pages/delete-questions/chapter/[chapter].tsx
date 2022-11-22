@@ -1,18 +1,25 @@
-import type { Question } from "@prisma/client";
-import type { NextPage } from "next";
+import { Question } from "@prisma/client";
+import { NextPage } from "next";
 import Link from "next/link";
-import Header from "../components/Header";
-import { supabase } from "../utils/supabase";
-import { trpc } from "../utils/trpc";
+import { useRouter } from "next/router";
+import Header from "../../../components/Header";
+import { supabase } from "../../../utils/supabase";
+import { trpc } from "../../../utils/trpc";
 
-const AllQuestions: NextPage = () => {
-  const utils = trpc.useContext();
+const DeleteQuestion: NextPage = () => {
+  const router = useRouter();
+  const { query, isReady } = useRouter();
+  const chapter = query.chapter as string;
+
   const {
     data: questions,
     isLoading,
     isError,
-  } = trpc.question.getQuestions.useQuery();
-
+  } = trpc.question.getQuestionsByChapter.useQuery(
+    { chapter: parseInt(chapter) },
+    { enabled: isReady }
+  );
+  const utils = trpc.useContext();
   const deleteQuestion = trpc.question.deleteQuestion.useMutation({
     onMutate: () => {
       utils.question.getQuestions.cancel();
@@ -55,17 +62,22 @@ const AllQuestions: NextPage = () => {
       .from("question-images")
       .remove([`${question.imageName}`]);
   };
+
+  console.log(questions);
   return (
     <>
-      <Header>All Questions</Header>
-
+      <Header>Delete Questions</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-3xl font-bold text-sky-300">All questions</h1>
+        <h1 className="text-3xl font-bold text-sky-300">
+          Questions Chapter {chapter}
+        </h1>
 
         <Link className="menu-button bg-slate-400 text-gray-900" href="/">
           Menu
         </Link>
-
+        <button className="menu-button" onClick={() => router.back()}>
+          Go Back
+        </button>
         {questions.length > 0 ? (
           questions.map((question) => (
             <div
@@ -84,7 +96,7 @@ const AllQuestions: NextPage = () => {
         ) : (
           <div className="flex flex-col items-center">
             <p className="mt-5 text-3xl font-bold text-red-500">No questions</p>
-            <Link className="menu-button" href="create-question">
+            <Link className="menu-button" href="/create-question">
               Create Question
             </Link>
           </div>
@@ -94,4 +106,4 @@ const AllQuestions: NextPage = () => {
   );
 };
 
-export default AllQuestions;
+export default DeleteQuestion;
