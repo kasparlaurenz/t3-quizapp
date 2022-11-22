@@ -2,6 +2,7 @@ import { Chapter, Question } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import DeleteButton from "../../../components/DeleteButton";
 import Header from "../../../components/Header";
 import { supabase } from "../../../utils/supabase";
 import { trpc } from "../../../utils/trpc";
@@ -79,6 +80,7 @@ const DeleteQuestion: NextPage = () => {
         <button className="menu-button" onClick={() => router.back()}>
           Go Back
         </button>
+
         {questions.length > 0 ? (
           questions.map((question) => (
             <div
@@ -91,12 +93,11 @@ const DeleteQuestion: NextPage = () => {
               ) : (
                 ""
               )}
-              <button
-                onClick={(e) => handleClick(e, question)}
-                className="reg-button flex w-8 items-center justify-center bg-red-400"
-              >
-                X
-              </button>
+              <DeleteButton
+                handleClick={handleClick}
+                itemToDelete={question}
+                deleteItem={deleteQuestion}
+              />
             </div>
           ))
         ) : (

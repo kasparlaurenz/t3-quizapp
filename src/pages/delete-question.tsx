@@ -1,6 +1,7 @@
 import { Chapter } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
+import DeleteButton from "../components/DeleteButton";
 import Header from "../components/Header";
 import { trpc } from "../utils/trpc";
 
@@ -67,12 +68,11 @@ const DeleteQuestions: NextPage = () => {
               className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
             >
               <h2>Chapter {chapter.number}</h2>
-              <button
-                onClick={(e) => handleClick(e, chapter)}
-                className="reg-button flex w-8 items-center justify-center bg-red-400"
-              >
-                X
-              </button>
+              <DeleteButton
+                handleClick={handleClick}
+                itemToDelete={chapter}
+                deleteItem={deleteChapter}
+              />
             </Link>
           ))
         ) : (
