@@ -1,5 +1,5 @@
-import { Chapter, Question } from "@prisma/client";
-import { FC } from "react";
+import type { Chapter, Question } from "@prisma/client";
+import type { FC } from "react";
 
 interface DeleteButtonProps {
   handleClick: (e: any, itemToDelete: any) => Promise<void>;
