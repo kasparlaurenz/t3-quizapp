@@ -39,7 +39,10 @@ const Play: NextPage = () => {
               className="menu-button"
               href={`./play-quiz/chapter/${chapter.number}`}
             >
-              {chapter.number}
+              <span className="text-l block font-bold text-sky-300">
+                {chapter.number}
+              </span>
+              <span> {chapter.description}</span>
             </Link>
           ))}
         </div>

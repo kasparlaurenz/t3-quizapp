@@ -76,13 +76,16 @@ const NewQuestion: NextPage = () => {
               className="menu-button"
               href={`./create-question/chapter/${chapter.number}`}
             >
-              {chapter.number}
+              <span className="text-l block font-bold text-sky-300">
+                {chapter.number}
+              </span>
+              <span> {chapter.description}</span>
             </Link>
           ))}
         </div>
         <button
           onClick={() => setShowChapterDetails(true)}
-          className="menu-button"
+          className="menu-button bg-slate-400 text-gray-900"
         >
           Create Chapter{" "}
           <span className="font-bold"> {currentLastChapter}</span>
@@ -109,16 +112,18 @@ const ChapterModal: FC<ChapterModalProps> = ({
     <div className="absolute z-50 flex w-[300px] flex-col items-center">
       <button
         onClick={() => setShowChapterDetails(false)}
-        className="absolute right-5 rounded-md bg-red-400 py-1 px-2"
+        className="absolute right-0 rounded-md bg-red-400 py-1 px-2 transition hover:bg-red-500"
       >
         X
       </button>
-      <p className="text-lg font-bold">Chapter {chapter} details</p>
-      <label htmlFor="desc">Description</label>
+      <p className="text-2xl font-bold">Chapter {chapter} details</p>
+      <label className="text-lg text-sky-300" htmlFor="desc">
+        Description
+      </label>
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        className="mt-4 w-full bg-slate-700 p-2"
+        className="mt-2 w-full bg-slate-700 p-2"
         id="desc"
         required
       />
