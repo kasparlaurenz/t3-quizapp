@@ -1,30 +1,14 @@
-import { NextPage } from "next";
-import { waitUntilSymbol } from "next/dist/server/web/spec-extension/fetch-event";
+import type { NextPage } from "next";
 import Link from "next/link";
-import Header from "../components/Header";
-import { trpc } from "../utils/trpc";
+import Header from "../../components/Header";
+import { trpc } from "../../utils/trpc";
 
-const NewQuestion: NextPage = () => {
+const Play: NextPage = () => {
   const {
     data: chapters,
     isLoading,
     isError,
   } = trpc.question.getChapters.useQuery();
-  const utils = trpc.useContext();
-  const createNewChapter = trpc.question.createChapter.useMutation({
-    onMutate: () => {
-      utils.question.getChapters.cancel();
-      const optimisticUpdate = utils.question.getChapters.getData();
-
-      if (optimisticUpdate) {
-        utils.question.getChapters.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.question.getChapters.invalidate();
-    },
-  });
-
   if (isLoading) {
     return (
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
@@ -40,14 +24,6 @@ const NewQuestion: NextPage = () => {
       </main>
     );
   }
-  const currentLastChapter = chapters.length + 1;
-
-  const handleClick = () => {
-    createNewChapter.mutate({
-      chapter: currentLastChapter,
-    });
-  };
-
   return (
     <>
       <Header>Create Question</Header>
@@ -61,19 +37,15 @@ const NewQuestion: NextPage = () => {
             <Link
               key={chapter.id}
               className="menu-button"
-              href={`./create-question/chapter/${chapter.number}`}
+              href={`./play-quiz/chapter/${chapter.number}`}
             >
               {chapter.number}
             </Link>
           ))}
         </div>
-        <button onClick={handleClick} className="menu-button">
-          Create Chapter{" "}
-          <span className="font-bold"> {currentLastChapter}</span>
-        </button>
       </main>
     </>
   );
 };
 
-export default NewQuestion;
+export default Play;

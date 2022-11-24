@@ -17,7 +17,7 @@ const Home: NextPage = () => {
           New Question
         </Link>
 
-        <Link className="menu-button" href="delete-question">
+        <Link className="menu-button" href="delete-questions">
           Remove
         </Link>
       </main>
