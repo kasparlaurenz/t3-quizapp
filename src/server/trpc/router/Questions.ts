@@ -37,6 +37,9 @@ export const questionsRouter = router({
         include: {
           answers: true,
         },
+        orderBy: {
+          createdAt: "asc",
+        },
       });
     }),
 

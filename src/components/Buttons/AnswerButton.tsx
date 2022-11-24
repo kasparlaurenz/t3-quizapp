@@ -8,12 +8,26 @@ interface AnswerProps {
     is_correct: boolean;
   };
   handleAnswerClicked: (answer: AnswerObjectType) => void;
+  question: string;
+  trackResult: (
+    question: string,
+    answerClicked: string,
+    isCorrect: boolean
+  ) => void;
 }
 
-const Answer: FC<AnswerProps> = ({ answer, handleAnswerClicked }) => {
+const Answer: FC<AnswerProps> = ({
+  answer,
+  handleAnswerClicked,
+  trackResult,
+  question,
+}) => {
   return (
     <button
-      onClick={() => handleAnswerClicked(answer)}
+      onClick={() => {
+        handleAnswerClicked(answer);
+        trackResult(question, answer.answer, answer.is_correct);
+      }}
       key={answer.id}
       className="reg-button h-auto w-36"
     >

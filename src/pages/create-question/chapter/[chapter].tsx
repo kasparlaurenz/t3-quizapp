@@ -38,8 +38,6 @@ const CreateQuestion: NextPage = () => {
     { enabled: isReady }
   );
 
-  console.log("desc", chapterDescription);
-
   const createNewQuestion = trpc.question.createQuestion.useMutation();
 
   const handleModal = () => {
