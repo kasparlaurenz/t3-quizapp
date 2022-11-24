@@ -67,7 +67,10 @@ const DeleteQuestions: NextPage = () => {
               key={chapter.id}
               className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
             >
-              <h2>Chapter {chapter.number}</h2>
+              <h2>
+                <span className="font-bold">{chapter.number}</span>{" "}
+                {chapter.description}
+              </h2>
               <DeleteButton
                 handleClick={handleClick}
                 itemToDelete={chapter}
