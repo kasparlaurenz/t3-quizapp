@@ -1,9 +1,11 @@
 import { NextPage } from "next";
 import Link from "next/link";
+import { FC, SetStateAction, useState } from "react";
 import Header from "../../components/Header";
 import { trpc } from "../../utils/trpc";
 
 const NewQuestion: NextPage = () => {
+  const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
   const {
     data: chapters,
     isLoading,
@@ -41,10 +43,12 @@ const NewQuestion: NextPage = () => {
   }
   const currentLastChapter = chapters.length + 1;
 
-  const handleClick = () => {
+  const handleClick = (desc: string) => {
     createNewChapter.mutate({
       chapter: currentLastChapter,
+      description: desc,
     });
+    setShowChapterDetails(false);
   };
 
   return (
@@ -55,6 +59,16 @@ const NewQuestion: NextPage = () => {
         <Link className="menu-button bg-slate-400 text-gray-900" href="/">
           Menu
         </Link>
+        {showChapterDetails && (
+          <>
+            <ChapterModal
+              setShowChapterDetails={setShowChapterDetails}
+              handleClick={handleClick}
+              chapter={currentLastChapter}
+            />
+            <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
+          </>
+        )}
         <div className="flex flex-col">
           {chapters.map((chapter) => (
             <Link
@@ -66,7 +80,10 @@ const NewQuestion: NextPage = () => {
             </Link>
           ))}
         </div>
-        <button onClick={handleClick} className="menu-button">
+        <button
+          onClick={() => setShowChapterDetails(true)}
+          className="menu-button"
+        >
           Create Chapter{" "}
           <span className="font-bold"> {currentLastChapter}</span>
         </button>
@@ -76,3 +93,41 @@ const NewQuestion: NextPage = () => {
 };
 
 export default NewQuestion;
+
+interface ChapterModalProps {
+  handleClick: (desc: string) => void;
+  chapter: number;
+  setShowChapterDetails: React.Dispatch<SetStateAction<boolean>>;
+}
+const ChapterModal: FC<ChapterModalProps> = ({
+  handleClick,
+  chapter,
+  setShowChapterDetails,
+}) => {
+  const [description, setDescription] = useState<string>("");
+  return (
+    <div className="absolute z-50 flex w-[300px] flex-col items-center">
+      <button
+        onClick={() => setShowChapterDetails(false)}
+        className="absolute right-5 rounded-md bg-red-400 py-1 px-2"
+      >
+        X
+      </button>
+      <p className="text-lg font-bold">Chapter {chapter} details</p>
+      <label htmlFor="desc">Description</label>
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="mt-4 w-full bg-slate-700 p-2"
+        id="desc"
+        required
+      />
+      <button
+        onClick={() => handleClick(description)}
+        className="menu-button mt-4"
+      >
+        Create New Chapter
+      </button>
+    </div>
+  );
+};

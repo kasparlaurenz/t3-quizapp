@@ -13,6 +13,6 @@
     @apply w-full rounded-md bg-neutral-600 p-2 text-white transition hover:bg-slate-600;
   }
   .menu-button {
-    @apply mt-8 w-[150px] rounded-md bg-neutral-600 p-2 text-center text-white transition hover:bg-slate-600;
+    @apply mt-8 w-[180px] rounded-md bg-neutral-600 p-2 text-center text-white transition hover:bg-slate-600;
   }
 }

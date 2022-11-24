@@ -126,6 +126,7 @@ export const questionsRouter = router({
     .input(
       z.object({
         chapter: z.number(),
+        description: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -133,6 +134,7 @@ export const questionsRouter = router({
         await ctx.prisma.chapter.create({
           data: {
             number: input.chapter,
+            description: input.description,
           },
         });
       } catch (error) {

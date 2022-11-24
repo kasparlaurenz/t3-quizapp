@@ -32,8 +32,9 @@ model Answer {
 }
 
 model Chapter {
-  id     String @id @default(cuid())
-  number Int    @unique
+  id          String @id @default(cuid())
+  number      Int    @unique
+  description String
 
   questions Question[]
 }
