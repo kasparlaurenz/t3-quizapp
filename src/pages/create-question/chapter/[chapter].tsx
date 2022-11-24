@@ -18,6 +18,7 @@ const initialQuestionState = {
   wrong_answer1: { answer: "", is_correct: false },
   wrong_answer2: { answer: "", is_correct: false },
   chapter: null,
+  description: "",
 };
 
 const CreateQuestion: NextPage = () => {
@@ -29,11 +30,17 @@ const CreateQuestion: NextPage = () => {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const createNewQuestion = trpc.question.createQuestion.useMutation();
-
-  const { query } = useRouter();
+  const { query, isReady } = useRouter();
 
   const chapter = query.chapter as string;
+  const { data: chapterDescription } = trpc.question.getChapterDesc.useQuery(
+    { chapter: parseInt(chapter) },
+    { enabled: isReady }
+  );
+
+  console.log("desc", chapterDescription);
+
+  const createNewQuestion = trpc.question.createQuestion.useMutation();
 
   const handleModal = () => {
     setShowConfirm((prev) => !prev);
@@ -92,6 +99,7 @@ const CreateQuestion: NextPage = () => {
       incorrect_two: newQuestion.wrong_answer2.answer,
       correct: newQuestion.correct_answer.answer,
       chapter: parseInt(chapter),
+      description: chapterDescription?.description ?? "",
     });
     resetForm();
   };

@@ -1,3 +1,4 @@
+import { Input } from "postcss";
 import { z } from "zod";
 
 import { router, publicProcedure } from "../trpc";
@@ -49,6 +50,7 @@ export const questionsRouter = router({
         imageUrl: z.string(),
         imageName: z.string(),
         chapter: z.number(),
+        description: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -65,6 +67,7 @@ export const questionsRouter = router({
                 },
                 create: {
                   number: input.chapter,
+                  description: input.description,
                 },
               },
             },
@@ -140,5 +143,23 @@ export const questionsRouter = router({
       } catch (error) {
         console.log(error);
       }
+    }),
+
+  getChapterDesc: publicProcedure
+    .input(
+      z.object({
+        chapter: z.number(),
+      })
+    )
+    .query(({ input, ctx }) => {
+      const description = ctx.prisma.chapter.findFirst({
+        where: {
+          number: input.chapter,
+        },
+        select: {
+          description: true,
+        },
+      });
+      return description;
     }),
 });
