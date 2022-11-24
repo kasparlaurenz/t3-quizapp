@@ -61,6 +61,9 @@ const PlayChapter: NextPage = () => {
         <Link className="menu-button bg-slate-400 text-gray-900" href="/">
           Menu
         </Link>
+        <button className="menu-button" onClick={() => router.back()}>
+          Go Back
+        </button>
 
         {questions.length > 0 && curQuestionIdx < questions.length ? (
           <div>
