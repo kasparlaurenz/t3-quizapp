@@ -172,7 +172,7 @@ const PlayChapter: NextPage = () => {
                           key={answer.answer}
                           className={
                             answer.is_correct
-                              ? " rounded-lg border-2 border-green-400 p-2"
+                              ? "rounded-lg border-2 border-green-400 p-2"
                               : "p-2"
                           }
                         >
