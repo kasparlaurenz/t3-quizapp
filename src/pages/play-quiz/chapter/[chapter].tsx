@@ -135,7 +135,7 @@ const PlayChapter: NextPage = () => {
                   className={
                     resultList[idx]?.isCorrect === true
                       ? "result flex w-[500px] flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200"
-                      : "result flex flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200"
+                      : "result flex w-[500px] flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200"
                   }
                 >
                   {" "}
