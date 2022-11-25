@@ -4,9 +4,9 @@ export const shuffle = <T>(array: T[]): T[] => {
     // find a random index from begining to i
     const idx = Math.floor(Math.random() * (i + 1));
     // swap value at idx with value at i
-    const tmp = result[i];
+    const tmp: T = result[i]!;
     result[i] = result[idx]!;
-    result[idx] = tmp!;
+    result[idx] = tmp;
   }
   return result;
 };
