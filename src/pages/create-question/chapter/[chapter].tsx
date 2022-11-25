@@ -25,6 +25,7 @@ const CreateQuestion: NextPage = () => {
   const router = useRouter();
   const [newQuestion, setNewQuestion] =
     useState<QuestionWithAnswers>(initialQuestionState);
+
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [image, setImage] = useState<File | undefined>();
   const [previewUrl, setPreviewUrl] = useState<string>("");
