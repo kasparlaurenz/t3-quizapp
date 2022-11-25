@@ -139,7 +139,7 @@ const PlayChapter: NextPage = () => {
                   }
                 >
                   {" "}
-                  <div className="flex w-full p-2 ">
+                  <div className="flex w-full justify-between p-2">
                     <p>
                       {idx + 1} / {questions.length}
                     </p>
