@@ -85,7 +85,7 @@ const DeleteQuestion: NextPage = () => {
           questions.map((question) => (
             <div
               key={question.id}
-              className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
+              className=" relative mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
             >
               <h2>{question.question}</h2>
               {question.imageUrl ? (

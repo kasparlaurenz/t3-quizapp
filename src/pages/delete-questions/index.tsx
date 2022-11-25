@@ -65,7 +65,7 @@ const DeleteQuestions: NextPage = () => {
             <Link
               href={`delete-questions/chapter/${chapter.number}`}
               key={chapter.id}
-              className=" mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
+              className=" relative mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
             >
               <h2>
                 <span className="font-bold">{chapter.number}</span>{" "}

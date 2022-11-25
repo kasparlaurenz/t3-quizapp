@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { AnswerObjectType } from "../../utils/types";
 
-interface AnswerProps {
+interface AnswerButtonProps {
   answer: {
     id: string;
     answer: string;
@@ -9,14 +9,10 @@ interface AnswerProps {
   };
   handleAnswerClicked: (answer: AnswerObjectType) => void;
   question: string;
-  trackResult: (
-    question: string,
-    answerClicked: string,
-    isCorrect: boolean
-  ) => void;
+  trackResult: (answerClicked: string, isCorrect: boolean) => void;
 }
 
-const Answer: FC<AnswerProps> = ({
+const AnswerButton: FC<AnswerButtonProps> = ({
   answer,
   handleAnswerClicked,
   trackResult,
@@ -26,7 +22,7 @@ const Answer: FC<AnswerProps> = ({
     <button
       onClick={() => {
         handleAnswerClicked(answer);
-        trackResult(question, answer.answer, answer.is_correct);
+        trackResult(answer.answer, answer.is_correct);
       }}
       key={answer.id}
       className="reg-button h-auto w-36"
@@ -36,4 +32,4 @@ const Answer: FC<AnswerProps> = ({
   );
 };
 
-export default Answer;
+export default AnswerButton;

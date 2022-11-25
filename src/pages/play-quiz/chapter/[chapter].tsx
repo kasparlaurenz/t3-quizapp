@@ -1,10 +1,12 @@
+import { Answer } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import Answer from "../../../components/Buttons/AnswerButton";
+import AnswerButton from "../../../components/Buttons/AnswerButton";
 import Header from "../../../components/Header";
+import { shuffle } from "../../../utils/shuffle";
 import { trpc } from "../../../utils/trpc";
 import type { AnswerObjectType } from "../../../utils/types";
 
@@ -16,7 +18,7 @@ const PlayChapter: NextPage = () => {
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [resultList, setResultList] = useState<
-    { question: string; answer: string; correct: boolean }[]
+    { answer: string; isCorrect: boolean }[]
   >([]);
 
   const {
@@ -53,15 +55,10 @@ const PlayChapter: NextPage = () => {
     }
   };
 
-  const trackResult = (
-    question: string,
-    answerClicked: string,
-    isCorrect: boolean
-  ) => {
+  const trackResult = (answerClicked: string, isCorrect: boolean) => {
     const tempResult = {
-      question: question,
       answer: answerClicked,
-      correct: isCorrect,
+      isCorrect: isCorrect,
     };
     setResultList((prev: any) => [...prev, tempResult]);
   };
@@ -102,17 +99,17 @@ const PlayChapter: NextPage = () => {
                   </div>
                 )}
               <div className="mt-10 flex w-full items-center justify-between gap-4">
-                {questions[curQuestionIdx]?.answers
-                  .sort(() => Math.random() - 0.5)
-                  .map((answer) => (
-                    <Answer
+                {shuffle(questions[curQuestionIdx]?.answers ?? []).map(
+                  (answer: Answer) => (
+                    <AnswerButton
                       key={answer.id}
                       handleAnswerClicked={handleAnswerClicked}
                       trackResult={trackResult}
                       question={questions[curQuestionIdx]?.id ?? ""}
                       answer={answer}
                     />
-                  ))}
+                  )
+                )}
               </div>
             </div>
           </div>
@@ -136,29 +133,47 @@ const PlayChapter: NextPage = () => {
                 <div
                   key={question.id}
                   className={
-                    resultList[idx]?.correct === true
+                    resultList[idx]?.isCorrect === true
                       ? "result flex w-[500px] flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200"
                       : "result flex flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200"
                   }
                 >
                   {" "}
-                  <h3 className="text-sm">Question {idx + 1}</h3>
-                  <p className="mt-1 text-base font-bold text-sky-400">
-                    {question.question}?
-                  </p>
-                  <p className="mt-2">
-                    Your Selection: {resultList[idx]?.answer}
-                  </p>
-                  <div className="answers mt-2 flex w-full items-center justify-between">
-                    {question.answers
-                      .sort(() => Math.random() - 0.5)
-                      .map((answer, idx) => (
+                  <div className="flex w-full p-2 ">
+                    <p>
+                      {idx + 1} / {questions.length}
+                    </p>
+                    <div className="flex flex-col items-center">
+                      <p className="font-bol text-lg">{question.question}?</p>
+                      <p
+                        className={
+                          resultList[idx]?.isCorrect === true
+                            ? "mt-1 text-green-400"
+                            : "mt-1 text-red-400"
+                        }
+                      >
+                        Your Selection: {resultList[idx]?.answer}
+                      </p>
+                    </div>
+                    {resultList[idx]?.isCorrect === true ? (
+                      <span role="img" aria-label="sheep" className="text-3xl">
+                        🥳
+                      </span>
+                    ) : (
+                      <span role="img" aria-label="sheep" className="text-3xl">
+                        😟
+                      </span>
+                    )}
+                  </div>
+                  <div className="answers mt-2 flex w-full flex-col items-start">
+                    {shuffle(question.answers).map(
+                      (answer: Answer, idx: number) => (
                         <p
                           key={answer.answer}
                           className={
                             answer.is_correct
-                              ? "rounded-lg border-2 border-green-400 p-2"
-                              : ""
+                              ? " rounded-lg border-2 border-green-400 p-2"
+                              : "p-2"
                           }
                         >
                           <span className="mr-2">
@@ -166,7 +181,8 @@ const PlayChapter: NextPage = () => {
                           </span>
                           {answer.answer}
                         </p>
-                      ))}
+                      )
+                    )}
                   </div>
                 </div>
               ))}
