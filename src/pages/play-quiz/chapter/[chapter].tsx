@@ -75,7 +75,7 @@ const PlayChapter: NextPage = () => {
         </button>
 
         {questions.length > 0 && curQuestionIdx < questions.length ? (
-          <div>
+          <div className="w-full sm:w-2/3">
             <div className="flex flex-col items-center justify-center">
               <h3 className="mt-10">Question</h3>
               <span className="font-bold text-blue-400">
@@ -98,7 +98,7 @@ const PlayChapter: NextPage = () => {
                     />
                   </div>
                 )}
-              <div className="mt-10 flex w-full items-center justify-between gap-4">
+              <div className="mt-10 flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
                 {shuffle(questions[curQuestionIdx]?.answers ?? []).map(
                   (answer: Answer) => (
                     <AnswerButton
@@ -134,13 +134,13 @@ const PlayChapter: NextPage = () => {
                   key={question.id}
                   className={
                     resultList[idx]?.isCorrect === true
-                      ? "result flex w-[500px] flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200"
-                      : "result flex w-[500px] flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200"
+                      ? "result flex flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200 md:w-[500px]"
+                      : "result flex flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200 md:w-[500px]"
                   }
                 >
                   {" "}
                   <div className="flex w-full justify-between p-2">
-                    <p>
+                    <p className="hidden sm:block">
                       {idx + 1} / {questions.length}
                     </p>
                     <div className="flex flex-col items-center">
@@ -156,11 +156,19 @@ const PlayChapter: NextPage = () => {
                       </p>
                     </div>
                     {resultList[idx]?.isCorrect === true ? (
-                      <span role="img" aria-label="sheep" className="text-3xl">
+                      <span
+                        role="img"
+                        aria-label="sheep"
+                        className="hidden text-3xl sm:block"
+                      >
                         🥳
                       </span>
                     ) : (
-                      <span role="img" aria-label="sheep" className="text-3xl">
+                      <span
+                        role="img"
+                        aria-label="sheep"
+                        className="hidden text-3xl sm:block"
+                      >
                         😟
                       </span>
                     )}

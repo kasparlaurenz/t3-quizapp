@@ -25,7 +25,7 @@ const AnswerButton: FC<AnswerButtonProps> = ({
         trackResult(answer.answer, answer.is_correct);
       }}
       key={answer.id}
-      className="reg-button h-auto w-36"
+      className="reg-button h-auto max-w-xs"
     >
       {answer.answer}
     </button>
