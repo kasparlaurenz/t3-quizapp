@@ -24,6 +24,23 @@ export const questionsRouter = router({
         },
       });
     }),
+
+  getQuestionsWithAnswersByChapterSelection: publicProcedure
+    .input(z.object({ chapter: z.array(z.number()) }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.question.findMany({
+        where: {
+          chapter: {
+            number: {
+              in: input.chapter,
+            },
+          },
+        },
+        include: {
+          answers: true,
+        },
+      });
+    }),
   getQuestionsWithAnswersByChapter: publicProcedure
     .input(z.object({ chapter: z.number() }))
     .query(async ({ ctx, input }) => {
