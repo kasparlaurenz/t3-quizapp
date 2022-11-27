@@ -45,13 +45,13 @@ export const questionsRouter = router({
         },
       });
 
-      const questionWithShuffledAnswers = questions.map((question) => {
+      const questionsWithShuffledAnswers = questions.map((question) => {
         return {
           ...question,
           answers: shuffle(question.answers),
         };
       });
-      return questionWithShuffledAnswers;
+      return questionsWithShuffledAnswers;
     }),
   getQuestionsWithAnswersByChapter: publicProcedure
     .input(z.object({ chapter: z.number() }))
