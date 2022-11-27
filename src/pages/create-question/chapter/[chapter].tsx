@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import React, { useRef, useState } from "react";
 
 import Header from "../../../components/Header";
@@ -10,8 +9,8 @@ import { trpc } from "../../../utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import type { FC } from "react";
-import type { QuestionWithAnswers } from "../../../utils/types";
 import TopSection from "../../../components/TopSection";
+import type { QuestionWithAnswers } from "../../../utils/types";
 
 const initialQuestionState = {
   question: "",
@@ -23,7 +22,6 @@ const initialQuestionState = {
 };
 
 const CreateQuestion: NextPage = () => {
-  const router = useRouter();
   const [newQuestion, setNewQuestion] =
     useState<QuestionWithAnswers>(initialQuestionState);
 

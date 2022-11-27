@@ -8,15 +8,15 @@ interface AnswerButtonProps {
     is_correct: boolean;
   };
   handleAnswerClicked: (answer: AnswerObjectType) => void;
-  question: string;
   trackResult: (answerClicked: string, isCorrect: boolean) => void;
+  revealAnswer: boolean;
 }
 
 const AnswerButton: FC<AnswerButtonProps> = ({
   answer,
   handleAnswerClicked,
   trackResult,
-  question,
+  revealAnswer,
 }) => {
   return (
     <button
@@ -25,7 +25,13 @@ const AnswerButton: FC<AnswerButtonProps> = ({
         trackResult(answer.answer, answer.is_correct);
       }}
       key={answer.id}
-      className="reg-button h-auto max-w-xs"
+      className={
+        revealAnswer
+          ? answer.is_correct
+            ? "reg-button h-auto max-w-xs border-2 border-green-400"
+            : "reg-button h-auto max-w-xs"
+          : "reg-button h-auto max-w-xs"
+      }
     >
       {answer.answer}
     </button>

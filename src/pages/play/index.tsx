@@ -74,6 +74,13 @@ const Play: NextPage = () => {
     setResultList((prev: any) => [...prev, tempResult]);
   };
 
+  const resetGame = () => {
+    setScore(0);
+    setCurQuestionIdx(0);
+    setResultList([]);
+    setPlayQuiz(true);
+  };
+
   return (
     <>
       <Header>Play</Header>
@@ -205,12 +212,9 @@ const Play: NextPage = () => {
                       </div>
                     </div>
                   ))}
-                  <Link
-                    className="menu-button mt-1 self-center bg-slate-400 text-gray-900"
-                    href="/"
-                  >
-                    Menu
-                  </Link>
+                  <button onClick={resetGame} className="menu-button">
+                    Play again
+                  </button>
                 </div>
               </div>
             ) : (
