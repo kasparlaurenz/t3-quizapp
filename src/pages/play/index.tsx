@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import AnswerButton from "../../components/Buttons/AnswerButton";
 import Header from "../../components/Header";
+import TopSection from "../../components/TopSection";
 import { shuffle } from "../../utils/shuffle";
 import { trpc } from "../../utils/trpc";
 import { AnswerObjectType } from "../../utils/types";
@@ -77,10 +78,7 @@ const Play: NextPage = () => {
     <>
       <Header>Play</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-3xl font-bold text-sky-300">Chapters</h1>
-        <Link className="menu-button bg-slate-400 text-gray-900" href="/">
-          Menu
-        </Link>
+        <TopSection title="Play" />
         {playQuiz && questions ? (
           <>
             {questions.length > 0 && curQuestionIdx < questions.length ? (

@@ -22,6 +22,9 @@ export const questionsRouter = router({
             number: input.chapter,
           },
         },
+        orderBy: {
+          createdAt: "asc",
+        },
       });
     }),
 

@@ -11,6 +11,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import type { FC } from "react";
 import type { QuestionWithAnswers } from "../../../utils/types";
+import TopSection from "../../../components/TopSection";
 
 const initialQuestionState = {
   question: "",
@@ -107,19 +108,14 @@ const CreateQuestion: NextPage = () => {
     <>
       <Header>Create Question</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <Link className="menu-button" href="/">
-          Menu
-        </Link>
-        <button className="menu-button" onClick={() => router.back()}>
-          Go Back
-        </button>
+        <TopSection title={`Question for Chapter ${chapter}`} />
         {showConfirm && (
           <>
             <ConfirmModal handleModal={handleModal} />
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
-        <form className="w-1/2" action="submit" onSubmit={handleSubmit}>
+        <form className="mt-6 w-1/2" action="submit" onSubmit={handleSubmit}>
           <NewQuestionInput
             setNewQuestion={setNewQuestion}
             htmlFor="question"

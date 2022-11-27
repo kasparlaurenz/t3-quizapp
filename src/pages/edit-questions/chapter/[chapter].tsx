@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import DeleteButton from "../../../components/Buttons/DeleteButton";
 import Header from "../../../components/Header";
+import TopSection from "../../../components/TopSection";
 import { supabase } from "../../../utils/supabase";
 import { trpc } from "../../../utils/trpc";
 
@@ -70,43 +71,43 @@ const ManageQuestions: NextPage = () => {
     <>
       <Header>Delete Questions</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-3xl font-bold text-sky-300">
-          Questions Chapter {chapter}
-        </h1>
+        <TopSection title={`Chapter ${chapter}`} />
 
-        <Link className="menu-button bg-slate-400 text-gray-900" href="/">
-          Menu
-        </Link>
-        <button className="menu-button" onClick={() => router.back()}>
-          Go Back
-        </button>
-
-        {questions.length > 0 ? (
-          questions.map((question) => (
-            <div
-              key={question.id}
-              className=" relative mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
-            >
-              <h2>{question.question}</h2>
-              {question.imageUrl ? (
-                <p className="font-bold italic text-red-300">has image</p>
-              ) : (
-                ""
-              )}
-              <DeleteButton
-                handleClick={handleClick}
-                itemToDelete={question}
-                deleteItem={deleteQuestion}
-              />
+        <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
+          {questions.length > 0 ? (
+            questions.map((question) => (
+              <div
+                key={question.id}
+                className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
+              >
+                <h2>{question.question}</h2>
+                {question.imageUrl ? (
+                  <p className="font-bold italic text-red-300">has image</p>
+                ) : (
+                  ""
+                )}
+                <DeleteButton
+                  handleClick={handleClick}
+                  itemToDelete={question}
+                  deleteItem={deleteQuestion}
+                />
+              </div>
+            ))
+          ) : (
+            <div className="flex flex-col items-center">
+              <p className="mt-5 text-3xl font-bold text-red-500">
+                No questions
+              </p>
             </div>
-          ))
-        ) : (
-          <div className="flex flex-col items-center">
-            <p className="mt-5 text-3xl font-bold text-red-500">No questions</p>
-          </div>
+          )}
+        </div>
+        {questions.length > 3 && (
+          <p className="mt-4 italic text-sky-500">
+            Scroll to view more questions
+          </p>
         )}
         <Link
-          className="menu-button"
+          className="menu-button mt-2"
           href={`/create-question/chapter/${chapter}`}
         >
           Create Question

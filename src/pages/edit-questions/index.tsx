@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FC, SetStateAction, useState } from "react";
 import DeleteButton from "../../components/Buttons/DeleteButton";
 import Header from "../../components/Header";
+import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
 
 const ManageChapters: NextPage = () => {
@@ -81,10 +82,7 @@ const ManageChapters: NextPage = () => {
     <>
       <Header>Delete Chapter</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-3xl font-bold text-sky-300">Chapters</h1>
-        <Link className="menu-button bg-slate-400 text-gray-900" href="/">
-          Menu
-        </Link>
+        <TopSection title="Chapters" />
         {showChapterDetails && (
           <>
             <ChapterModal
@@ -95,32 +93,41 @@ const ManageChapters: NextPage = () => {
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
-        {chapters.length > 0 ? (
-          chapters.map((chapter) => (
-            <Link
-              href={`edit-questions/chapter/${chapter.number}`}
-              key={chapter.id}
-              className=" relative mt-6 flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700"
-            >
-              <h2>
-                <span className="font-bold">{chapter.number}</span>{" "}
-                {chapter.description}
-              </h2>
-              <DeleteButton
-                handleClick={handleDeleteClick}
-                itemToDelete={chapter}
-                deleteItem={deleteChapter}
-              />
-            </Link>
-          ))
-        ) : (
-          <div className="flex flex-col items-center">
-            <p className="mt-5 text-3xl font-bold text-red-500">No Chapters</p>
-          </div>
+        <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
+          {chapters.length > 0 ? (
+            chapters.map((chapter) => (
+              <Link
+                href={`edit-questions/chapter/${chapter.number}`}
+                key={chapter.id}
+                className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700"
+              >
+                <h2>
+                  <span className="font-bold">{chapter.number}</span>{" "}
+                  {chapter.description}
+                </h2>
+                <DeleteButton
+                  handleClick={handleDeleteClick}
+                  itemToDelete={chapter}
+                  deleteItem={deleteChapter}
+                />
+              </Link>
+            ))
+          ) : (
+            <div className="flex flex-col items-center">
+              <p className="mt-5 text-3xl font-bold text-red-500">
+                No Chapters
+              </p>
+            </div>
+          )}
+        </div>
+        {chapters.length > 3 && (
+          <p className="mt-4 italic text-sky-500">
+            Scroll to view more questions
+          </p>
         )}
         <button
           onClick={() => setShowChapterDetails(true)}
-          className="menu-button bg-slate-400 text-gray-900"
+          className="menu-button mt-2"
         >
           Create Chapter{" "}
           <span className="font-bold"> {currentLastChapter}</span>
