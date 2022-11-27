@@ -10,16 +10,7 @@ import { trpc } from "../../utils/trpc";
 import { AnswerObjectType } from "../../utils/types";
 
 const Play: NextPage = () => {
-  //
-
-  // work on wrong click, reveal answer
-  //
   const [revealAnswer, setRevealAnswer] = useState(false);
-  //
-  //
-
-  //
-
   const [selectedChapters, setSelectedChapters] = useState<number[]>([]);
   const [fetchQuestions, setFetchQuestions] = useState(false);
   const [playQuiz, setPlayQuiz] = useState(false);
