@@ -91,6 +91,8 @@ const Play: NextPage = () => {
     setPlayQuiz(true);
   };
 
+  console.log(questions);
+
   return (
     <>
       <Header>Play</Header>
@@ -125,7 +127,7 @@ const Play: NextPage = () => {
                       </div>
                     )}
                   <div className="mt-10 flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
-                    {shuffle(questions[curQuestionIdx]?.answers ?? []).map(
+                    {(questions[curQuestionIdx]?.answers ?? []).map(
                       (answer: Answer) => (
                         <AnswerButton
                           key={answer.id}
@@ -202,23 +204,21 @@ const Play: NextPage = () => {
                         )}
                       </div>
                       <div className="answers mt-2 flex w-full flex-col items-start">
-                        {shuffle(question.answers).map(
-                          (answer: Answer, idx: number) => (
-                            <p
-                              key={answer.answer}
-                              className={
-                                answer.is_correct
-                                  ? "rounded-lg border-2 border-green-400 p-2"
-                                  : "p-2"
-                              }
-                            >
-                              <span className="mr-2">
-                                {idx === 0 ? "A" : idx === 1 ? "B" : "C"})
-                              </span>
-                              {answer.answer}
-                            </p>
-                          )
-                        )}
+                        {question.answers.map((answer: Answer, idx: number) => (
+                          <p
+                            key={answer.answer}
+                            className={
+                              answer.is_correct
+                                ? "rounded-lg border-2 border-green-400 p-2"
+                                : "p-2"
+                            }
+                          >
+                            <span className="mr-2">
+                              {idx === 0 ? "A" : idx === 1 ? "B" : "C"})
+                            </span>
+                            {answer.answer}
+                          </p>
+                        ))}
                       </div>
                     </div>
                   ))}
