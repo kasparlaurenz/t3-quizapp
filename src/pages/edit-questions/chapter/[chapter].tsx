@@ -7,7 +7,7 @@ import Header from "../../../components/Header";
 import { supabase } from "../../../utils/supabase";
 import { trpc } from "../../../utils/trpc";
 
-const DeleteQuestion: NextPage = () => {
+const ManageQuestions: NextPage = () => {
   const router = useRouter();
   const { query, isReady } = useRouter();
   const chapter = query.chapter as string;
@@ -103,14 +103,17 @@ const DeleteQuestion: NextPage = () => {
         ) : (
           <div className="flex flex-col items-center">
             <p className="mt-5 text-3xl font-bold text-red-500">No questions</p>
-            <Link className="menu-button" href="/create-question">
-              Create Question
-            </Link>
           </div>
         )}
+        <Link
+          className="menu-button"
+          href={`/create-question/chapter/${chapter}`}
+        >
+          Create Question
+        </Link>
       </main>
     </>
   );
 };
 
-export default DeleteQuestion;
+export default ManageQuestions;

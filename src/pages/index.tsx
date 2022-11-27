@@ -13,12 +13,8 @@ const Home: NextPage = () => {
         <Link className="menu-button bg-blue-500" href="play-quiz">
           Play Game
         </Link>
-        <Link className="menu-button" href="create-question">
-          New Question
-        </Link>
-
-        <Link className="menu-button" href="delete-questions">
-          Remove
+        <Link className="menu-button" href="edit-questions">
+          Edit Questions
         </Link>
       </main>
     </>
