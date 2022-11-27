@@ -6,7 +6,6 @@ import { useState } from "react";
 import AnswerButton from "../../components/Buttons/AnswerButton";
 import Header from "../../components/Header";
 import TopSection from "../../components/TopSection";
-import { shuffle } from "../../utils/shuffle";
 import { trpc } from "../../utils/trpc";
 import { AnswerObjectType } from "../../utils/types";
 
@@ -72,8 +71,13 @@ const Play: NextPage = () => {
       setScore((prev) => prev + 1);
       setCurQuestionIdx((prev) => prev + 1);
     } else {
-      setCurQuestionIdx((prev) => prev + 1);
+      setRevealAnswer(true);
     }
+  };
+
+  const handleNextClick = () => {
+    setRevealAnswer(false);
+    setCurQuestionIdx((prev) => prev + 1);
   };
 
   const trackResult = (answerClicked: string, isCorrect: boolean) => {
@@ -90,8 +94,6 @@ const Play: NextPage = () => {
     setResultList([]);
     setPlayQuiz(true);
   };
-
-  console.log(questions);
 
   return (
     <>
@@ -126,7 +128,7 @@ const Play: NextPage = () => {
                         />
                       </div>
                     )}
-                  <div className="mt-10 flex w-full flex-col items-center justify-between gap-4 lg:flex-row">
+                  <div className="mt-10 flex w-full flex-col items-center justify-between gap-4">
                     {(questions[curQuestionIdx]?.answers ?? []).map(
                       (answer: Answer) => (
                         <AnswerButton
@@ -139,6 +141,13 @@ const Play: NextPage = () => {
                       )
                     )}
                   </div>
+                  {revealAnswer && (
+                    <button onClick={handleNextClick} className="menu-button">
+                      {curQuestionIdx + 1 === questions.length
+                        ? "Finish"
+                        : "Next"}
+                    </button>
+                  )}
                 </div>
               </div>
             ) : questions.length === curQuestionIdx && questions.length > 0 ? (
@@ -238,7 +247,7 @@ const Play: NextPage = () => {
               </div>
             )}
           </>
-        ) : (
+        ) : chapters.length > 0 ? (
           <>
             <label className="mt-4 text-2xl" htmlFor="chapter-selection">
               Choose your Chapters:
@@ -291,6 +300,14 @@ const Play: NextPage = () => {
                 </p>
               )}
             </div>
+          </>
+        ) : (
+          <>
+            <p className="mt-2 text-lg font-bold text-red-500">No Chapters</p>
+
+            <Link className="menu-button mt-2" href="edit-questions">
+              Create a Chapter
+            </Link>
           </>
         )}
       </main>

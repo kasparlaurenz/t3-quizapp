@@ -114,9 +114,7 @@ const ManageChapters: NextPage = () => {
             ))
           ) : (
             <div className="flex flex-col items-center">
-              <p className="mt-5 text-3xl font-bold text-red-500">
-                No Chapters
-              </p>
+              <p className="mt-2 text-lg font-bold text-red-500">No Chapters</p>
             </div>
           )}
         </div>
