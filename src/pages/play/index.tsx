@@ -46,7 +46,7 @@ const Play: NextPage = () => {
     );
   }
 
-  const hanldeChange = (
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     chapter: Chapter
   ) => {
@@ -252,7 +252,7 @@ const Play: NextPage = () => {
                         className=" mr-1 h-[18px] w-[18px] accent-sky-500"
                         type="checkbox"
                         value={chapter.number}
-                        onChange={(e) => hanldeChange(e, chapter)}
+                        onChange={(e) => handleChange(e, chapter)}
                       />
                       {chapter.number}
                     </label>
