@@ -2,23 +2,22 @@ import { Chapter, Question } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import DeleteButton from "../../../components/Buttons/DeleteButton";
-import Header from "../../../components/Header";
-import TopSection from "../../../components/TopSection";
-import { supabase } from "../../../utils/supabase";
-import { trpc } from "../../../utils/trpc";
+import DeleteButton from "../../../../components/Buttons/DeleteButton";
+import Header from "../../../../components/Header";
+import TopSection from "../../../../components/TopSection";
+import { supabase } from "../../../../utils/supabase";
+import { trpc } from "../../../../utils/trpc";
 
 const ManageQuestions: NextPage = () => {
-  const router = useRouter();
   const { query, isReady } = useRouter();
-  const chapter = query.chapter as string;
+  const chapterNumber = query.chapterNumber as string;
 
   const {
     data: questions,
     isLoading,
     isError,
   } = trpc.question.getQuestionsByChapter.useQuery(
-    { chapter: parseInt(chapter) },
+    { chapter: parseInt(chapterNumber) },
     { enabled: isReady }
   );
   const utils = trpc.useContext();
@@ -26,7 +25,7 @@ const ManageQuestions: NextPage = () => {
     onMutate: () => {
       utils.question.getQuestions.cancel();
       const optimisticUpdate = utils.question.getQuestionsByChapter.getData({
-        chapter: parseInt(chapter),
+        chapter: parseInt(chapterNumber),
       });
 
       if (optimisticUpdate) {
@@ -71,7 +70,7 @@ const ManageQuestions: NextPage = () => {
     <>
       <Header>Delete Questions</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={`Chapter ${chapter}`} />
+        <TopSection title={`Chapter ${chapterNumber}`} />
 
         <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
           {questions.length > 0 ? (
@@ -108,7 +107,7 @@ const ManageQuestions: NextPage = () => {
         )}
         <Link
           className="menu-button mt-2"
-          href={`/create-question/chapter/${chapter}`}
+          href={`/create-question/chapter/${chapterNumber}`}
         >
           Create Question
         </Link>
