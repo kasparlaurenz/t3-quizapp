@@ -178,7 +178,10 @@ const Play: NextPage = () => {
             <label className="mt-4 text-2xl" htmlFor="chapter-selection">
               Choose your Chapters:
             </label>
-            <form id="chapter-selection">
+            <form
+              id="chapter-selection"
+              className="flex flex-col items-center justify-center"
+            >
               {chapters.length > 0 && (
                 <>
                   <label className="text-2xl text-sky-400">
@@ -207,20 +210,23 @@ const Play: NextPage = () => {
                   </div>
                 ))}
               </div>
-            </form>
-            <div>
+
               {selectedChapters.length > 0 ? (
                 <>
-                  <p className="text-center text-xl">
+                  <p className="text-center">
                     Play with chapter <br />
-                    {selectedChapters.map((chapter) => (
-                      <span key={chapter} className="font-bold text-sky-500">
+                    {selectedChapters.sort().map((chapter) => (
+                      <span
+                        key={chapter}
+                        className="text-lg font-bold text-sky-500"
+                      >
                         {chapter}{" "}
                       </span>
                     ))}
                   </p>
                   <button
-                    onClick={() => {
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
                       setFetchQuestions(true);
                       setPlayQuiz(true);
                     }}
@@ -230,15 +236,11 @@ const Play: NextPage = () => {
                   </button>
                 </>
               ) : (
-                <p className="text-center text-xl text-sky-500">
-                  No chapter selected.
-                  <br />{" "}
-                  <span className="italic text-white">
-                    Please select at least one chapter
-                  </span>
-                </p>
+                <span className="w-2/3 text-center italic text-sky-400">
+                  No Chapter selected, please select atleast one.
+                </span>
               )}
-            </div>
+            </form>
           </>
         ) : (
           <>
