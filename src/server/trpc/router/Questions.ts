@@ -80,6 +80,13 @@ export const questionsRouter = router({
         orderBy: {
           createdAt: "asc",
         },
+        include: {
+          chapter: {
+            select: {
+              description: true,
+            },
+          },
+        },
       });
     }),
 
@@ -89,6 +96,9 @@ export const questionsRouter = router({
       return ctx.prisma.question.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          answers: true,
         },
       });
     }),
@@ -119,6 +129,88 @@ export const questionsRouter = router({
         }
       );
       return shuffledQuestionsWithShuffledAnswers;
+    }),
+
+  updateQuestion: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        question: z.string(),
+        incorrect_one: z.string(),
+        incorrect_two: z.string(),
+        correct: z.string(),
+        imageUrl: z.string().optional(),
+        imageName: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.question.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            question: input.question,
+            imageUrl: input.imageUrl,
+            imageName: input.imageName,
+            answers: {
+              updateMany: [
+                {
+                  where: {
+                    questionId: input.id,
+                    is_correct: false,
+                  },
+                  data: {
+                    answer: input.incorrect_one,
+                  },
+                },
+                {
+                  where: {
+                    questionId: input.id,
+                    is_correct: false,
+                  },
+                  data: {
+                    answer: input.incorrect_two,
+                  },
+                },
+                {
+                  where: {
+                    questionId: input.id,
+                    is_correct: true,
+                  },
+                  data: {
+                    answer: input.correct,
+                  },
+                },
+              ],
+            },
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+
+  deleteImageOfQuestion: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.question.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            imageUrl: "",
+            imageName: "",
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }),
 });
 

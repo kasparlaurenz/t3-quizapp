@@ -37,6 +37,11 @@ const ManageQuestions: NextPage = () => {
     },
   });
 
+  const { data: chapterDescription } = trpc.chapter.getChapterDesc.useQuery(
+    { chapter: parseInt(chapterNumber) },
+    { enabled: isReady }
+  );
+
   if (isLoading) {
     return (
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
@@ -70,27 +75,23 @@ const ManageQuestions: NextPage = () => {
     <>
       <Header>Delete Questions</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={`Chapter ${chapterNumber}`} />
+        <TopSection title={chapterDescription?.description ?? ""} />
 
         <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
           {questions.length > 0 ? (
             questions.map((question) => (
-              <div
+              <Link
+                href={`/edit-questions/chapter/${chapterNumber}/question/${question.id}`}
                 key={question.id}
                 className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
               >
                 <h2>{question.question}</h2>
-                {question.imageUrl ? (
-                  <p className="font-bold italic text-red-300">has image</p>
-                ) : (
-                  ""
-                )}
                 <DeleteButton
                   handleClick={handleClick}
                   itemToDelete={question}
                   deleteItem={deleteQuestion}
                 />
-              </div>
+              </Link>
             ))
           ) : (
             <div className="flex flex-col items-center">
