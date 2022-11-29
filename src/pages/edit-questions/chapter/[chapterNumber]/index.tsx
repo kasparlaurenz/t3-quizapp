@@ -2,23 +2,22 @@ import { Chapter, Question } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import DeleteButton from "../../../components/Buttons/DeleteButton";
-import Header from "../../../components/Header";
-import TopSection from "../../../components/TopSection";
-import { supabase } from "../../../utils/supabase";
-import { trpc } from "../../../utils/trpc";
+import DeleteButton from "../../../../components/Buttons/DeleteButton";
+import Header from "../../../../components/Header";
+import TopSection from "../../../../components/TopSection";
+import { supabase } from "../../../../utils/supabase";
+import { trpc } from "../../../../utils/trpc";
 
 const ManageQuestions: NextPage = () => {
-  const router = useRouter();
   const { query, isReady } = useRouter();
-  const chapter = query.chapter as string;
+  const chapterNumber = query.chapterNumber as string;
 
   const {
     data: questions,
     isLoading,
     isError,
   } = trpc.question.getQuestionsByChapter.useQuery(
-    { chapter: parseInt(chapter) },
+    { chapter: parseInt(chapterNumber) },
     { enabled: isReady }
   );
   const utils = trpc.useContext();
@@ -26,7 +25,7 @@ const ManageQuestions: NextPage = () => {
     onMutate: () => {
       utils.question.getQuestions.cancel();
       const optimisticUpdate = utils.question.getQuestionsByChapter.getData({
-        chapter: parseInt(chapter),
+        chapter: parseInt(chapterNumber),
       });
 
       if (optimisticUpdate) {
@@ -37,6 +36,11 @@ const ManageQuestions: NextPage = () => {
       utils.question.getQuestionsByChapter.invalidate();
     },
   });
+
+  const { data: chapterDescription } = trpc.chapter.getChapterDesc.useQuery(
+    { chapter: parseInt(chapterNumber) },
+    { enabled: isReady }
+  );
 
   if (isLoading) {
     return (
@@ -71,27 +75,23 @@ const ManageQuestions: NextPage = () => {
     <>
       <Header>Delete Questions</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={`Chapter ${chapter}`} />
+        <TopSection title={chapterDescription?.description ?? ""} />
 
         <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
           {questions.length > 0 ? (
             questions.map((question) => (
-              <div
+              <Link
+                href={`/edit-questions/chapter/${chapterNumber}/question/${question.id}`}
                 key={question.id}
                 className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
               >
                 <h2>{question.question}</h2>
-                {question.imageUrl ? (
-                  <p className="font-bold italic text-red-300">has image</p>
-                ) : (
-                  ""
-                )}
                 <DeleteButton
                   handleClick={handleClick}
                   itemToDelete={question}
                   deleteItem={deleteQuestion}
                 />
-              </div>
+              </Link>
             ))
           ) : (
             <div className="flex flex-col items-center">
@@ -108,7 +108,7 @@ const ManageQuestions: NextPage = () => {
         )}
         <Link
           className="menu-button mt-2"
-          href={`/create-question/chapter/${chapter}`}
+          href={`/create-question/chapter/${chapterNumber}`}
         >
           Create Question
         </Link>

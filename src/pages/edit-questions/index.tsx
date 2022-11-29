@@ -95,14 +95,14 @@ const ManageChapters: NextPage = () => {
         )}
         <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
           {chapters.length > 0 ? (
-            chapters.map((chapter) => (
+            chapters.map((chapter, idx) => (
               <Link
                 href={`edit-questions/chapter/${chapter.number}`}
                 key={chapter.id}
                 className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700"
               >
                 <h2>
-                  <span className="font-bold">{chapter.number}</span>{" "}
+                  <span className="font-bold">{idx + 1}</span>{" "}
                   {chapter.description}
                 </h2>
                 <DeleteButton

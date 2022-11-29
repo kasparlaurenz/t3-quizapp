@@ -7,6 +7,7 @@ interface NewQuestionInputProps {
   setNewQuestion: React.Dispatch<SetStateAction<InitialQuestionType>>;
   htmlFor: string;
   children: React.ReactNode;
+  isRequired: boolean;
 }
 
 const NewQuestionInput: FC<NewQuestionInputProps> = ({
@@ -14,6 +15,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
   value,
   htmlFor,
   children,
+  isRequired,
 }) => {
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     switch (htmlFor) {
@@ -63,7 +65,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
         onChange={handleInputChange}
         className="bg-slate-700 p-2"
         id={htmlFor}
-        required
+        required={isRequired}
       />
     </div>
   );

@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import type { FC } from "react";
 import TopSection from "../../../components/TopSection";
 import type { InitialQuestionType } from "../../../utils/types";
+import ConfirmModal from "../../../components/ConfirmationModal";
 
 const initialQuestionState: InitialQuestionType = {
   question: "",
@@ -109,7 +110,7 @@ const CreateQuestion: NextPage = () => {
         <TopSection title={`Question for Chapter ${chapter}`} />
         {showConfirm && (
           <>
-            <ConfirmModal handleModal={handleModal} />
+            <ConfirmModal status="created" handleModal={handleModal} />
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
@@ -118,6 +119,7 @@ const CreateQuestion: NextPage = () => {
             setNewQuestion={setNewQuestion}
             htmlFor="question"
             value={newQuestion.question}
+            isRequired={true}
           >
             Your Question
           </NewQuestionInput>
@@ -125,6 +127,7 @@ const CreateQuestion: NextPage = () => {
             setNewQuestion={setNewQuestion}
             htmlFor="wrong_answer1"
             value={newQuestion.wrong_answer1.answer}
+            isRequired={true}
           >
             Wrong Answer 1
           </NewQuestionInput>
@@ -132,6 +135,7 @@ const CreateQuestion: NextPage = () => {
             setNewQuestion={setNewQuestion}
             htmlFor="wrong_answer2"
             value={newQuestion.wrong_answer2.answer}
+            isRequired={true}
           >
             Wrong Answer 2
           </NewQuestionInput>
@@ -139,19 +143,33 @@ const CreateQuestion: NextPage = () => {
             setNewQuestion={setNewQuestion}
             htmlFor="correct_answer"
             value={newQuestion.correct_answer.answer}
+            isRequired={true}
           >
             Correct Answer
           </NewQuestionInput>
           <div className="flex flex-col">
+            <label htmlFor="image">
+              Upload Image <span className="italic">(optional)</span>
+            </label>
             {image && (
               // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
               <div className="relative my-2 h-[70px] w-[90px]">
                 <Image layout="fill" src={previewUrl} alt="previe-image" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (fileInputRef.current !== null) {
+                      fileInputRef.current.value = "";
+                    }
+                    setPreviewUrl("");
+                    setImage(undefined);
+                  }}
+                  className="rounded-m absolute top-0 right-0 bg-red-400 py-1 px-2  transition hover:bg-red-500"
+                >
+                  X
+                </button>
               </div>
             )}
-            <label htmlFor="image">
-              Upload Image <span className="italic">(optional)</span>
-            </label>
             <input
               ref={fileInputRef}
               name="image"
@@ -166,20 +184,6 @@ const CreateQuestion: NextPage = () => {
         </form>
       </main>
     </>
-  );
-};
-
-interface ConfirmModalProps {
-  handleModal: () => void;
-}
-const ConfirmModal: FC<ConfirmModalProps> = ({ handleModal }) => {
-  return (
-    <div className="absolute z-50">
-      <p className="text-lg">Question has been created</p>
-      <button onClick={handleModal} className="reg-button">
-        Close
-      </button>
-    </div>
   );
 };
 
