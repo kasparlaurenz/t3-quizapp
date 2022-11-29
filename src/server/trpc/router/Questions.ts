@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { shuffle } from "../../../utils/shuffle";
 
 import { publicProcedure, router } from "../trpc";
 
@@ -22,13 +23,16 @@ export const questionsRouter = router({
             number: input.chapter,
           },
         },
+        orderBy: {
+          createdAt: "asc",
+        },
       });
     }),
 
   getQuestionsWithAnswersByChapterSelection: publicProcedure
     .input(z.object({ chapter: z.array(z.number()) }))
     .query(async ({ ctx, input }) => {
-      return ctx.prisma.question.findMany({
+      const questions = await ctx.prisma.question.findMany({
         where: {
           chapter: {
             number: {
@@ -40,6 +44,18 @@ export const questionsRouter = router({
           answers: true,
         },
       });
+
+      const shuffledQuestions = shuffle(questions);
+
+      const shuffledQuestionsWithShuffledAnswers = shuffledQuestions.map(
+        (question) => {
+          return {
+            ...question,
+            answers: shuffle(question.answers),
+          };
+        }
+      );
+      return shuffledQuestionsWithShuffledAnswers;
     }),
   getQuestionsWithAnswersByChapter: publicProcedure
     .input(z.object({ chapter: z.number() }))

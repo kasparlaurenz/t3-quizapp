@@ -16,3 +16,11 @@
     @apply mt-8 w-[200px] rounded-md bg-neutral-600 p-2 text-center text-white transition hover:bg-slate-600;
   }
 }
+
+.no-scroll {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scroll::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}

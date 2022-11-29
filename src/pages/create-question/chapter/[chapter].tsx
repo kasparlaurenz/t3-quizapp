@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import React, { useRef, useState } from "react";
 
 import Header from "../../../components/Header";
@@ -10,9 +9,10 @@ import { trpc } from "../../../utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import type { FC } from "react";
-import type { QuestionWithAnswers } from "../../../utils/types";
+import TopSection from "../../../components/TopSection";
+import type { InitialQuestionType } from "../../../utils/types";
 
-const initialQuestionState = {
+const initialQuestionState: InitialQuestionType = {
   question: "",
   correct_answer: { answer: "", is_correct: true },
   wrong_answer1: { answer: "", is_correct: false },
@@ -22,9 +22,8 @@ const initialQuestionState = {
 };
 
 const CreateQuestion: NextPage = () => {
-  const router = useRouter();
   const [newQuestion, setNewQuestion] =
-    useState<QuestionWithAnswers>(initialQuestionState);
+    useState<InitialQuestionType>(initialQuestionState);
 
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [image, setImage] = useState<File | undefined>();
@@ -107,19 +106,14 @@ const CreateQuestion: NextPage = () => {
     <>
       <Header>Create Question</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <Link className="menu-button" href="/">
-          Menu
-        </Link>
-        <button className="menu-button" onClick={() => router.back()}>
-          Go Back
-        </button>
+        <TopSection title={`Question for Chapter ${chapter}`} />
         {showConfirm && (
           <>
             <ConfirmModal handleModal={handleModal} />
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
-        <form className="w-1/2" action="submit" onSubmit={handleSubmit}>
+        <form className="mt-6 w-1/2" action="submit" onSubmit={handleSubmit}>
           <NewQuestionInput
             setNewQuestion={setNewQuestion}
             htmlFor="question"
