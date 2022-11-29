@@ -82,6 +82,16 @@ export const questionsRouter = router({
         },
       });
     }),
+
+  getQuestionById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.question.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
   getQuestionsWithAnswersByChapterSelection: publicProcedure
     .input(z.object({ chapter: z.array(z.number()) }))
     .query(async ({ ctx, input }) => {
