@@ -50,7 +50,7 @@ const Play: NextPage = () => {
     );
   }
 
-  const handleChange = (
+  const handleSelectChapter = (
     e: React.ChangeEvent<HTMLInputElement>,
     chapter: Chapter
   ) => {
@@ -199,7 +199,7 @@ const Play: NextPage = () => {
                         className=" mr-1 h-[14px] w-[14px] accent-sky-500"
                         type="checkbox"
                         value={chapter.number}
-                        onChange={(e) => handleChange(e, chapter)}
+                        onChange={(e) => handleSelectChapter(e, chapter)}
                         checked={selectedChapters.includes(chapter.number)}
                       />
                       {chapter.number} {chapter.description}
