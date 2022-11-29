@@ -33,7 +33,7 @@ const CreateQuestion: NextPage = () => {
   const { query, isReady } = useRouter();
 
   const chapter = query.chapter as string;
-  const { data: chapterDescription } = trpc.question.getChapterDesc.useQuery(
+  const { data: chapterDescription } = trpc.chapter.getChapterDesc.useQuery(
     { chapter: parseInt(chapter) },
     { enabled: isReady }
   );

@@ -14,33 +14,33 @@ const ManageChapters: NextPage = () => {
     data: chapters,
     isLoading,
     isError,
-  } = trpc.question.getChapters.useQuery();
+  } = trpc.chapter.getChapters.useQuery();
 
-  const deleteChapter = trpc.question.deleteChapter.useMutation({
+  const deleteChapter = trpc.chapter.deleteChapter.useMutation({
     onMutate: () => {
-      utils.question.getChapters.cancel();
-      const optimisticUpdate = utils.question.getChapters.getData();
+      utils.chapter.getChapters.cancel();
+      const optimisticUpdate = utils.chapter.getChapters.getData();
 
       if (optimisticUpdate) {
-        utils.question.getChapters.setData(optimisticUpdate);
+        utils.chapter.getChapters.setData(optimisticUpdate);
       }
     },
     onSettled: () => {
-      utils.question.getChapters.invalidate();
+      utils.chapter.getChapters.invalidate();
     },
   });
 
-  const createNewChapter = trpc.question.createChapter.useMutation({
+  const createNewChapter = trpc.chapter.createChapter.useMutation({
     onMutate: () => {
-      utils.question.getChapters.cancel();
-      const optimisticUpdate = utils.question.getChapters.getData();
+      utils.chapter.getChapters.cancel();
+      const optimisticUpdate = utils.chapter.getChapters.getData();
 
       if (optimisticUpdate) {
-        utils.question.getChapters.setData(optimisticUpdate);
+        utils.chapter.getChapters.setData(optimisticUpdate);
       }
     },
     onSettled: () => {
-      utils.question.getChapters.invalidate();
+      utils.chapter.getChapters.invalidate();
     },
   });
 

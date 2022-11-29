@@ -33,7 +33,7 @@ const Play: NextPage = () => {
     data: chapters,
     isLoading,
     isError,
-  } = trpc.question.getChapters.useQuery();
+  } = trpc.chapter.getChapters.useQuery();
   if (isLoading) {
     return (
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
@@ -182,7 +182,7 @@ const Play: NextPage = () => {
               id="chapter-selection"
               className="flex flex-col items-center justify-center"
             >
-              {chapters.length > 0 && (
+              {chapters.length > 1 && (
                 <>
                   <label className="text-2xl text-sky-400">
                     <input
