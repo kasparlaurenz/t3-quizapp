@@ -1,10 +1,10 @@
 import type { ChangeEvent, FC } from "react";
-import type { QuestionWithAnswersFE } from "../utils/types";
+import type { InitialQuestionType } from "../utils/types";
 import type { SetStateAction } from "react";
 
 interface NewQuestionInputProps {
   value: string;
-  setNewQuestion: React.Dispatch<SetStateAction<QuestionWithAnswersFE>>;
+  setNewQuestion: React.Dispatch<SetStateAction<InitialQuestionType>>;
   htmlFor: string;
   children: React.ReactNode;
 }

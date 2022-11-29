@@ -10,9 +10,9 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import type { FC } from "react";
 import TopSection from "../../../components/TopSection";
-import type { QuestionWithAnswersFE } from "../../../utils/types";
+import type { InitialQuestionType } from "../../../utils/types";
 
-const initialQuestionState = {
+const initialQuestionState: InitialQuestionType = {
   question: "",
   correct_answer: { answer: "", is_correct: true },
   wrong_answer1: { answer: "", is_correct: false },
@@ -23,7 +23,7 @@ const initialQuestionState = {
 
 const CreateQuestion: NextPage = () => {
   const [newQuestion, setNewQuestion] =
-    useState<QuestionWithAnswersFE>(initialQuestionState);
+    useState<InitialQuestionType>(initialQuestionState);
 
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [image, setImage] = useState<File | undefined>();
