@@ -12,7 +12,7 @@ export type AnswerObjectType = {
   is_correct: boolean;
 };
 
-export type QuestionWithAnswers = QuestionType & {
+export type QuestionWithAnswersFE = QuestionType & {
   wrong_answer1: AnswerType;
   wrong_answer2: AnswerType;
   correct_answer: AnswerType;
