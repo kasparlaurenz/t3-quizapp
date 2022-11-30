@@ -99,7 +99,7 @@ const ManageChapters: NextPage = () => {
               <Link
                 href={`edit-questions/chapter/${chapter.number}`}
                 key={chapter.id}
-                className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700"
+                className=" relative flex h-auto w-full items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
               >
                 <h2>
                   <span className="font-bold">{idx + 1}</span>{" "}
@@ -160,7 +160,7 @@ const ChapterModal: FC<ChapterModalProps> = ({
       <label className="text-lg text-sky-300" htmlFor="desc">
         Description
       </label>
-      <textarea
+      <input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         className="mt-2 w-full bg-slate-700 p-2"

@@ -175,7 +175,7 @@ const ManageQuestion: NextPage = ({}) => {
         )}
         <div className="flex w-full flex-col items-center">
           <form
-            className="mt-6 w-full lg:max-w-[600px]"
+            className="mt-6 w-full md:max-w-[650px]"
             action="submit"
             onSubmit={handleSubmit}
           >
