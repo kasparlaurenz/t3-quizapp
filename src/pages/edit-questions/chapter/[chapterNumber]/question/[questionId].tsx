@@ -184,50 +184,48 @@ const ManageQuestion: NextPage = ({}) => {
               htmlFor="question"
               value={newQuestion.question}
               isRequired={false}
+              placeholder={(question && question.question) ?? ""}
             >
               Current Question:{" "}
-              <span className="text-sky-400">
-                {(question && question.question) ?? ""}
-              </span>
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
               htmlFor="wrong_answer1"
               value={newQuestion.wrong_answer1.answer}
               isRequired={false}
+              placeholder={
+                question && question.answers[0]?.is_correct === false
+                  ? question.answers[0]?.answer
+                  : ""
+              }
             >
               Current first wrong:{" "}
-              <span className="text-sky-400">
-                {question && question.answers[0]?.is_correct === false
-                  ? question.answers[0]?.answer
-                  : ""}
-              </span>
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
               htmlFor="wrong_answer2"
               value={newQuestion.wrong_answer2.answer}
               isRequired={false}
+              placeholder={
+                question && question.answers[1]?.is_correct === false
+                  ? question.answers[1]?.answer
+                  : ""
+              }
             >
               Current second wrong:{" "}
-              <span className="text-sky-400">
-                {question && question.answers[1]?.is_correct === false
-                  ? question.answers[1]?.answer
-                  : ""}
-              </span>
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
               htmlFor="correct_answer"
               value={newQuestion.correct_answer.answer}
               isRequired={false}
+              placeholder={
+                question && question.answers[2]?.is_correct === true
+                  ? question.answers[2]?.answer
+                  : ""
+              }
             >
               Current right one:{" "}
-              <span className="text-sky-400">
-                {question && question.answers[2]?.is_correct === true
-                  ? question.answers[2]?.answer
-                  : ""}
-              </span>
             </NewQuestionInput>
             <div className="flex flex-col">
               {question?.imageUrl ? (

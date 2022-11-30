@@ -125,6 +125,7 @@ const CreateQuestion: NextPage = () => {
               htmlFor="question"
               value={newQuestion.question}
               isRequired={true}
+              placeholder="Enter your question here.."
             >
               Your Question
             </NewQuestionInput>
@@ -133,6 +134,7 @@ const CreateQuestion: NextPage = () => {
               htmlFor="wrong_answer1"
               value={newQuestion.wrong_answer1.answer}
               isRequired={true}
+              placeholder="Enter your first wrong answer here.."
             >
               Wrong Answer 1
             </NewQuestionInput>
@@ -141,6 +143,7 @@ const CreateQuestion: NextPage = () => {
               htmlFor="wrong_answer2"
               value={newQuestion.wrong_answer2.answer}
               isRequired={true}
+              placeholder="Enter your second wrong answer here.."
             >
               Wrong Answer 2
             </NewQuestionInput>
@@ -149,6 +152,7 @@ const CreateQuestion: NextPage = () => {
               htmlFor="correct_answer"
               value={newQuestion.correct_answer.answer}
               isRequired={true}
+              placeholder="Enter your correct answer here.."
             >
               Correct Answer
             </NewQuestionInput>

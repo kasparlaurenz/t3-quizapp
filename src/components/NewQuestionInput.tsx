@@ -8,6 +8,7 @@ interface NewQuestionInputProps {
   htmlFor: string;
   children: React.ReactNode;
   isRequired: boolean;
+  placeholder: string;
 }
 
 const NewQuestionInput: FC<NewQuestionInputProps> = ({
@@ -16,6 +17,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
   htmlFor,
   children,
   isRequired,
+  placeholder,
 }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     switch (htmlFor) {
@@ -66,6 +68,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
         className="bg-slate-700 p-2"
         id={htmlFor}
         required={isRequired}
+        placeholder={placeholder}
       />
     </div>
   );
