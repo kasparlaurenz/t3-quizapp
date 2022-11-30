@@ -27,7 +27,7 @@ const Play: NextPage = () => {
   const { data: questions } =
     trpc.question.getQuestionsWithAnswersByChapterSelection.useQuery(
       { chapter: selectedChapters },
-      { enabled: fetchQuestions === true }
+      { enabled: fetchQuestions === true, refetchOnWindowFocus: false }
     );
   const {
     data: chapters,
