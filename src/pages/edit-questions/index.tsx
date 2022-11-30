@@ -165,6 +165,7 @@ const ChapterModal: FC<ChapterModalProps> = ({
         onChange={(e) => setDescription(e.target.value)}
         className="mt-2 w-full bg-slate-700 p-2"
         id="desc"
+        placeholder="Chapter description"
         required
       />
       <button
