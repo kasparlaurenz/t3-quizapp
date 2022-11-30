@@ -114,74 +114,84 @@ const CreateQuestion: NextPage = () => {
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
-        <form className="mt-6 w-1/2" action="submit" onSubmit={handleSubmit}>
-          <NewQuestionInput
-            setNewQuestion={setNewQuestion}
-            htmlFor="question"
-            value={newQuestion.question}
-            isRequired={true}
+        <div className="flex w-full flex-col items-center">
+          <form
+            className="mt-6 w-full lg:max-w-[600px]"
+            action="submit"
+            onSubmit={handleSubmit}
           >
-            Your Question
-          </NewQuestionInput>
-          <NewQuestionInput
-            setNewQuestion={setNewQuestion}
-            htmlFor="wrong_answer1"
-            value={newQuestion.wrong_answer1.answer}
-            isRequired={true}
-          >
-            Wrong Answer 1
-          </NewQuestionInput>
-          <NewQuestionInput
-            setNewQuestion={setNewQuestion}
-            htmlFor="wrong_answer2"
-            value={newQuestion.wrong_answer2.answer}
-            isRequired={true}
-          >
-            Wrong Answer 2
-          </NewQuestionInput>
-          <NewQuestionInput
-            setNewQuestion={setNewQuestion}
-            htmlFor="correct_answer"
-            value={newQuestion.correct_answer.answer}
-            isRequired={true}
-          >
-            Correct Answer
-          </NewQuestionInput>
-          <div className="flex flex-col">
-            <label htmlFor="image">
-              Upload Image <span className="italic">(optional)</span>
-            </label>
-            {image && (
-              // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
-              <div className="relative my-2 h-[70px] w-[90px]">
-                <Image layout="fill" src={previewUrl} alt="previe-image" />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (fileInputRef.current !== null) {
-                      fileInputRef.current.value = "";
-                    }
-                    setPreviewUrl("");
-                    setImage(undefined);
-                  }}
-                  className="rounded-m absolute top-0 right-0 bg-red-400 py-1 px-2  transition hover:bg-red-500"
-                >
-                  X
-                </button>
-              </div>
-            )}
-            <input
-              ref={fileInputRef}
-              name="image"
-              type="file"
-              accept="image/*"
-              onChange={onFileChange}
-            />
-          </div>
-          <button type="submit" className="menu-button">
-            Create Question
-          </button>
-        </form>
+            <NewQuestionInput
+              setNewQuestion={setNewQuestion}
+              htmlFor="question"
+              value={newQuestion.question}
+              isRequired={true}
+              placeholder="Enter your question here.."
+            >
+              Your Question
+            </NewQuestionInput>
+            <NewQuestionInput
+              setNewQuestion={setNewQuestion}
+              htmlFor="wrong_answer1"
+              value={newQuestion.wrong_answer1.answer}
+              isRequired={true}
+              placeholder="Enter your first wrong answer here.."
+            >
+              Wrong Answer 1
+            </NewQuestionInput>
+            <NewQuestionInput
+              setNewQuestion={setNewQuestion}
+              htmlFor="wrong_answer2"
+              value={newQuestion.wrong_answer2.answer}
+              isRequired={true}
+              placeholder="Enter your second wrong answer here.."
+            >
+              Wrong Answer 2
+            </NewQuestionInput>
+            <NewQuestionInput
+              setNewQuestion={setNewQuestion}
+              htmlFor="correct_answer"
+              value={newQuestion.correct_answer.answer}
+              isRequired={true}
+              placeholder="Enter your correct answer here.."
+            >
+              Correct Answer
+            </NewQuestionInput>
+            <div className="flex flex-col">
+              <label htmlFor="image">
+                Upload Image <span className="italic">(optional)</span>
+              </label>
+              {image && (
+                // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
+                <div className="relative my-2 h-[70px] w-[90px]">
+                  <Image layout="fill" src={previewUrl} alt="previe-image" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (fileInputRef.current !== null) {
+                        fileInputRef.current.value = "";
+                      }
+                      setPreviewUrl("");
+                      setImage(undefined);
+                    }}
+                    className="rounded-m absolute top-0 right-0 bg-red-400 py-1 px-2  transition hover:bg-red-500"
+                  >
+                    X
+                  </button>
+                </div>
+              )}
+              <input
+                ref={fileInputRef}
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+              />
+            </div>
+            <button type="submit" className="menu-button">
+              Create Question
+            </button>
+          </form>
+        </div>
       </main>
     </>
   );
