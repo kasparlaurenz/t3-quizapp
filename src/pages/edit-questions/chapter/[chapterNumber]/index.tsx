@@ -83,7 +83,7 @@ const ManageQuestions: NextPage = () => {
               <Link
                 href={`/edit-questions/chapter/${chapterNumber}/question/${question.id}`}
                 key={question.id}
-                className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4"
+                className=" relative flex h-auto w-1/4 items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700"
               >
                 <h2>{question.question}</h2>
                 <DeleteButton
