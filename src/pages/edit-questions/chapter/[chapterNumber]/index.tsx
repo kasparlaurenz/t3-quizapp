@@ -73,11 +73,11 @@ const ManageQuestions: NextPage = () => {
 
   return (
     <>
-      <Header>Delete Questions</Header>
+      <Header>Fragen</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <TopSection title={chapterDescription?.description ?? ""} />
 
-        <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
+        <div className="relative mt-4 flex w-full flex-col items-center justify-start gap-5 p-2">
           {questions.length > 0 ? (
             questions.map((question) => (
               <Link
@@ -96,21 +96,16 @@ const ManageQuestions: NextPage = () => {
           ) : (
             <div className="flex flex-col items-center">
               <p className="mt-5 text-3xl font-bold text-red-500">
-                No questions
+                Keine Fragen
               </p>
             </div>
           )}
         </div>
-        {questions.length > 3 && (
-          <p className="mt-4 italic text-sky-500">
-            Scroll to view more questions
-          </p>
-        )}
         <Link
           className="menu-button mt-2"
           href={`/create-question/chapter/${chapterNumber}`}
         >
-          Create Question
+          Neue Frage
         </Link>
       </main>
     </>

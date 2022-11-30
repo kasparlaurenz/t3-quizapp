@@ -14,14 +14,14 @@ const TopSection: FC<TopSectionProps> = ({ title }) => {
         onClick={() => router.back()}
         className="menu-button mt-0 w-fit bg-slate-400 text-gray-900"
       >
-        Back
+        Zurück
       </button>
       <h1 className="text-3xl font-bold text-sky-300">{title}</h1>
       <Link
         className="menu-button mt-0 w-fit bg-slate-400 text-gray-900"
         href="/"
       >
-        Menu
+        Menü
       </Link>
     </div>
   );

@@ -164,9 +164,9 @@ const ManageQuestion: NextPage = ({}) => {
   }
   return (
     <>
-      <Header>Create Question</Header>
+      <Header>Neue Frage</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={`Manage Question`} />
+        <TopSection title="Neue Frage" />
         {showConfirm && (
           <>
             <ConfirmModal status="updated" handleModal={handleModal} />
@@ -186,7 +186,7 @@ const ManageQuestion: NextPage = ({}) => {
               isRequired={false}
               placeholder={question!.question}
             >
-              Current Question:{" "}
+              Aktuelle Frage:{" "}
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
@@ -195,7 +195,7 @@ const ManageQuestion: NextPage = ({}) => {
               isRequired={false}
               placeholder={question!.answers[0]!.answer}
             >
-              Current first wrong:{" "}
+              Erste falsche Antwort:{" "}
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
@@ -204,7 +204,7 @@ const ManageQuestion: NextPage = ({}) => {
               isRequired={false}
               placeholder={question!.answers[1]!.answer}
             >
-              Current second wrong:{" "}
+              Zweite falsche Antwort:{" "}
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
@@ -213,7 +213,7 @@ const ManageQuestion: NextPage = ({}) => {
               isRequired={false}
               placeholder={question!.answers[2]!.answer}
             >
-              Current right one:{" "}
+              Richtige Antwort:{" "}
             </NewQuestionInput>
             <div className="flex flex-col">
               {question?.imageUrl ? (
@@ -236,7 +236,7 @@ const ManageQuestion: NextPage = ({}) => {
               ) : (
                 <>
                   <label htmlFor="image">
-                    Upload Image <span className="italic">(optional)</span>
+                    Bild <span className="italic">(optional)</span>
                   </label>
                   {image && (
                     // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
@@ -272,7 +272,7 @@ const ManageQuestion: NextPage = ({}) => {
               )}
             </div>
             <button type="submit" className="menu-button">
-              Update Question
+              Frage aktualisieren
             </button>
           </form>
         </div>

@@ -11,10 +11,10 @@ const Home: NextPage = () => {
         <h1 className="text-3xl font-bold text-sky-300">QuizApp</h1>
 
         <Link className="menu-button bg-blue-500" href="play">
-          Play Game
+          Fragebogen
         </Link>
         <Link className="menu-button" href="edit-questions">
-          Edit Questions
+          Bearbeiten
         </Link>
       </main>
     </>

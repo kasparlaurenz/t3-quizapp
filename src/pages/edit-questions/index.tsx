@@ -80,9 +80,9 @@ const ManageChapters: NextPage = () => {
   };
   return (
     <>
-      <Header>Delete Chapter</Header>
+      <Header>Kapitel</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title="Chapters" />
+        <TopSection title="Kapitel" />
         {showChapterDetails && (
           <>
             <ChapterModal
@@ -93,7 +93,7 @@ const ManageChapters: NextPage = () => {
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
-        <div className="no-scroll relative mt-4 flex max-h-64 w-full flex-col items-center justify-start gap-5 overflow-y-scroll p-2">
+        <div className=" relative mt-4 flex  w-full flex-col items-center justify-start gap-5 p-2">
           {chapters.length > 0 ? (
             chapters.map((chapter, idx) => (
               <Link
@@ -118,17 +118,11 @@ const ManageChapters: NextPage = () => {
             </div>
           )}
         </div>
-        {chapters.length > 3 && (
-          <p className="mt-4 italic text-sky-500">
-            Scroll to view more questions
-          </p>
-        )}
         <button
           onClick={() => setShowChapterDetails(true)}
           className="menu-button mt-2"
         >
-          Create Chapter{" "}
-          <span className="font-bold"> {currentLastChapter}</span>
+          Neues Kapitel <span className="font-bold"> {currentLastChapter}</span>
         </button>
       </main>
     </>
@@ -158,7 +152,7 @@ const ChapterModal: FC<ChapterModalProps> = ({
       </button>
       <p className="text-2xl font-bold">Chapter {chapter} details</p>
       <label className="text-lg text-sky-300" htmlFor="desc">
-        Description
+        Titel
       </label>
       <input
         value={description}
@@ -172,7 +166,7 @@ const ChapterModal: FC<ChapterModalProps> = ({
         onClick={() => handleClick(description)}
         className="menu-button mt-4"
       >
-        Create New Chapter
+        Erstelle neues Kapitel
       </button>
     </div>
   );

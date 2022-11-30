@@ -21,14 +21,14 @@ const Result: FC<ResultProps> = ({
   return (
     <div className="mt-8 flex flex-col items-center justify-center">
       <p className="text-lg">
-        You got{" "}
+        Du hast{" "}
         <span className="px-2 text-5xl font-bold text-blue-300">{score}</span>{" "}
-        of{" "}
+        aus{" "}
         <span className="px-2 text-5xl font-bold text-blue-300">
           {" "}
           {questions.length}
         </span>{" "}
-        Questions correct!{" "}
+        Fragen korrekt beantwortet!{" "}
       </p>
 
       <div className="mt-4 flex flex-col gap-4">
@@ -55,7 +55,7 @@ const Result: FC<ResultProps> = ({
                       : "mt-1 text-red-400"
                   }
                 >
-                  Your Selection: {resultList[idx]?.answer}
+                  Deine Antwort: {resultList[idx]?.answer}
                 </p>
               </div>
               {resultList[idx]?.isCorrect === true ? (
@@ -96,7 +96,7 @@ const Result: FC<ResultProps> = ({
           </div>
         ))}
         <button onClick={resetGame} className="menu-button">
-          Play again
+          Neustarten
         </button>
       </div>
     </div>

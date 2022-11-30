@@ -102,7 +102,7 @@ const Play: NextPage = () => {
 
   return (
     <>
-      <Header>Play</Header>
+      <Header>Fragebogen</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <TopSection title="Play" />
         {playQuiz && questions ? (
@@ -110,7 +110,7 @@ const Play: NextPage = () => {
             {questions.length > 0 && curQuestionIdx < questions.length ? (
               <div className="w-full sm:w-2/3">
                 <div className="flex flex-col items-center justify-center">
-                  <h3 className="mt-10">Question</h3>
+                  <h3 className="mt-10">Frage</h3>
                   <span className="font-bold text-blue-400">
                     {curQuestionIdx + 1} / {questions.length}
                   </span>
@@ -149,8 +149,8 @@ const Play: NextPage = () => {
                   {revealAnswer && (
                     <button onClick={handleNextClick} className="menu-button">
                       {curQuestionIdx + 1 === questions.length
-                        ? "Finish"
-                        : "Next"}
+                        ? "Beenden"
+                        : "Weiter"}
                     </button>
                   )}
                 </div>
@@ -165,18 +165,15 @@ const Play: NextPage = () => {
             ) : (
               <div className="flex flex-col items-center">
                 <p className="mt-5 text-3xl font-bold text-red-500">
-                  No questions
+                  Keine Fragen gefunden
                 </p>
-                <Link className="menu-button mt-1" href="create-question">
-                  Create Question
-                </Link>
               </div>
             )}
           </>
         ) : chapters.length > 0 ? (
           <>
             <label className="mt-4 text-2xl" htmlFor="chapter-selection">
-              Choose your Chapters:
+              Kapitel wählen
             </label>
             <form
               id="chapter-selection"
@@ -190,7 +187,7 @@ const Play: NextPage = () => {
                       className="mr-1 h-[18px] w-[18px] accent-sky-500"
                       onChange={handleSelectAll}
                     />
-                    Select all
+                    Alle
                   </label>
                 </>
               )}
@@ -214,7 +211,7 @@ const Play: NextPage = () => {
               {selectedChapters.length > 0 ? (
                 <>
                   <p className="text-center">
-                    Play with chapter <br />
+                    Starte mit Kapitel <br />
                     {selectedChapters.sort().map((chapter) => (
                       <span
                         key={chapter}
@@ -232,22 +229,22 @@ const Play: NextPage = () => {
                     }}
                     className="menu-button mt-3"
                   >
-                    Play Game
+                    Starten
                   </button>
                 </>
               ) : (
                 <span className="w-2/3 text-center italic text-sky-400">
-                  No Chapter selected, please select atleast one.
+                  Bitte wähle mindestens ein Kapitel zum Starten.
                 </span>
               )}
             </form>
           </>
         ) : (
           <>
-            <p className="mt-2 text-lg font-bold text-red-500">No Chapters</p>
+            <p className="mt-2 text-lg font-bold text-red-500">Keine Kapitel</p>
 
             <Link className="menu-button mt-2" href="edit-questions">
-              Create a Chapter
+              Erstelle Kapitel
             </Link>
           </>
         )}
