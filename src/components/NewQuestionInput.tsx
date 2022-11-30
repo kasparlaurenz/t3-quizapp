@@ -17,7 +17,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
   children,
   isRequired,
 }) => {
-  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     switch (htmlFor) {
       case "question":
         setNewQuestion((newQuestion) => ({
@@ -60,7 +60,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
   return (
     <div className="flex flex-col">
       <label htmlFor={htmlFor}>{children}</label>
-      <textarea
+      <input
         value={value}
         onChange={handleInputChange}
         className="bg-slate-700 p-2"
