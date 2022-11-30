@@ -184,7 +184,7 @@ const ManageQuestion: NextPage = ({}) => {
               htmlFor="question"
               value={newQuestion.question}
               isRequired={false}
-              placeholder={(question && question.question) ?? ""}
+              placeholder={question!.question}
             >
               Current Question:{" "}
             </NewQuestionInput>
@@ -193,11 +193,7 @@ const ManageQuestion: NextPage = ({}) => {
               htmlFor="wrong_answer1"
               value={newQuestion.wrong_answer1.answer}
               isRequired={false}
-              placeholder={
-                question && question.answers[0]?.is_correct === false
-                  ? question.answers[0]?.answer
-                  : ""
-              }
+              placeholder={question!.answers[0]!.answer}
             >
               Current first wrong:{" "}
             </NewQuestionInput>
@@ -206,11 +202,7 @@ const ManageQuestion: NextPage = ({}) => {
               htmlFor="wrong_answer2"
               value={newQuestion.wrong_answer2.answer}
               isRequired={false}
-              placeholder={
-                question && question.answers[1]?.is_correct === false
-                  ? question.answers[1]?.answer
-                  : ""
-              }
+              placeholder={question!.answers[1]!.answer}
             >
               Current second wrong:{" "}
             </NewQuestionInput>
@@ -219,11 +211,7 @@ const ManageQuestion: NextPage = ({}) => {
               htmlFor="correct_answer"
               value={newQuestion.correct_answer.answer}
               isRequired={false}
-              placeholder={
-                question && question.answers[2]?.is_correct === true
-                  ? question.answers[2]?.answer
-                  : ""
-              }
+              placeholder={question!.answers[2]!.answer}
             >
               Current right one:{" "}
             </NewQuestionInput>
