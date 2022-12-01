@@ -125,40 +125,40 @@ const CreateQuestion: NextPage = () => {
               htmlFor="question"
               value={newQuestion.question}
               isRequired={true}
-              placeholder="Enter your question here.."
+              placeholder="Frage.."
             >
-              Your Question
+              Frage
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
               htmlFor="wrong_answer1"
               value={newQuestion.wrong_answer1.answer}
               isRequired={true}
-              placeholder="Enter your first wrong answer here.."
+              placeholder="Falsche Antwort.."
             >
-              Wrong Answer 1
+              Erste falsche Antwort
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
               htmlFor="wrong_answer2"
               value={newQuestion.wrong_answer2.answer}
               isRequired={true}
-              placeholder="Enter your second wrong answer here.."
+              placeholder="Falsche Antwort.."
             >
-              Wrong Answer 2
+              Zweite falsche Antwort
             </NewQuestionInput>
             <NewQuestionInput
               setNewQuestion={setNewQuestion}
               htmlFor="correct_answer"
               value={newQuestion.correct_answer.answer}
               isRequired={true}
-              placeholder="Enter your correct answer here.."
+              placeholder="Richtige Antwort.."
             >
-              Correct Answer
+              Richtige Antwort
             </NewQuestionInput>
             <div className="flex flex-col">
               <label htmlFor="image">
-                Upload Image <span className="italic">(optional)</span>
+                Bild <span className="italic">(optional)</span>
               </label>
               {image && (
                 // <img alt="preview" className="my-2 w-[80px]" src={previewUrl} />
@@ -188,7 +188,7 @@ const CreateQuestion: NextPage = () => {
               />
             </div>
             <button type="submit" className="menu-button">
-              Create Question
+              Frage erstellen
             </button>
           </form>
         </div>

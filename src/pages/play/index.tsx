@@ -104,7 +104,7 @@ const Play: NextPage = () => {
     <>
       <Header>Fragebogen</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title="Play" />
+        <TopSection title="Kapitel" />
         {playQuiz && questions ? (
           <>
             {questions.length > 0 && curQuestionIdx < questions.length ? (
@@ -209,29 +209,16 @@ const Play: NextPage = () => {
               </div>
 
               {selectedChapters.length > 0 ? (
-                <>
-                  <p className="text-center">
-                    Starte mit Kapitel <br />
-                    {selectedChapters.sort().map((chapter) => (
-                      <span
-                        key={chapter}
-                        className="text-lg font-bold text-sky-500"
-                      >
-                        {chapter}{" "}
-                      </span>
-                    ))}
-                  </p>
-                  <button
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                      e.preventDefault();
-                      setFetchQuestions(true);
-                      setPlayQuiz(true);
-                    }}
-                    className="menu-button mt-3"
-                  >
-                    Starten
-                  </button>
-                </>
+                <button
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    setFetchQuestions(true);
+                    setPlayQuiz(true);
+                  }}
+                  className="menu-button mt-3"
+                >
+                  Starten
+                </button>
               ) : (
                 <span className="w-2/3 text-center italic text-sky-400">
                   Bitte wähle mindestens ein Kapitel zum Starten.
