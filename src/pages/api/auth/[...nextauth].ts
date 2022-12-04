@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
-        token.name = user.name;
+        token.username = user.username;
         token.email = user.email;
       }
       return token;
@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
-        session.user.name = token.name as string;
+        session.user.username = token.username as string;
         session.user.email = token.email as string;
       }
 
@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
           type: "email",
           placeholder: "jsmith@gmail.com",
         },
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials, req) => {
@@ -67,6 +68,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        console.log("user", user);
         return {
           id: user.id,
           email: user.email,
