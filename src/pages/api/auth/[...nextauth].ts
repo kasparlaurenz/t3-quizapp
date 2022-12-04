@@ -6,7 +6,7 @@ import { prisma } from "../../../server/db/client";
 import { env } from "process";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
