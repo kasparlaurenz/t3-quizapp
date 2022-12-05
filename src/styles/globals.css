@@ -29,6 +29,12 @@ ul {
   font-weight: normal;
 }
 
+button,
+a {
+  transition: all 0.3s ease !important;
+  transition-duration: 300ms !important;
+}
+
 @layer base {
   body {
     @apply bg-neutral-900 text-white;
