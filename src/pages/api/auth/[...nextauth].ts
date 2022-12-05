@@ -11,7 +11,6 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (user) {
-        token.id = user.id;
         token.role = user.role;
         token.username = user.username;
         token.email = user.email;
@@ -20,7 +19,6 @@ export const authOptions: NextAuthOptions = {
     },
     session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string;
         session.user.role = token.role as string;
         session.user.username = token.username as string;
         session.user.email = token.email as string;
@@ -37,11 +35,6 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: "credentials",
       credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "jsmith@gmail.com",
-        },
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
@@ -52,7 +45,7 @@ export const authOptions: NextAuthOptions = {
         // find out user from db
         const user = await prisma.user.findFirst({
           where: {
-            email: cred.email,
+            username: cred.username,
           },
         });
         if (!user) {
@@ -72,7 +65,6 @@ export const authOptions: NextAuthOptions = {
         console.log("user", user);
         return {
           id: user.id,
-          email: user.email,
           username: user.username,
           role: user.role,
         };

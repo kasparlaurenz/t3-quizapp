@@ -10,10 +10,10 @@ export const authRouter = router({
   register: publicProcedure
     .input(registerSchema)
     .mutation(async ({ input, ctx }) => {
-      const { username, email, password } = input;
+      const { username, password } = input;
 
       const exists = await ctx.prisma.user.findFirst({
-        where: { email },
+        where: { username },
       });
 
       if (exists) {
@@ -27,13 +27,13 @@ export const authRouter = router({
       const hash = bcrypt.hashSync(password, salt);
 
       const result = await ctx.prisma.user.create({
-        data: { username, email, password: hash },
+        data: { username, password: hash },
       });
 
       return {
         status: 201,
         message: "Account created successfully",
-        result: result.email,
+        result: result.username,
       };
     }),
 });
