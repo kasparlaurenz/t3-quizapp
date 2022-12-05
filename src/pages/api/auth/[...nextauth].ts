@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/login",
+    signIn: "/",
     newUser: "/register",
     error: "/",
   },
