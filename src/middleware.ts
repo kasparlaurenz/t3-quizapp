@@ -10,4 +10,6 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ["/edit-questions"] };
+export const config = {
+  matcher: ["/edit-questions/:path*", "/create-question/:path*"],
+};
