@@ -1,11 +1,10 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import Header from "../components/Header";
-import { getServerAuthSession } from "../server/common/get-server-auth-session";
 
 const Home: NextPage = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
     <>
