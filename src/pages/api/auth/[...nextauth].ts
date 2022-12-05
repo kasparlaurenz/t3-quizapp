@@ -45,7 +45,8 @@ export const authOptions: NextAuthOptions = {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials, req) => {
+      // @ts-ignore
+      authorize: async (credentials) => {
         const cred = await loginSchema.parseAsync(credentials);
         // perform you login logic
         // find out user from db
