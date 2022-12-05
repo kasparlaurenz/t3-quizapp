@@ -69,9 +69,9 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/index",
+    signIn: "/",
     newUser: "/login",
-    error: "/index",
+    error: "/",
   },
 };
 
