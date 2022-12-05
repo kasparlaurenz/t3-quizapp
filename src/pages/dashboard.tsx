@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       <Header />
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-sky-300">QuizApp</h1>
-        {session?.user?.role ?? <div>{session?.user?.username}</div>}
+        <>{session?.user ?? <div>{session?.user?.username}</div>}</>
 
         <Link className="menu-button bg-blue-500" href="play">
           Fragebogen
