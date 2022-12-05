@@ -7,7 +7,6 @@ import Header from "../components/Header";
 const Index: NextPage = () => {
   const { data: session } = useSession();
 
-  console.log("session", session);
   return (
     <>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
