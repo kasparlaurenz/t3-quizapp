@@ -1,13 +1,11 @@
 import { type NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
 import LoginForm from "../components/Auth/LoginForm";
 import Header from "../components/Header";
 
 const Index: NextPage = () => {
   const { data: session } = useSession();
-  const [showLogin, setShowLogin] = useState(false);
 
   console.log("session", session);
   return (
@@ -37,11 +35,7 @@ const Index: NextPage = () => {
               </button>
             </div>
           )}
-          {showLogin && (
-            <div className="flex flex-col gap-4">
-              <LoginForm />
-            </div>
-          )}
+
           {!session && (
             <div className="flex w-full flex-col items-center gap-4">
               <LoginForm />

@@ -1,8 +1,12 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import Header from "../components/Header";
+import { getServerAuthSession } from "../server/common/get-server-auth-session";
 
 const Home: NextPage = () => {
+  const { data: session, status } = useSession();
+
   return (
     <>
       <Header />
@@ -13,9 +17,18 @@ const Home: NextPage = () => {
         <Link className="menu-button bg-blue-500" href="play">
           Fragebogen
         </Link>
-        <Link className="menu-button" href="edit-questions">
-          Bearbeiten
-        </Link>
+
+        {session?.user?.role === "ADMIN" && (
+          <Link className="menu-button" href="edit-questions">
+            Bearbeiten
+          </Link>
+        )}
+        <button
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="menu-button"
+        >
+          Abmelden
+        </button>
       </main>
     </>
   );
