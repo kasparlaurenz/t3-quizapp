@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
 
-      authorize: async (credentials, req) => {
+      authorize: async (credentials) => {
         const cred = await loginSchema.parseAsync(credentials);
         // perform you login logic
         // find out user from db
@@ -51,18 +51,14 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           return null;
         }
-
         // if everything is fine
         const isValidPassword = bcrypt.compareSync(
           cred.password,
           user.password
         );
-
         if (!isValidPassword) {
           return null;
         }
-
-        console.log("user", user);
         return {
           id: user.id,
           username: user.username,
