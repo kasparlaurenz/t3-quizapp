@@ -6,8 +6,13 @@ module.exports = {
       },
     ],
   },
-};
-
-config.node = {
-  fs: "empty",
+  fs: false,
+  path: false,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback.fs = false;
+      config.resolve.fallback.path = false;
+    }
+    return config;
+  },
 };
