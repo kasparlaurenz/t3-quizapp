@@ -19,7 +19,7 @@ const AllQuestions: NextPage = () => {
       const optimisticUpdate = utils.question.getQuestions.getData();
 
       if (optimisticUpdate) {
-        utils.question.getQuestions.setData(undefined, optimisticUpdate);
+        utils.question.getQuestions.setData(optimisticUpdate);
       }
     },
     onSettled: () => {
