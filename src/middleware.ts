@@ -1,13 +1,12 @@
 import withAuth from "next-auth/middleware";
+import { authOptions } from "./pages/api/auth/[...nextauth]";
 
 export default withAuth({
   callbacks: {
     authorized: ({ token }) => token?.role === "ADMIN",
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/",
-  },
+  secret: authOptions.secret,
+  pages: authOptions.pages,
 });
 
 export const config = {
