@@ -1,4 +1,3 @@
-//@ts-nocheck
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -12,7 +11,7 @@ const RegisterForm = () => {
 
   const mutation = trpc.auth.register.useMutation({
     onError: (e) => setErrorMessage(e.message),
-    onSuccess: () => router.push("/login"),
+    onSuccess: () => router.push("/"),
   });
 
   const {
