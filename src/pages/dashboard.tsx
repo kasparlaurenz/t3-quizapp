@@ -23,7 +23,6 @@ const Home: NextPage = () => {
         )}
         {session?.user && (
           <>
-            <p>{session.user.username}</p>
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="menu-button"
