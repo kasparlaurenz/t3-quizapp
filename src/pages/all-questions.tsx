@@ -14,13 +14,11 @@ const AllQuestions: NextPage = () => {
   } = trpc.question.getQuestions.useQuery();
 
   const deleteQuestion = trpc.question.deleteQuestion.useMutation({
-    onMutate: () => {
-      utils.question.getQuestions.cancel();
-      const optimisticUpdate = utils.question.getQuestions.getData();
+    onMutate: async () => {
+      await utils.question.getQuestions.cancel();
+      const prevQuestions = utils.question.getQuestions.getData();
 
-      if (optimisticUpdate) {
-        utils.question.getQuestions.setData(undefined, optimisticUpdate);
-      }
+      utils.question.getQuestions.setData(undefined, prevQuestions);
     },
     onSettled: () => {
       utils.question.getQuestions.invalidate();

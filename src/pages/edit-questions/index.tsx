@@ -1,6 +1,7 @@
 import type { Chapter } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
+import { Input } from "postcss";
 import { FC, SetStateAction, useState } from "react";
 import DeleteButton from "../../components/Buttons/DeleteButton";
 import Header from "../../components/Header";
@@ -22,7 +23,7 @@ const ManageChapters: NextPage = () => {
       const optimisticUpdate = utils.chapter.getChapters.getData();
 
       if (optimisticUpdate) {
-        utils.chapter.getChapters.setData(optimisticUpdate);
+        utils.chapter.getChapters.setData(undefined, optimisticUpdate);
       }
     },
     onSettled: () => {
@@ -31,13 +32,10 @@ const ManageChapters: NextPage = () => {
   });
 
   const createNewChapter = trpc.chapter.createChapter.useMutation({
-    onMutate: () => {
-      utils.chapter.getChapters.cancel();
-      const optimisticUpdate = utils.chapter.getChapters.getData();
-
-      if (optimisticUpdate) {
-        utils.chapter.getChapters.setData(optimisticUpdate);
-      }
+    onMutate: async () => {
+      await utils.chapter.getChapters.cancel();
+      const prevChapters = utils.chapter.getChapters.getData();
+      utils.chapter.getChapters.setData(undefined, prevChapters);
     },
     onSettled: () => {
       utils.chapter.getChapters.invalidate();
