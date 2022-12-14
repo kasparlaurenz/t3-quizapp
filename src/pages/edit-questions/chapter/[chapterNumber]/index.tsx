@@ -29,10 +29,7 @@ const ManageQuestions: NextPage = () => {
       });
 
       if (optimisticUpdate) {
-        utils.question.getQuestionsByChapter.setData(
-          { chapter: parseInt(chapterNumber) },
-          optimisticUpdate
-        );
+        utils.question.getQuestionsByChapter.setData(optimisticUpdate);
       }
     },
     onSettled: () => {

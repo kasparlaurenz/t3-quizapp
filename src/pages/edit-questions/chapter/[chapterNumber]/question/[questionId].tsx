@@ -46,10 +46,7 @@ const ManageQuestion: NextPage = ({}) => {
       });
 
       if (optimisticUpdate) {
-        utils.question.getQuestionById.setData(
-          { id: questionId },
-          optimisticUpdate
-        );
+        utils.question.getQuestionById.setData(optimisticUpdate);
       }
     },
     onSettled: () => {
@@ -69,10 +66,7 @@ const ManageQuestion: NextPage = ({}) => {
       });
 
       if (optimisticUpdate) {
-        utils.question.getQuestionById.setData(
-          { id: questionId },
-          optimisticUpdate
-        );
+        utils.question.getQuestionById.setData(optimisticUpdate);
       }
     },
     onSettled: () => {
