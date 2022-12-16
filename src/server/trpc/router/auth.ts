@@ -16,6 +16,13 @@ export const authRouter = router({
         where: { username },
       });
 
+      if (password.length < 4) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Password must be at least 4 characters long.",
+        });
+      }
+
       if (exists) {
         throw new TRPCError({
           code: "CONFLICT",

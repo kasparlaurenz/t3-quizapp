@@ -10,7 +10,8 @@ const RegisterForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const mutation = trpc.auth.register.useMutation({
-    onError: (e) => setErrorMessage(e.message),
+    onError: (e) =>
+      setErrorMessage("Passwort muss mindestens 4 Zeichen lang sein"),
     onSuccess: () => router.push("/"),
   });
 
@@ -34,7 +35,12 @@ const RegisterForm = () => {
         className="flex w-2/3 flex-col gap-2"
       >
         {errorMessage && (
-          <p className="text-center text-red-600">{errorMessage}</p>
+          <p className="text-center text-rose-500">{errorMessage}</p>
+        )}
+        {errors.password_confirm && (
+          <p className="text-center  text-rose-500">
+            Passwörter stimmen nicht überein
+          </p>
         )}
         <label>Username</label>
         <input
@@ -71,11 +77,6 @@ const RegisterForm = () => {
             },
           })}
         />
-        {errors.password_confirm && (
-          <p className="text-center  text-rose-500">
-            Passwörter stimmen nicht überein
-          </p>
-        )}
 
         <div className="flex gap-4">
           <button
