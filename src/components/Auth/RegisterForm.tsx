@@ -28,11 +28,11 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="radius flex w-2/5 flex-col items-center gap-2 rounded-md bg-zinc-700 p-10">
+    <div className="radius flex w-full max-w-2xl flex-col items-center gap-2 rounded-md bg-zinc-700 p-10">
       <h2 className="text-3xl text-sky-300">Registrieren</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex w-2/3 flex-col gap-2"
+        className="flex w-full max-w-sm flex-col gap-2"
       >
         {errorMessage && (
           <p className="text-center text-rose-500">{errorMessage}</p>

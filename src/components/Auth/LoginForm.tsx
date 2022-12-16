@@ -20,7 +20,7 @@ const LoginForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-2/3 flex-col gap-2"
+      className="flex w-full max-w-sm flex-col gap-2"
     >
       {error && (
         <p className="text-center text-red-600">Login failed, try again!</p>

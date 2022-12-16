@@ -12,7 +12,7 @@ const Index: NextPage = () => {
     <>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <Header>Home</Header>
-        <div className="radius flex w-2/5 flex-col items-center gap-2 rounded-md bg-zinc-700 p-10">
+        <div className="radius flex w-full max-w-2xl flex-col items-center gap-2 rounded-md bg-zinc-700 p-10">
           <h2 className="text-3xl text-sky-300">Anmelden</h2>
           <p>
             {session
@@ -37,9 +37,9 @@ const Index: NextPage = () => {
           )}
 
           {!session && (
-            <div className="flex w-full flex-col items-center gap-4">
+            <div className="flex w-full max-w-sm flex-col items-center gap-4">
               <LoginForm />
-              <div className="w-2/3">
+              <div className="w-full">
                 <span>
                   Keinen Account?
                   <Link href={"/register"} className="text-sky-400">
