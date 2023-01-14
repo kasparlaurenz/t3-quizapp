@@ -2,7 +2,8 @@ import withAuth from "next-auth/middleware";
 
 export default withAuth({
   callbacks: {
-    authorized: ({ token }) => token?.role === "ADMIN",
+    authorized: ({ token }) =>
+      token?.role === "USER" || token?.role === "ADMIN",
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
@@ -11,5 +12,5 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ["/edit-questions/:path*", "/create-question/:path*"],
+  matcher: ["/edit-questions/:path*", "/create-question/:path*", "/dashboard/"],
 };
