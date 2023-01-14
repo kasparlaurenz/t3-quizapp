@@ -1,7 +1,8 @@
 import type { Chapter } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { FC, SetStateAction, useState } from "react";
+import { useState } from "react";
+import type { FC, SetStateAction } from "react";
 import DeleteButton from "../../components/Buttons/DeleteButton";
 import Header from "../../components/Header";
 import TopSection from "../../components/TopSection";

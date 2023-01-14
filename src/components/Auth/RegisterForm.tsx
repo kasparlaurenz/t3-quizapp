@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { IRegister } from "../../utils/authValidation";
+import type { IRegister } from "../../utils/authValidation";
 import { trpc } from "../../utils/trpc";
 
 const RegisterForm = () => {
