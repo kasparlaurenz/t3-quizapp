@@ -8,7 +8,12 @@ type QuestionWithAnswer = Question & {
 interface ResultProps {
   score: number;
   questions: QuestionWithAnswer[];
-  resultList: { answer: string; isCorrect: boolean }[];
+  resultList: {
+    answer: string;
+    isCorrect: boolean;
+    chapterDescription: string;
+    chapterNumber: number;
+  }[];
   resetGame: () => void;
 }
 
@@ -48,6 +53,10 @@ const Result: FC<ResultProps> = ({
               </p>
               <div className="flex flex-col items-center">
                 <p className="font-bol text-lg">{question.question}?</p>
+                <p className="mt-1 text-gray-400">
+                  Aus Kapitel {resultList[idx]?.chapterNumber}:{" "}
+                  {resultList[idx]?.chapterDescription}
+                </p>
                 <p
                   className={
                     resultList[idx]?.isCorrect === true

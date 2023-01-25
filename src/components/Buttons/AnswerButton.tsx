@@ -1,14 +1,19 @@
 import type { FC } from "react";
-import type { AnswerObjectType } from "../../utils/types";
+import type { AnswerObjectType, ChapterType } from "../../utils/types";
 
 interface AnswerButtonProps {
+  questionChapter: ChapterType;
   answer: {
     id: string;
     answer: string;
     is_correct: boolean;
   };
   handleAnswerClicked: (answer: AnswerObjectType) => void;
-  trackResult: (answerClicked: string, isCorrect: boolean) => void;
+  trackResult: (
+    answerClicked: string,
+    isCorrect: boolean,
+    questionChapter: ChapterType
+  ) => void;
   revealAnswer: boolean;
 }
 
@@ -17,12 +22,13 @@ const AnswerButton: FC<AnswerButtonProps> = ({
   handleAnswerClicked,
   trackResult,
   revealAnswer,
+  questionChapter,
 }) => {
   return (
     <button
       onClick={() => {
         handleAnswerClicked(answer);
-        trackResult(answer.answer, answer.is_correct);
+        trackResult(answer.answer, answer.is_correct, questionChapter);
       }}
       key={answer.id}
       className={

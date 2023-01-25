@@ -15,3 +15,15 @@ export type InitialQuestionType = QuestionType & {
   chapter?: number | null;
   description?: string;
 };
+
+export type ChapterType = {
+  number: number;
+  description: string;
+};
+
+export type ResultList = {
+  answer: string;
+  isCorrect: boolean;
+  chapterDescription: string;
+  chapterNumber: number;
+};

@@ -115,6 +115,12 @@ export const questionsRouter = router({
         },
         include: {
           answers: true,
+          chapter: {
+            select: {
+              description: true,
+              number: true,
+            },
+          },
         },
       });
 

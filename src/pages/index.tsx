@@ -1,4 +1,4 @@
-import { GetServerSideProps, type NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import LoginForm from "../components/Auth/LoginForm";

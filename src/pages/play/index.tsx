@@ -1,6 +1,6 @@
-import { Answer, Chapter } from "@prisma/client";
+import type { Answer, Chapter } from "@prisma/client";
 import type { NextPage } from "next";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import AnswerButton from "../../components/Buttons/AnswerButton";
@@ -8,7 +8,11 @@ import Header from "../../components/Header";
 import Result from "../../components/Result/Result";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
-import { AnswerObjectType } from "../../utils/types";
+import type {
+  AnswerObjectType,
+  ChapterType,
+  ResultList,
+} from "../../utils/types";
 
 const Play: NextPage = () => {
   const [revealAnswer, setRevealAnswer] = useState(false);
@@ -20,9 +24,7 @@ const Play: NextPage = () => {
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
 
-  const [resultList, setResultList] = useState<
-    { answer: string; isCorrect: boolean }[]
-  >([]);
+  const [resultList, setResultList] = useState<ResultList[]>([]);
 
   const { data: questions } =
     trpc.question.getQuestionsWithAnswersByChapterSelection.useQuery(
@@ -85,12 +87,18 @@ const Play: NextPage = () => {
     setCurQuestionIdx((prev) => prev + 1);
   };
 
-  const trackResult = (answerClicked: string, isCorrect: boolean) => {
+  const trackResult = (
+    answerClicked: string,
+    isCorrect: boolean,
+    questionChapter: ChapterType
+  ) => {
     const tempResult = {
       answer: answerClicked,
       isCorrect: isCorrect,
+      chapterDescription: questionChapter.description,
+      chapterNumber: questionChapter.number,
     };
-    setResultList((prev: any) => [...prev, tempResult]);
+    setResultList((prev) => [...prev, tempResult]);
   };
 
   const resetGame = () => {
@@ -99,6 +107,8 @@ const Play: NextPage = () => {
     setResultList([]);
     setPlayQuiz(true);
   };
+
+  console.log("questions", questions);
 
   return (
     <>
@@ -137,6 +147,8 @@ const Play: NextPage = () => {
                     {(questions[curQuestionIdx]?.answers ?? []).map(
                       (answer: Answer) => (
                         <AnswerButton
+                          // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
+                          questionChapter={questions[curQuestionIdx]!.chapter}
                           key={answer.id}
                           handleAnswerClicked={handleAnswerClicked}
                           trackResult={trackResult}
@@ -186,6 +198,7 @@ const Play: NextPage = () => {
                       type="checkbox"
                       className="mr-1 h-[18px] w-[18px] accent-sky-500"
                       onChange={handleSelectAll}
+                      checked={isCheckAll}
                     />
                     Alle
                   </label>
