@@ -1,4 +1,5 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { loginSchema } from "../../../utils/authValidation";
@@ -9,11 +10,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
-      // Persist the OAuth access_token and or the user id to the token right after signin
       if (user) {
         token.role = user.role;
         token.username = user.username;
-        token.email = user.email;
+        token.id = user.id;
       }
       return token;
     },
@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
       if (token && session.user) {
         session.user.role = token.role as string;
         session.user.username = token.username as string;
-        session.user.email = token.email as string;
+        session.user.id = token.id as string;
       }
 
       return session;

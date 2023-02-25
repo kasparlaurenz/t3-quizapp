@@ -8,7 +8,6 @@ import { trpc } from "../../../utils/trpc";
 
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import type { FC } from "react";
 import TopSection from "../../../components/TopSection";
 import type { InitialQuestionType } from "../../../utils/types";
 import ConfirmModal from "../../../components/ConfirmationModal";
