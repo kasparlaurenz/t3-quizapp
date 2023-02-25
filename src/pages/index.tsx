@@ -17,18 +17,14 @@ const Index: NextPage = () => {
           <div className="max-w-md ">
             <p className="text-center">
               {session
-                ? `Du bist angemeldet als ${session.user?.username}  ${
-                    session.user?.role === "ADMIN" ? "(Admin)" : "(User)"
-                  }`
-                : "Du bist nicht angemeledet"}
+                ? `Du bist angemeldet als ${session.user?.username}  mit der Rolle ${session.user?.role}`
+                : "Du bist nicht angemeldet."}
             </p>
-            {session && session.user?.role === "GUEST" && (
-              <p className="text-red-500">
-                {" "}
-                Du bist als {session.user.role} angemeldet. Warte auf die
-                Freischaltung deines Accounts.
-              </p>
-            )}
+            <p>
+              {session &&
+                session.user?.role === "GUEST" &&
+                "Warte auf die Bestätigung deines Accounts durch einen Admin"}
+            </p>
           </div>
           {session && (
             <div className="flex flex-col gap-4">
