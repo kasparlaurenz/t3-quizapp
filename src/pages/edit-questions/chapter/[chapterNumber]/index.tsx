@@ -1,5 +1,5 @@
-import { Chapter, Question } from "@prisma/client";
-import { NextPage } from "next";
+import type { Question } from "@prisma/client";
+import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import DeleteButton from "../../../../components/Buttons/DeleteButton";

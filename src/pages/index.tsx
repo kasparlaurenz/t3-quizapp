@@ -1,4 +1,4 @@
-import { GetServerSideProps, type NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import LoginForm from "../components/Auth/LoginForm";
@@ -17,14 +17,16 @@ const Index: NextPage = () => {
           <div className="max-w-md ">
             <p className="text-center">
               {session
-                ? `Du bist angemeldet als ${session.user?.username}`
+                ? `Du bist angemeldet als ${session.user?.username}  ${
+                    session.user?.role === "ADMIN" ? "(Admin)" : "(User)"
+                  }`
                 : "Du bist nicht angemeledet"}
             </p>
             {session && session.user?.role === "GUEST" && (
               <p className="text-red-500">
                 {" "}
-                Du bist als Gast angemeldet. Warte auf die Freischaltung deines
-                Accounts.
+                Du bist als {session.user.role} angemeldet. Warte auf die
+                Freischaltung deines Accounts.
               </p>
             )}
           </div>

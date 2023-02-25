@@ -6,6 +6,8 @@ import Header from "../components/Header";
 const Home: NextPage = () => {
   const { data: session } = useSession();
 
+  console.log(session?.user);
+
   return (
     <>
       <Header />
@@ -23,6 +25,12 @@ const Home: NextPage = () => {
         )}
         {session?.user && (
           <>
+            <Link
+              className="menu-button"
+              href={`/profile/user/${session.user.id}`}
+            >
+              Profil
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="menu-button"
