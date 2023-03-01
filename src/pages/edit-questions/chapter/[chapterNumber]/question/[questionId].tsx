@@ -12,9 +12,9 @@ import type { InitialQuestionType } from "../../../../../utils/types";
 
 const initialQuestionState: InitialQuestionType = {
   question: "",
-  correct_answer: { answer: "", is_correct: true },
-  wrong_answer1: { answer: "", is_correct: false },
-  wrong_answer2: { answer: "", is_correct: false },
+  correct_answer: { answer: "", is_correct: true, id: "" },
+  wrong_answer1: { answer: "", is_correct: false, id: "" },
+  wrong_answer2: { answer: "", is_correct: false, id: "" },
 };
 
 const ManageQuestion: NextPage = ({}) => {
@@ -36,6 +36,8 @@ const ManageQuestion: NextPage = ({}) => {
     { id: questionId },
     { enabled: isReady }
   );
+
+  console.log("---Question", question);
 
   const utils = trpc.useContext();
   const updateQuestion = trpc.question.updateQuestion.useMutation({
@@ -90,8 +92,10 @@ const ManageQuestion: NextPage = ({}) => {
       imageName: question?.imageName || imageName,
       incorrect_one:
         newQuestion.wrong_answer1.answer || question!.answers[0]!.answer,
+      incorrect_one_id: question!.answers[0]!.id,
       incorrect_two:
         newQuestion.wrong_answer2.answer || question!.answers[1]!.answer,
+      incorrect_two_id: question!.answers[1]!.id,
       correct:
         newQuestion.correct_answer.answer || question!.answers[2]!.answer,
     });

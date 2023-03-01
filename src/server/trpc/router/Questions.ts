@@ -143,13 +143,16 @@ export const questionsRouter = router({
         id: z.string(),
         question: z.string(),
         incorrect_one: z.string(),
+        incorrect_one_id: z.string(),
         incorrect_two: z.string(),
+        incorrect_two_id: z.string(),
         correct: z.string(),
         imageUrl: z.string().optional(),
         imageName: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      console.log(input);
       try {
         await ctx.prisma.question.update({
           where: {
@@ -163,8 +166,7 @@ export const questionsRouter = router({
               updateMany: [
                 {
                   where: {
-                    questionId: input.id,
-                    is_correct: false,
+                    id: input.incorrect_one_id,
                   },
                   data: {
                     answer: input.incorrect_one,
@@ -172,8 +174,7 @@ export const questionsRouter = router({
                 },
                 {
                   where: {
-                    questionId: input.id,
-                    is_correct: false,
+                    id: input.incorrect_two_id,
                   },
                   data: {
                     answer: input.incorrect_two,
