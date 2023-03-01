@@ -3,7 +3,7 @@ export type QuestionType = {
 };
 
 export type AnswerObjectType = {
-  id: string;
+  id?: string;
   answer: string;
   is_correct: boolean;
 };
