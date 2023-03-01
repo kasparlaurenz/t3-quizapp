@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import type { FC } from "react";
 
 interface TopSectionProps {
-  title: string;
+  title?: string;
 }
 
 const TopSection: FC<TopSectionProps> = ({ title }) => {
