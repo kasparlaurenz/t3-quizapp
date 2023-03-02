@@ -90,12 +90,16 @@ const ManageQuestion: NextPage = ({}) => {
       question: newQuestion.question || question!.question,
       imageUrl: question?.imageUrl || publicUrl,
       imageName: question?.imageName || imageName,
-      incorrect_one:
-        newQuestion.wrong_answer1.answer || question!.answers[0]!.answer,
-      incorrect_one_id: question!.answers[0]!.id,
-      incorrect_two:
-        newQuestion.wrong_answer2.answer || question!.answers[1]!.answer,
-      incorrect_two_id: question!.answers[1]!.id,
+      incorrect_one: {
+        answer:
+          newQuestion.wrong_answer1.answer || question!.answers[0]!.answer,
+        id: question!.answers[0]!.id,
+      },
+      incorrect_two: {
+        answer:
+          newQuestion.wrong_answer2.answer || question!.answers[1]!.answer,
+        id: question!.answers[1]!.id,
+      },
       correct:
         newQuestion.correct_answer.answer || question!.answers[2]!.answer,
     });

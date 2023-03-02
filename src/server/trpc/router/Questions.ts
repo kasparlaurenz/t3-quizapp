@@ -142,10 +142,14 @@ export const questionsRouter = router({
       z.object({
         id: z.string(),
         question: z.string(),
-        incorrect_one: z.string(),
-        incorrect_one_id: z.string(),
-        incorrect_two: z.string(),
-        incorrect_two_id: z.string(),
+        incorrect_one: z.object({
+          answer: z.string(),
+          id: z.string(),
+        }),
+        incorrect_two: z.object({
+          answer: z.string(),
+          id: z.string(),
+        }),
         correct: z.string(),
         imageUrl: z.string().optional(),
         imageName: z.string().optional(),
@@ -166,18 +170,18 @@ export const questionsRouter = router({
               updateMany: [
                 {
                   where: {
-                    id: input.incorrect_one_id,
+                    id: input.incorrect_one.id,
                   },
                   data: {
-                    answer: input.incorrect_one,
+                    answer: input.incorrect_one.answer,
                   },
                 },
                 {
                   where: {
-                    id: input.incorrect_two_id,
+                    id: input.incorrect_two.id,
                   },
                   data: {
-                    answer: input.incorrect_two,
+                    answer: input.incorrect_two.answer,
                   },
                 },
                 {
