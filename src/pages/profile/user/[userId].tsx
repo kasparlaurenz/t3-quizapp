@@ -13,6 +13,7 @@ const ProfilePage: NextPage = () => {
       <Header />
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-sky-300">{userId}</h1>
+        <p>Hallo</p>
       </main>
     </>
   );
