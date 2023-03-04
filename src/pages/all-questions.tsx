@@ -83,9 +83,9 @@ const AllQuestions: NextPage = () => {
           ))
         ) : (
           <div className="flex flex-col items-center">
-            <p className="mt-5 text-3xl font-bold text-red-500">No questions</p>
+            <p className="mt-5 text-3xl font-bold text-red-500">Keine Fragen</p>
             <Link className="menu-button" href="create-question">
-              Create Question
+              Frage erstellen
             </Link>
           </div>
         )}

@@ -106,7 +106,7 @@ const CreateQuestion: NextPage = () => {
     <>
       <Header>Create Question</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={`Question for Chapter ${chapter}`} />
+        <TopSection title={`Farge in Kapitel ${chapter}`} />
         {showConfirm && (
           <>
             <ConfirmModal status="created" handleModal={handleModal} />

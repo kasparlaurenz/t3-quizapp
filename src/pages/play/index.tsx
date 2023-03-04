@@ -108,8 +108,6 @@ const Play: NextPage = () => {
     setPlayQuiz(true);
   };
 
-  console.log("questions", questions);
-
   return (
     <>
       <Header>Fragebogen</Header>
@@ -129,11 +127,6 @@ const Play: NextPage = () => {
                   </p>
                   {questions[curQuestionIdx] &&
                     questions[curQuestionIdx]?.imageUrl && (
-                      // <img
-                      //   className="w-[300px]"
-                      //   alt={questions[curQuestionIdx]?.question || ""}
-                      //   src={questions[curQuestionIdx]?.imageUrl || ``}
-                      // />
                       <div className="relative h-[500px] w-[500px]">
                         <Image
                           layout="fill"
