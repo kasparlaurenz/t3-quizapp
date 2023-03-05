@@ -10,8 +10,7 @@ const RegisterForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const mutation = trpc.auth.register.useMutation({
-    onError: (e) =>
-      setErrorMessage("Passwort muss mindestens 4 Zeichen lang sein"),
+    onError: (e) => setErrorMessage(e.message),
     onSuccess: () => router.push("/"),
   });
 
