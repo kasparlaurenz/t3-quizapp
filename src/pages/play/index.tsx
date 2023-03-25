@@ -1,10 +1,9 @@
-import type { Answer, Chapter } from "@prisma/client";
+import type { Chapter } from "@prisma/client";
 import type { NextPage } from "next";
-import Image from "next/legacy/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import AnswerButton from "../../components/Buttons/AnswerButton";
 import Header from "../../components/Header";
+import Question from "../../components/Play/Question";
 import Result from "../../components/Result/Result";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
@@ -116,50 +115,14 @@ const Play: NextPage = () => {
         {playQuiz && questions ? (
           <>
             {questions.length > 0 && curQuestionIdx < questions.length ? (
-              <div className="w-full sm:w-2/3">
-                <div className="flex flex-col items-center justify-center">
-                  <h3 className="mt-10">Frage</h3>
-                  <span className="font-bold text-blue-400">
-                    {curQuestionIdx + 1} / {questions.length}
-                  </span>
-                  <p className="text-2xl">
-                    {questions[curQuestionIdx]?.question}?
-                  </p>
-                  {questions[curQuestionIdx] &&
-                    questions[curQuestionIdx]?.imageUrl && (
-                      <div className="relative h-[500px] w-[500px]">
-                        <Image
-                          layout="fill"
-                          objectFit="contain"
-                          src={questions[curQuestionIdx]?.imageUrl || ``}
-                          alt={questions[curQuestionIdx]?.question || ""}
-                        />
-                      </div>
-                    )}
-                  <div className="mt-10 flex w-full flex-col items-center justify-between gap-4">
-                    {(questions[curQuestionIdx]?.answers ?? []).map(
-                      (answer: Answer) => (
-                        <AnswerButton
-                          // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-                          questionChapter={questions[curQuestionIdx]!.chapter}
-                          key={answer.id}
-                          handleAnswerClicked={handleAnswerClicked}
-                          trackResult={trackResult}
-                          answer={answer}
-                          revealAnswer={revealAnswer}
-                        />
-                      )
-                    )}
-                  </div>
-                  {revealAnswer && (
-                    <button onClick={handleNextClick} className="menu-button">
-                      {curQuestionIdx + 1 === questions.length
-                        ? "Beenden"
-                        : "Weiter"}
-                    </button>
-                  )}
-                </div>
-              </div>
+              <Question
+                curQuestionIdx={curQuestionIdx}
+                questions={questions}
+                handleAnswerClicked={handleAnswerClicked}
+                handleNextClick={handleNextClick}
+                revealAnswer={revealAnswer}
+                trackResult={trackResult}
+              />
             ) : questions.length === curQuestionIdx && questions.length > 0 ? (
               <Result
                 score={score}

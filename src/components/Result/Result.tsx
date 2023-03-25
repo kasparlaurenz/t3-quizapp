@@ -1,7 +1,7 @@
 import type { Answer, Question } from "@prisma/client";
 import type { FC } from "react";
 
-type QuestionWithAnswer = Question & {
+export type QuestionWithAnswer = Question & {
   answers: Answer[];
 };
 
