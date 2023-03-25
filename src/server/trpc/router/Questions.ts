@@ -156,7 +156,6 @@ export const questionsRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      console.log(input);
       try {
         await ctx.prisma.question.update({
           where: {

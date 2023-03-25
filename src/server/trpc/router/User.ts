@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 import bcrypt from "bcrypt";
+import { TRPCError } from "@trpc/server";
 
 const SALT_ROUNDS = 10;
 
@@ -60,7 +61,10 @@ export const userRouter = router({
         user.password
       );
       if (!isPasswordValid) {
-        throw new Error("Invalid password");
+        throw new TRPCError({
+          message: "Invalid password",
+          code: "UNAUTHORIZED",
+        });
       }
       const salt = bcrypt.genSaltSync(SALT_ROUNDS);
       const hash = bcrypt.hashSync(input.newPassword, salt);

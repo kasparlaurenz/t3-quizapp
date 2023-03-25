@@ -16,24 +16,15 @@ const ManageQuestions: NextPage = () => {
     data: questions,
     isLoading,
     isError,
+    refetch: refetchQuestions,
   } = trpc.question.getQuestionsByChapter.useQuery(
     { chapter: parseInt(chapterNumber) },
     { enabled: isReady }
   );
   const utils = trpc.useContext();
   const deleteQuestion = trpc.question.deleteQuestion.useMutation({
-    onMutate: () => {
-      utils.question.getQuestions.cancel();
-      const optimisticUpdate = utils.question.getQuestionsByChapter.getData({
-        chapter: parseInt(chapterNumber),
-      });
-
-      if (optimisticUpdate) {
-        utils.question.getQuestionsByChapter.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.question.getQuestionsByChapter.invalidate();
+    onSuccess: () => {
+      refetchQuestions();
     },
   });
 

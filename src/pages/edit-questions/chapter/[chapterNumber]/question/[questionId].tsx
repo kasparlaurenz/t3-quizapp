@@ -32,6 +32,7 @@ const ManageQuestion: NextPage = ({}) => {
     data: question,
     isLoading,
     isError,
+    refetch: refetchQuestion,
   } = trpc.question.getQuestionById.useQuery(
     { id: questionId },
     { enabled: isReady }
@@ -41,38 +42,16 @@ const ManageQuestion: NextPage = ({}) => {
 
   const utils = trpc.useContext();
   const updateQuestion = trpc.question.updateQuestion.useMutation({
-    onMutate: () => {
-      utils.question.getQuestionById.cancel();
-      const optimisticUpdate = utils.question.getQuestionById.getData({
-        id: questionId,
-      });
-
-      if (optimisticUpdate) {
-        utils.question.getQuestionById.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.question.getQuestionById.invalidate();
-    },
     onSuccess: () => {
+      refetchQuestion();
       setShowConfirm(true);
       resetForm();
     },
   });
 
   const deleteImage = trpc.question.deleteImageOfQuestion.useMutation({
-    onMutate: () => {
-      utils.question.getQuestions.cancel();
-      const optimisticUpdate = utils.question.getQuestionById.getData({
-        id: questionId,
-      });
-
-      if (optimisticUpdate) {
-        utils.question.getQuestionById.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.question.getQuestionById.invalidate();
+    onSuccess: () => {
+      refetchQuestion();
     },
   });
 

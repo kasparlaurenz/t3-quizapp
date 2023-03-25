@@ -11,19 +11,12 @@ const AllQuestions: NextPage = () => {
     data: questions,
     isLoading,
     isError,
+    refetch: refetchQuestions,
   } = trpc.question.getQuestions.useQuery();
 
   const deleteQuestion = trpc.question.deleteQuestion.useMutation({
-    onMutate: () => {
-      utils.question.getQuestions.cancel();
-      const optimisticUpdate = utils.question.getQuestions.getData();
-
-      if (optimisticUpdate) {
-        utils.question.getQuestions.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.question.getQuestions.invalidate();
+    onSuccess: () => {
+      refetchQuestions();
     },
   });
 

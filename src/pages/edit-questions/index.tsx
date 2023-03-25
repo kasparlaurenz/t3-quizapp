@@ -15,33 +15,18 @@ const ManageChapters: NextPage = () => {
     data: chapters,
     isLoading,
     isError,
+    refetch: refetchChapters,
   } = trpc.chapter.getChapters.useQuery();
 
   const deleteChapter = trpc.chapter.deleteChapter.useMutation({
-    onMutate: () => {
-      utils.chapter.getChapters.cancel();
-      const optimisticUpdate = utils.chapter.getChapters.getData();
-
-      if (optimisticUpdate) {
-        utils.chapter.getChapters.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.chapter.getChapters.invalidate();
+    onSuccess: () => {
+      refetchChapters();
     },
   });
 
   const createNewChapter = trpc.chapter.createChapter.useMutation({
-    onMutate: () => {
-      utils.chapter.getChapters.cancel();
-      const optimisticUpdate = utils.chapter.getChapters.getData();
-
-      if (optimisticUpdate) {
-        utils.chapter.getChapters.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.chapter.getChapters.invalidate();
+    onSuccess: () => {
+      refetchChapters();
     },
   });
 

@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import React from "react";
@@ -8,9 +9,11 @@ import TopSection from "../../../components/TopSection";
 import { trpc } from "../../../utils/trpc";
 
 const ProfilePage: NextPage = () => {
-  const { query, isReady } = useRouter();
+  const { isReady, query } = useRouter();
+  const { data: session } = useSession();
   const utils = trpc.useContext();
-  const userId = query.userId as string;
+  const userId = session?.user?.id as string;
+  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
   const [userData, setUserData] = React.useState({
     username: "",
@@ -19,26 +22,19 @@ const ProfilePage: NextPage = () => {
   });
   const [showConfirm, setShowConfirm] = React.useState(false);
 
-  const { data: user } = trpc.user.getUserById.useQuery(
+  const { data: user, refetch } = trpc.user.getUserById.useQuery(
     { id: userId },
     { enabled: isReady }
   );
 
   const updatePassword = trpc.user.updateUser.useMutation({
-    onMutate: () => {
-      utils.user.getUserById.cancel();
-      const optimisticUpdate = utils.user.getUserById.getData({ id: userId });
-
-      if (optimisticUpdate) {
-        utils.user.getUserById.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.user.getUserById.invalidate();
-    },
     onSuccess: () => {
+      refetch();
       resetForm();
       setShowConfirm(true);
+    },
+    onError: (err) => {
+      setErrorMsg(err.message);
     },
   });
 
@@ -48,7 +44,7 @@ const ProfilePage: NextPage = () => {
       id: userId,
       previousPassword: userData.oldPassword,
       newPassword: userData.newPassword,
-      username: userData.username,
+      username: userData.username === "" ? user!.username : userData.username,
     });
   };
 
@@ -80,6 +76,11 @@ const ProfilePage: NextPage = () => {
           </>
         )}
         <div className="flex w-full flex-col items-center">
+          {errorMsg && (
+            <div className="rounded-md bg-red-500 p-2 text-white">
+              {errorMsg}
+            </div>
+          )}
           <form
             className="mt-6 w-full md:max-w-[650px]"
             action="submit"
