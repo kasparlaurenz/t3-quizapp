@@ -11,13 +11,19 @@ import { trpc } from "../../utils/trpc";
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
   const [isOriginal, setIsOriginal] = useState<boolean>(true);
+  const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
   const utils = trpc.useContext();
   const {
     data: chapters,
     isLoading,
     isError,
     refetch: refetchChapters,
-  } = trpc.chapter.getChapters.useQuery();
+  } = trpc.chapter.getChapters.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      setFilteredChapters(data);
+    },
+  });
 
   const deleteChapter = trpc.chapter.deleteChapter.useMutation({
     onSuccess: () => {
@@ -66,6 +72,16 @@ const ManageChapters: NextPage = () => {
     });
     setShowChapterDetails(false);
   };
+
+  const handleSelectedFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === "alle") {
+      setFilteredChapters(chapters);
+    } else if (e.target.value === "original") {
+      setFilteredChapters(chapters.filter((c) => c.isOriginal));
+    } else if (e.target.value === "eigene") {
+      setFilteredChapters(chapters.filter((c) => !c.isOriginal));
+    }
+  };
   return (
     <>
       <Header>Kapitel</Header>
@@ -84,8 +100,18 @@ const ManageChapters: NextPage = () => {
           </>
         )}
         <div className=" relative mt-4 flex  w-full flex-col items-center justify-start gap-5 p-2">
-          {chapters.length > 0 ? (
-            chapters.map((chapter, idx) => (
+          <select
+            className="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            name="filter"
+            id="filter"
+            onChange={handleSelectedFilter}
+          >
+            <option value="alle">Alle</option>
+            <option value="original">Original</option>
+            <option value="eigene">Eigene</option>
+          </select>
+          {filteredChapters.length > 0 ? (
+            filteredChapters.map((chapter, idx) => (
               <Link
                 href={`edit-questions/chapter/${chapter.number}`}
                 key={chapter.id}

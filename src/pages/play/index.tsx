@@ -1,7 +1,7 @@
 import type { Chapter } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header";
 import Question from "../../components/Play/Question";
 import Result from "../../components/Result/Result";
