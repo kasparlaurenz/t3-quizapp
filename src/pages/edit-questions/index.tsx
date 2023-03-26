@@ -53,6 +53,7 @@ const ManageChapters: NextPage = () => {
     );
   }
   const currentLastChapter = chapters.length + 1;
+  console.log("currentLastChapter", currentLastChapter);
 
   const handleDeleteClick = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
