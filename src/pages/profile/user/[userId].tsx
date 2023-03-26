@@ -58,6 +58,7 @@ const ProfilePage: NextPage = () => {
       oldPassword: "",
       newPassword: "",
     });
+    setErrorMsg(null);
   };
 
   return (
@@ -111,6 +112,7 @@ const ProfilePage: NextPage = () => {
                 name="oldPassword"
                 id="oldPassword"
                 className="bg-slate-700 p-2"
+                required
               />
             </div>
             <div className="flex flex-col">
@@ -127,7 +129,7 @@ const ProfilePage: NextPage = () => {
               />
             </div>
             <button type="submit" className="menu-button">
-              Update User
+              {userData.newPassword === "" ? "Update Username" : "Update"}
             </button>
           </form>
         </div>

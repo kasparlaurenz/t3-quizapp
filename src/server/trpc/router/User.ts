@@ -42,20 +42,27 @@ export const userRouter = router({
     .input(
       z.object({
         id: z.string(),
-        username: z.string(),
+        username: z.string().min(3),
         previousPassword: z.string(),
         newPassword: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
+      console.log("Input", input);
       const user = await ctx.prisma.user.findUnique({
         where: {
           id: input.id,
         },
       });
+
       if (!user) {
         throw new Error("User not found");
       }
+
+      if (input.newPassword === "") {
+        input.newPassword = input.previousPassword;
+      }
+
       const isPasswordValid = await bcrypt.compare(
         input.previousPassword,
         user.password
