@@ -8,6 +8,7 @@ export const chaptersRouter = router({
       z.object({
         chapter: z.number(),
         description: z.string(),
+        isOriginal: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -16,6 +17,7 @@ export const chaptersRouter = router({
           data: {
             number: input.chapter,
             description: input.description,
+            isOriginal: input.isOriginal,
           },
         });
       } catch (error) {
@@ -62,6 +64,7 @@ export const chaptersRouter = router({
         },
         select: {
           description: true,
+          isOriginal: true,
         },
       });
       return description;

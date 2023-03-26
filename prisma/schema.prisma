@@ -1,49 +1,50 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model Question {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  question  String
-  imageUrl  String?
-  imageName String?
-  chapterId String
-  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  answers   Answer[]
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    question  String
+    imageUrl  String?
+    imageName String?
+    chapterId String
+    chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+    answers   Answer[]
 }
 
 model Answer {
-  id         String   @id @default(cuid())
-  answer     String
-  is_correct Boolean
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+    id         String   @id @default(cuid())
+    answer     String
+    is_correct Boolean
+    questionId String
+    question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model Chapter {
-  id          String     @id @default(cuid())
-  number      Int        @unique
-  description String
-  questions   Question[]
+    id          String     @id @default(cuid())
+    number      Int        @unique
+    description String
+    questions   Question[]
+    isOriginal  Boolean
 }
 
 model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(GUEST)
+    id        String   @id @default(cuid())
+    username  String   @unique
+    password  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    role      Role     @default(GUEST)
 }
 
 enum Role {
-  ADMIN
-  USER
-  GUEST
+    ADMIN
+    USER
+    GUEST
 }

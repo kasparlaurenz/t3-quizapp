@@ -1,7 +1,7 @@
 import type { Chapter } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Question from "../../components/Play/Question";
 import Result from "../../components/Result/Result";
@@ -20,6 +20,8 @@ const Play: NextPage = () => {
   const [isCheckAll, setIsCheckAll] = useState(false);
 
   const [selectedChapters, setSelectedChapters] = useState<number[]>([]);
+  const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
+
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
 
@@ -34,7 +36,13 @@ const Play: NextPage = () => {
     data: chapters,
     isLoading,
     isError,
-  } = trpc.chapter.getChapters.useQuery();
+  } = trpc.chapter.getChapters.useQuery(undefined, {
+    onSuccess: (data) => {
+      setFilteredChapters(data);
+    },
+    refetchOnWindowFocus: false,
+  });
+
   if (isLoading) {
     return (
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
@@ -100,6 +108,16 @@ const Play: NextPage = () => {
     setResultList((prev) => [...prev, tempResult]);
   };
 
+  const handleSelectedFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === "alle") {
+      setFilteredChapters(chapters);
+    } else if (e.target.value === "original") {
+      setFilteredChapters(chapters.filter((c) => c.isOriginal));
+    } else if (e.target.value === "eigene") {
+      setFilteredChapters(chapters.filter((c) => !c.isOriginal));
+    }
+  };
+
   const resetGame = () => {
     setScore(0);
     setCurQuestionIdx(0);
@@ -143,11 +161,24 @@ const Play: NextPage = () => {
             <label className="mt-4 text-2xl" htmlFor="chapter-selection">
               Kapitel wählen
             </label>
+            <label className="mt-4" htmlFor="filter">
+              Filter
+            </label>
+            <select
+              className="mt-2 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              name="filter"
+              id="filter"
+              onChange={handleSelectedFilter}
+            >
+              <option value="alle">Alle</option>
+              <option value="original">Original</option>
+              <option value="eigene">Eigene</option>
+            </select>
             <form
               id="chapter-selection"
-              className="flex flex-col items-center justify-center"
+              className="mt-4 flex flex-col items-center justify-center"
             >
-              {chapters.length > 1 && (
+              {filteredChapters.length > 1 && (
                 <>
                   <label className="text-2xl text-sky-400">
                     <input
@@ -161,7 +192,7 @@ const Play: NextPage = () => {
                 </>
               )}
               <div className="mt-2 flex flex-col gap-2">
-                {chapters.map((chapter) => (
+                {filteredChapters.map((chapter) => (
                   <div key={chapter.id}>
                     <label className="text-lg">
                       <input

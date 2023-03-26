@@ -98,6 +98,7 @@ const CreateQuestion: NextPage = () => {
       correct: newQuestion.correct_answer.answer,
       chapter: parseInt(chapter),
       description: chapterDescription?.description ?? "",
+      isOriginal: chapterDescription?.isOriginal ?? false,
     });
     resetForm();
   };

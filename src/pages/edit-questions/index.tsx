@@ -10,6 +10,7 @@ import { trpc } from "../../utils/trpc";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
+  const [isOriginal, setIsOriginal] = useState<boolean>(true);
   const utils = trpc.useContext();
   const {
     data: chapters,
@@ -61,6 +62,7 @@ const ManageChapters: NextPage = () => {
     createNewChapter.mutate({
       chapter: currentLastChapter,
       description: desc,
+      isOriginal,
     });
     setShowChapterDetails(false);
   };
@@ -75,6 +77,8 @@ const ManageChapters: NextPage = () => {
               setShowChapterDetails={setShowChapterDetails}
               handleClick={handleCreateClick}
               chapter={currentLastChapter}
+              isOriginal={isOriginal}
+              setIsOriginal={setIsOriginal}
             />
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
@@ -123,11 +127,15 @@ interface ChapterModalProps {
   handleClick: (desc: string) => void;
   chapter: number;
   setShowChapterDetails: React.Dispatch<SetStateAction<boolean>>;
+  isOriginal: boolean;
+  setIsOriginal: React.Dispatch<SetStateAction<boolean>>;
 }
 const ChapterModal: FC<ChapterModalProps> = ({
   handleClick,
   chapter,
   setShowChapterDetails,
+  isOriginal,
+  setIsOriginal,
 }) => {
   const [description, setDescription] = useState<string>("");
   return (
@@ -150,6 +158,15 @@ const ChapterModal: FC<ChapterModalProps> = ({
         placeholder="Chapter description"
         required
       />
+      <label className="text-l mt-2 text-sky-400">
+        <input
+          type="checkbox"
+          className="mr-1 h-[18px] w-[18px] accent-sky-500"
+          checked={isOriginal}
+          onChange={() => setIsOriginal(!isOriginal)}
+        />
+        Original
+      </label>
       <button
         onClick={() => handleClick(description)}
         className="menu-button mt-4"
