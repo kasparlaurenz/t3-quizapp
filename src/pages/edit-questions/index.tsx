@@ -102,7 +102,7 @@ const ManageChapters: NextPage = () => {
         )}
         <div className=" relative mt-4 flex  w-full flex-col items-center justify-start gap-5 p-2">
           <select
-            className="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="cursor-pointer rounded-lg bg-slate-400 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             name="filter"
             id="filter"
             onChange={handleSelectedFilter}
@@ -119,7 +119,7 @@ const ManageChapters: NextPage = () => {
                 className=" relative flex h-auto w-full items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
               >
                 <h2>
-                  <span className="font-bold">{idx + 1}</span>{" "}
+                  <span className="font-bold">{chapter.number}.</span>{" "}
                   {chapter.description}
                 </h2>
                 <DeleteButton
@@ -141,7 +141,7 @@ const ManageChapters: NextPage = () => {
           onClick={() => setShowChapterDetails(true)}
           className="menu-button mt-2"
         >
-          Neues Kapitel <span className="font-bold"> {currentLastChapter}</span>
+          Neues Kapitel {currentLastChapter}
         </button>
       </main>
     </>
