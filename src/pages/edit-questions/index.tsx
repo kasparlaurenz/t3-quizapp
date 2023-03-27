@@ -173,16 +173,13 @@ const ChapterModal: FC<ChapterModalProps> = ({
       >
         X
       </button>
-      <p className="text-2xl font-bold">Chapter {chapter} details</p>
-      <label className="text-lg text-sky-300" htmlFor="desc">
-        Titel
-      </label>
+      <p className="text-2xl font-bold">Kapitel {chapter}</p>
       <input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         className="mt-2 w-full bg-slate-700 p-2"
         id="desc"
-        placeholder="Chapter description"
+        placeholder="Titel"
         required
       />
       <label className="text-l mt-2 text-sky-400">
