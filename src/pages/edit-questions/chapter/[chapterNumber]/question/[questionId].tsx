@@ -38,8 +38,6 @@ const ManageQuestion: NextPage = ({}) => {
     { enabled: isReady }
   );
 
-  console.log("---Question", question);
-
   const utils = trpc.useContext();
   const updateQuestion = trpc.question.updateQuestion.useMutation({
     onSuccess: () => {

@@ -70,7 +70,6 @@ const RegisterForm = () => {
             required: "Bestätigen Sie ihr Passwort",
             validate: (val: string) => {
               if (watch("password") !== val) {
-                console.log("Passwörter stimmen nicht überein");
                 return "";
               }
             },

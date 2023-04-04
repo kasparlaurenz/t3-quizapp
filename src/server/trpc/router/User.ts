@@ -48,7 +48,6 @@ export const userRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      console.log("Input", input);
       const user = await ctx.prisma.user.findUnique({
         where: {
           id: input.id,
@@ -85,5 +84,65 @@ export const userRouter = router({
         },
       });
       return updatedUser;
+    }),
+
+  updateRecentAnswerToQuestion: publicProcedure
+    .input(
+      z.object({
+        questionId: z.string(),
+        userId: z.string(),
+        answerState: z.boolean(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          id: input.userId,
+        },
+      });
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const question = await ctx.prisma.question.findUnique({
+        where: {
+          id: input.questionId,
+        },
+      });
+
+      if (!question) {
+        throw new Error("Question not found");
+      }
+
+      const recentAnswer =
+        await ctx.prisma.recentUserAnswerToQuestion.findFirst({
+          where: {
+            userId: input.userId,
+            questionId: input.questionId,
+          },
+        });
+
+      if (recentAnswer) {
+        const updatedRecentAnswer =
+          await ctx.prisma.recentUserAnswerToQuestion.update({
+            where: {
+              id: recentAnswer.id,
+            },
+            data: {
+              answerState: input.answerState,
+            },
+          });
+        return updatedRecentAnswer;
+      } else {
+        const newRecentAnswer =
+          await ctx.prisma.recentUserAnswerToQuestion.create({
+            data: {
+              userId: input.userId,
+              questionId: input.questionId,
+              answerState: input.answerState,
+            },
+          });
+        return newRecentAnswer.id;
+      }
     }),
 });

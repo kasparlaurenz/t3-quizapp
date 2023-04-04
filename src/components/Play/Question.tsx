@@ -19,7 +19,7 @@ type QuestionProps = {
     };
   }[];
   curQuestionIdx: number;
-  handleAnswerClicked: (answer: AnswerObjectType) => void;
+  handleAnswerClicked: (answer: AnswerObjectType, questionId: string) => void;
   trackResult: (
     answerClicked: string,
     isCorrect: boolean,
@@ -59,6 +59,7 @@ const Question: FC<QuestionProps> = ({
           {(questions[curQuestionIdx]?.answers ?? []).map((answer: Answer) => (
             <AnswerButton
               // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
+              questionId={questions[curQuestionIdx]!.id}
               questionChapter={questions[curQuestionIdx]!.chapter}
               key={answer.id}
               handleAnswerClicked={handleAnswerClicked}

@@ -5,9 +5,6 @@ import Header from "../components/Header";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
-
-  console.log(session?.user);
-
   return (
     <>
       <Header />

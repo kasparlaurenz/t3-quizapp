@@ -12,6 +12,7 @@ import type {
   ChapterType,
   ResultList,
 } from "../../utils/types";
+import { useSession } from "next-auth/react";
 
 const Play: NextPage = () => {
   const [revealAnswer, setRevealAnswer] = useState(false);
@@ -26,6 +27,8 @@ const Play: NextPage = () => {
   const [score, setScore] = useState<number>(0);
 
   const [resultList, setResultList] = useState<ResultList[]>([]);
+
+  const { data: session } = useSession();
 
   const { data: questions } =
     trpc.question.getQuestionsWithAnswersByChapterSelection.useQuery(
@@ -42,6 +45,8 @@ const Play: NextPage = () => {
     },
     refetchOnWindowFocus: false,
   });
+
+  const updateUserAnswer = trpc.user.updateRecentAnswerToQuestion.useMutation();
 
   if (isLoading) {
     return (
@@ -80,11 +85,24 @@ const Play: NextPage = () => {
     }
   };
 
-  const handleAnswerClicked = (answer: AnswerObjectType) => {
+  const handleAnswerClicked = (
+    answer: AnswerObjectType,
+    questionId: string
+  ) => {
     if (answer.is_correct) {
+      updateUserAnswer.mutate({
+        questionId: questionId,
+        answerState: true,
+        userId: session!.user!.id,
+      });
       setScore((prev) => prev + 1);
       setCurQuestionIdx((prev) => prev + 1);
     } else {
+      updateUserAnswer.mutate({
+        questionId: questionId,
+        answerState: false,
+        userId: session!.user!.id,
+      });
       setRevealAnswer(true);
     }
   };

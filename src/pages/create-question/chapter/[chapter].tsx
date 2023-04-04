@@ -38,7 +38,6 @@ const CreateQuestion: NextPage = () => {
     { enabled: isReady }
   );
 
-  console.log("chapter", chapter);
   const createNewQuestion = trpc.question.createQuestion.useMutation();
 
   const handleModal = () => {
@@ -59,7 +58,7 @@ const CreateQuestion: NextPage = () => {
         .upload(imageName, image);
 
       if (error) {
-        console.log(error);
+        console.log("error", error);
       }
 
       if (data) {
