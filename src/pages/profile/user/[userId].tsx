@@ -9,9 +9,8 @@ import TopSection from "../../../components/TopSection";
 import { trpc } from "../../../utils/trpc";
 
 const ProfilePage: NextPage = () => {
-  const { isReady, query } = useRouter();
+  const { isReady } = useRouter();
   const { data: session } = useSession();
-  const utils = trpc.useContext();
   const userId = session?.user?.id as string;
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
@@ -22,12 +21,11 @@ const ProfilePage: NextPage = () => {
   });
   const [showConfirm, setShowConfirm] = React.useState(false);
 
-  const { data: user, refetch } = trpc.user.getUserById.useQuery(
-    { id: userId },
-    { enabled: isReady }
-  );
+  const { data: user, refetch } = trpc.user.getUserById.useQuery(undefined, {
+    enabled: isReady,
+  });
 
-  const updatePassword = trpc.user.updateUser.useMutation({
+  const updateUser = trpc.user.updateUser.useMutation({
     onSuccess: () => {
       refetch();
       resetForm();
@@ -40,8 +38,7 @@ const ProfilePage: NextPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updatePassword.mutate({
-      id: userId,
+    updateUser.mutate({
       previousPassword: userData.oldPassword,
       newPassword: userData.newPassword,
       username: userData.username === "" ? user!.username : userData.username,
