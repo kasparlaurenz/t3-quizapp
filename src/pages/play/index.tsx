@@ -6,14 +6,13 @@ import Header from "../../components/Header";
 import Question from "../../components/Play/Question";
 import Result from "../../components/Result/Result";
 import TopSection from "../../components/TopSection";
+import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { trpc } from "../../utils/trpc";
 import type {
   AnswerObjectType,
   ChapterType,
   ResultList,
 } from "../../utils/types";
-import { useSession } from "next-auth/react";
-import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 
 const Play: NextPage = () => {
   const [revealAnswer, setRevealAnswer] = useState(false);

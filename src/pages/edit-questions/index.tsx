@@ -1,13 +1,12 @@
 import type { Chapter } from "@prisma/client";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import Link from "next/link";
-import { useState } from "react";
 import type { FC, SetStateAction } from "react";
+import { useState } from "react";
 import DeleteButton from "../../components/Buttons/DeleteButton";
 import Header from "../../components/Header";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
-import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
@@ -114,7 +113,7 @@ const ManageChapters: NextPage = () => {
             <option value="eigene">Eigene</option>
           </select>
           {filteredChapters.length > 0 ? (
-            filteredChapters.map((chapter, idx) => (
+            filteredChapters.map((chapter) => (
               <Link
                 href={`edit-questions/chapter/${chapter.number}`}
                 key={chapter.id}

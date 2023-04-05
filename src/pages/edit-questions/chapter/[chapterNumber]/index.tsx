@@ -21,7 +21,6 @@ const ManageQuestions: NextPage = () => {
     { chapter: parseInt(chapterNumber) },
     { enabled: isReady }
   );
-  const utils = trpc.useContext();
   const deleteQuestion = trpc.question.deleteQuestion.useMutation({
     onSuccess: () => {
       refetchQuestions();

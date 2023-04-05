@@ -1,7 +1,7 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { ILogin } from "../../utils/authValidation";
+import { type ILogin } from "../../utils/authValidation";
 
 const LoginForm = () => {
   const router = useRouter();

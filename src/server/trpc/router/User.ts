@@ -1,12 +1,12 @@
-import { z } from "zod";
-import { publicProcedure, router, protectedProcedure } from "../trpc";
-import bcrypt from "bcrypt";
 import { TRPCError } from "@trpc/server";
+import bcrypt from "bcrypt";
+import { z } from "zod";
+import { protectedProcedure, router } from "../trpc";
 
 const SALT_ROUNDS = 10;
 
 export const userRouter = router({
-  getUserById: protectedProcedure.query(async ({ input, ctx }) => {
+  getUserById: protectedProcedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findUnique({
       where: {
         id: ctx.session.user.id,
