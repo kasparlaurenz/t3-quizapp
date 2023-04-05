@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { publicProcedure, router } from "../trpc";
+import { publicProcedure, router, adminProcedure } from "../trpc";
 
 export const chaptersRouter = router({
-  createChapter: publicProcedure
+  createChapter: adminProcedure
     .input(
       z.object({
         chapter: z.number(),
@@ -12,20 +12,16 @@ export const chaptersRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.prisma.chapter.create({
-          data: {
-            number: input.chapter,
-            description: input.description,
-            isOriginal: input.isOriginal,
-          },
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      await ctx.prisma.chapter.create({
+        data: {
+          number: input.chapter,
+          description: input.description,
+          isOriginal: input.isOriginal,
+        },
+      });
     }),
 
-  deleteChapter: publicProcedure
+  deleteChapter: adminProcedure
     .input(
       z.object({
         id: z.string(),

@@ -1,5 +1,5 @@
 import type { Chapter } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import type { FC, SetStateAction } from "react";
@@ -7,12 +7,12 @@ import DeleteButton from "../../components/Buttons/DeleteButton";
 import Header from "../../components/Header";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
+import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
   const [isOriginal, setIsOriginal] = useState<boolean>(true);
   const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
-  const utils = trpc.useContext();
   const {
     data: chapters,
     isLoading,
@@ -34,6 +34,9 @@ const ManageChapters: NextPage = () => {
   const createNewChapter = trpc.chapter.createChapter.useMutation({
     onSuccess: () => {
       refetchChapters();
+    },
+    onError: ({ message }) => {
+      console.log("ERROR FE", message);
     },
   });
 

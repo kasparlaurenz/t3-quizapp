@@ -1,17 +1,14 @@
-import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 
 import React from "react";
 import ConfirmModal from "../../../components/ConfirmationModal";
 import Header from "../../../components/Header";
 import TopSection from "../../../components/TopSection";
+import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import { trpc } from "../../../utils/trpc";
 
 const ProfilePage: NextPage = () => {
-  const { isReady } = useRouter();
-  const { data: session } = useSession();
-  const userId = session?.user?.id as string;
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
   const [userData, setUserData] = React.useState({
@@ -21,9 +18,7 @@ const ProfilePage: NextPage = () => {
   });
   const [showConfirm, setShowConfirm] = React.useState(false);
 
-  const { data: user, refetch } = trpc.user.getUserById.useQuery(undefined, {
-    enabled: isReady,
-  });
+  const { data: user, refetch } = trpc.user.getUserById.useQuery();
 
   const updateUser = trpc.user.updateUser.useMutation({
     onSuccess: () => {
@@ -136,3 +131,22 @@ const ProfilePage: NextPage = () => {
 };
 
 export default ProfilePage;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerAuthSession({
+    req: context.req,
+    res: context.res,
+  });
+  console.log("getServerSideProps", session);
+
+  if (!session || !session.user || session.user.role === "GUEST") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+};

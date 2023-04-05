@@ -1,5 +1,5 @@
 import type { Chapter } from "@prisma/client";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import React, { useState } from "react";
 import Header from "../../components/Header";
@@ -13,6 +13,7 @@ import type {
   ResultList,
 } from "../../utils/types";
 import { useSession } from "next-auth/react";
+import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 
 const Play: NextPage = () => {
   const [revealAnswer, setRevealAnswer] = useState(false);
@@ -27,8 +28,6 @@ const Play: NextPage = () => {
   const [score, setScore] = useState<number>(0);
 
   const [resultList, setResultList] = useState<ResultList[]>([]);
-
-  const { data: session } = useSession();
 
   const { data: questions } =
     trpc.question.getQuestionsWithAnswersByChapterSelection.useQuery(
@@ -247,3 +246,22 @@ const Play: NextPage = () => {
 };
 
 export default Play;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerAuthSession({
+    req: context.req,
+    res: context.res,
+  });
+  console.log("getServerSideProps", session);
+
+  if (!session || !session.user || session.user.role === "GUEST") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+};

@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { shuffle } from "../../../utils/shuffle";
 
-import { publicProcedure, router } from "../trpc";
+import { adminProcedure, publicProcedure, router } from "../trpc";
 
 export const questionsRouter = router({
-  createQuestion: publicProcedure
+  createQuestion: adminProcedure
     .input(
       z.object({
         question: z.string(),
@@ -50,7 +50,7 @@ export const questionsRouter = router({
         console.log(error);
       }
     }),
-  deleteQuestion: publicProcedure
+  deleteQuestion: adminProcedure
     .input(
       z.object({
         id: z.string(),
@@ -67,9 +67,6 @@ export const questionsRouter = router({
       });
       return question;
     }),
-  getQuestions: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.question.findMany();
-  }),
   getQuestionsByChapter: publicProcedure
     .input(z.object({ chapter: z.number() }))
     .query(async ({ ctx, input }) => {
@@ -139,7 +136,7 @@ export const questionsRouter = router({
       return shuffledQuestionsWithShuffledAnswers;
     }),
 
-  updateQuestion: publicProcedure
+  updateQuestion: adminProcedure
     .input(
       z.object({
         id: z.string(),
@@ -203,7 +200,7 @@ export const questionsRouter = router({
       }
     }),
 
-  deleteImageOfQuestion: publicProcedure
+  deleteImageOfQuestion: adminProcedure
     .input(
       z.object({
         id: z.string(),
@@ -225,29 +222,3 @@ export const questionsRouter = router({
       }
     }),
 });
-
-// getQuestionsWithAnswers: publicProcedure.query(({ ctx }) => {
-//   return ctx.prisma.question.findMany({
-//     include: {
-//       answers: true,
-//     },
-//   });
-// }),
-
-// getQuestionsWithAnswersByChapter: publicProcedure
-//   .input(z.object({ chapter: z.number() }))
-//   .query(async ({ ctx, input }) => {
-//     return ctx.prisma.question.findMany({
-//       where: {
-//         chapter: {
-//           number: input.chapter,
-//         },
-//       },
-//       include: {
-//         answers: true,
-//       },
-//       orderBy: {
-//         createdAt: "asc",
-//       },
-//     });
-//   }),
