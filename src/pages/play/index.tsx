@@ -90,21 +90,15 @@ const Play: NextPage = () => {
     questionId: string
   ) => {
     if (answer.is_correct) {
-      updateUserAnswer.mutate({
-        questionId: questionId,
-        answerState: true,
-        userId: session!.user!.id,
-      });
       setScore((prev) => prev + 1);
       setCurQuestionIdx((prev) => prev + 1);
     } else {
-      updateUserAnswer.mutate({
-        questionId: questionId,
-        answerState: false,
-        userId: session!.user!.id,
-      });
       setRevealAnswer(true);
     }
+    updateUserAnswer.mutate({
+      questionId: questionId,
+      answerState: answer.is_correct,
+    });
   };
 
   const handleNextClick = () => {

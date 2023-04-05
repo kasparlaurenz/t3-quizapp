@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../trpc";
+import { publicProcedure, router, protectedProcedure } from "../trpc";
 import bcrypt from "bcrypt";
 import { TRPCError } from "@trpc/server";
 
@@ -86,18 +86,17 @@ export const userRouter = router({
       return updatedUser;
     }),
 
-  updateRecentAnswerToQuestion: publicProcedure
+  updateRecentAnswerToQuestion: protectedProcedure
     .input(
       z.object({
         questionId: z.string(),
-        userId: z.string(),
         answerState: z.boolean(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       const user = await ctx.prisma.user.findUnique({
         where: {
-          id: input.userId,
+          id: ctx.session.user.id,
         },
       });
       if (!user) {
@@ -117,7 +116,7 @@ export const userRouter = router({
       const recentAnswer =
         await ctx.prisma.recentUserAnswerToQuestion.findFirst({
           where: {
-            userId: input.userId,
+            userId: ctx.session.user.id,
             questionId: input.questionId,
           },
         });
@@ -137,7 +136,7 @@ export const userRouter = router({
         const newRecentAnswer =
           await ctx.prisma.recentUserAnswerToQuestion.create({
             data: {
-              userId: input.userId,
+              userId: ctx.session.user.id,
               questionId: input.questionId,
               answerState: input.answerState,
             },
