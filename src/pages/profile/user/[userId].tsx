@@ -1,5 +1,4 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
 
 import React from "react";
 import ConfirmModal from "../../../components/ConfirmationModal";
@@ -10,6 +9,7 @@ import { trpc } from "../../../utils/trpc";
 
 const ProfilePage: NextPage = () => {
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+  const [toggleView, setToggleView] = React.useState(false);
 
   const [userData, setUserData] = React.useState({
     username: "",
@@ -17,6 +17,16 @@ const ProfilePage: NextPage = () => {
     newPassword: "",
   });
   const [showConfirm, setShowConfirm] = React.useState(false);
+
+  const { data: chapters } = trpc.chapter.getChapters.useQuery();
+
+  console.log("chapters", chapters);
+
+  const { data: recent } = trpc.recent.getRecentAnswersOfChatper.useQuery({
+    chapterNumber: 1,
+  });
+
+  console.log("recent", recent);
 
   const { data: user, refetch } = trpc.user.getUserById.useQuery();
 
@@ -68,62 +78,85 @@ const ProfilePage: NextPage = () => {
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
-        <div className="flex w-full flex-col items-center">
+        <div className="flex w-full items-center justify-center">
+          <aside>
+            <div className="flex flex-col items-center">
+              <button
+                onClick={() => setToggleView((prev) => !prev)}
+                className="menu-button"
+              >
+                Recent Answers
+              </button>
+              <button
+                onClick={() => setToggleView((prev) => !prev)}
+                className="menu-button"
+              >
+                User
+              </button>
+            </div>
+          </aside>
           {errorMsg && (
             <div className="rounded-md bg-red-500 p-2 text-white">
               {errorMsg}
             </div>
           )}
-          <form
-            className="mt-6 w-full md:max-w-[650px]"
-            action="submit"
-            onSubmit={handleSubmit}
-          >
-            <div className="flex flex-col">
-              <label htmlFor="username">Username</label>
-              <input
-                type="text"
-                value={userData.username}
-                onChange={(e) =>
-                  setUserData({ ...userData, username: e.target.value })
-                }
-                placeholder={user?.username}
-                name="username"
-                id="username"
-                className="bg-slate-700 p-2"
-              />
+          {toggleView ? (
+            <form
+              className="mt-6 w-full md:max-w-[500px]"
+              action="submit"
+              onSubmit={handleSubmit}
+            >
+              <div className="flex flex-col">
+                <label htmlFor="username">Username</label>
+                <input
+                  type="text"
+                  value={userData.username}
+                  onChange={(e) =>
+                    setUserData({ ...userData, username: e.target.value })
+                  }
+                  placeholder={user?.username}
+                  name="username"
+                  id="username"
+                  className="bg-slate-700 p-2"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="oldPassword">Old Password</label>
+                <input
+                  type="password"
+                  value={userData.oldPassword}
+                  onChange={(e) =>
+                    setUserData({ ...userData, oldPassword: e.target.value })
+                  }
+                  name="oldPassword"
+                  id="oldPassword"
+                  className="bg-slate-700 p-2"
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="newPassword">New Password</label>
+                <input
+                  type="password"
+                  value={userData.newPassword}
+                  onChange={(e) =>
+                    setUserData({ ...userData, newPassword: e.target.value })
+                  }
+                  name="newPassword"
+                  id="newPassword"
+                  className="bg-slate-700 p-2"
+                />
+              </div>
+              <button type="submit" className="menu-button">
+                {userData.newPassword === "" ? "Update Username" : "Update"}
+              </button>
+            </form>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div>Scores</div>
+              <div>Questions</div>
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="oldPassword">Old Password</label>
-              <input
-                type="password"
-                value={userData.oldPassword}
-                onChange={(e) =>
-                  setUserData({ ...userData, oldPassword: e.target.value })
-                }
-                name="oldPassword"
-                id="oldPassword"
-                className="bg-slate-700 p-2"
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="newPassword">New Password</label>
-              <input
-                type="password"
-                value={userData.newPassword}
-                onChange={(e) =>
-                  setUserData({ ...userData, newPassword: e.target.value })
-                }
-                name="newPassword"
-                id="newPassword"
-                className="bg-slate-700 p-2"
-              />
-            </div>
-            <button type="submit" className="menu-button">
-              {userData.newPassword === "" ? "Update Username" : "Update"}
-            </button>
-          </form>
+          )}
         </div>
       </main>
     </>

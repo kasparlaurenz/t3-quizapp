@@ -28,11 +28,12 @@ model Answer {
 }
 
 model Chapter {
-    id          String     @id @default(cuid())
-    number      Int        @unique
-    description String
-    questions   Question[]
-    isOriginal  Boolean
+    id                         String                       @id @default(cuid())
+    number                     Int                          @unique
+    description                String
+    questions                  Question[]
+    isOriginal                 Boolean
+    RecentUserAnswerToQuestion RecentUserAnswerToQuestion[]
 }
 
 model User {
@@ -51,6 +52,8 @@ model RecentUserAnswerToQuestion {
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     questionId  String
     question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+    chapterId   String
+    chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
     answerState Boolean  @default(false)
 }
 

@@ -106,7 +106,7 @@ export const userRouter = router({
               answerState: input.answerState,
             },
           });
-        return updatedRecentAnswer;
+        return updatedRecentAnswer.id;
       } else {
         const newRecentAnswer =
           await ctx.prisma.recentUserAnswerToQuestion.create({
@@ -114,6 +114,7 @@ export const userRouter = router({
               userId: ctx.session.user.id,
               questionId: input.questionId,
               answerState: input.answerState,
+              chapterId: question.chapterId,
             },
           });
         return newRecentAnswer.id;
