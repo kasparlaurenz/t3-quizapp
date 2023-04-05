@@ -44,6 +44,7 @@ export const chaptersRouter = router({
     }),
 
   getChapters: publicProcedure.query(({ ctx }) => {
+    console.log("getChapters", ctx.session);
     return ctx.prisma.chapter.findMany({
       orderBy: {
         number: "asc",

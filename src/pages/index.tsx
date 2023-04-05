@@ -1,9 +1,8 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import LoginForm from "../components/Auth/LoginForm";
 import Header from "../components/Header";
-import { getServerAuthSession } from "../server/common/get-server-auth-session";
 
 const Index: NextPage = () => {
   const { data: session } = useSession();
@@ -64,21 +63,3 @@ const Index: NextPage = () => {
 };
 
 export default Index;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession({
-    req: context.req,
-    res: context.res,
-  });
-
-  if (session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return { props: {} };
-};
