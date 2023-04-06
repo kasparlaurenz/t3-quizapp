@@ -82,6 +82,9 @@ export const userRouter = router({
         where: {
           id: input.questionId,
         },
+        include: {
+          chapter: true,
+        },
       });
 
       if (!question) {

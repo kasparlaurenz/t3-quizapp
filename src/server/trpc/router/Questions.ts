@@ -89,6 +89,16 @@ export const questionsRouter = router({
       });
     }),
 
+  getQuestionsByChapterId: publicProcedure
+    .input(z.object({ chapterId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.question.findMany({
+        where: {
+          chapterId: input.chapterId,
+        },
+      });
+    }),
+
   getQuestionById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
