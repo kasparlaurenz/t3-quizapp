@@ -89,16 +89,6 @@ export const questionsRouter = router({
       });
     }),
 
-  getQuestionsByChapterId: publicProcedure
-    .input(z.object({ chapterId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      return ctx.prisma.question.findMany({
-        where: {
-          chapterId: input.chapterId,
-        },
-      });
-    }),
-
   getQuestionById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -230,5 +220,15 @@ export const questionsRouter = router({
       } catch (error) {
         console.log(error);
       }
+    }),
+
+  getAnswer: publicProcedure
+    .input(z.object({ questionId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.answer.findMany({
+        where: {
+          questionId: input.questionId,
+        },
+      });
     }),
 });

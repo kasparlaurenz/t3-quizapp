@@ -6,16 +6,18 @@ import Header from "../../../components/Header";
 import TopSection from "../../../components/TopSection";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import { trpc } from "../../../utils/trpc";
-import { type Question } from "@prisma/client";
+import { Answer, Question } from "@prisma/client";
 
 const ProfilePage: NextPage = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showUser, setShowUser] = useState(true);
-  const [showAnswers, setShowAnswers] = useState(false);
+  const [showAnswerScreen, setShowAnswerScreen] = useState(false);
   const [selectedChapter, setSelectedChapter] = useState<string>();
-  const [selectedQuestions, setSelectedQuestions] = useState<Question[]>();
+  const [selectedQuestions, setSelectedQuestions] =
+    useState<(Question & { answers: Answer[] })[]>();
+  const [revealAnswer, setRevealAnswer] = useState(false);
 
-  const { data: questions } = trpc.question.getQuestionsByChapterId.useQuery(
+  const { data: questions } = trpc.recent.getQuestionsByChapterId.useQuery(
     {
       chapterId: selectedChapter!,
     },
@@ -27,7 +29,7 @@ const ProfilePage: NextPage = () => {
     }
   );
 
-  console.log("Questions", selectedQuestions);
+  console.log("Questions", questions);
 
   const [userData, setUserData] = React.useState({
     username: "",
@@ -64,6 +66,10 @@ const ProfilePage: NextPage = () => {
     setShowConfirm((prev) => !prev);
   };
 
+  const revealAnswerHandler = (id: string) => {
+    console.log("ID", id);
+  };
+
   const resetForm = () => {
     setUserData({
       username: "",
@@ -93,7 +99,7 @@ const ProfilePage: NextPage = () => {
             <button
               onClick={() => {
                 setShowUser(true);
-                setShowAnswers(false);
+                setShowAnswerScreen(false);
               }}
               className="menu-button"
             >
@@ -102,7 +108,7 @@ const ProfilePage: NextPage = () => {
             <button
               onClick={() => {
                 setShowUser(false);
-                setShowAnswers(true);
+                setShowAnswerScreen(true);
               }}
               className="menu-button"
             >
@@ -167,7 +173,7 @@ const ProfilePage: NextPage = () => {
               </button>
             </form>
           )}
-          {showAnswers && (
+          {showAnswerScreen && (
             <div className="flex flex-col items-center">
               <select
                 className="mt-4 cursor-pointer rounded-lg bg-slate-400 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
@@ -183,17 +189,49 @@ const ProfilePage: NextPage = () => {
                 ))}
               </select>
               {selectedQuestions?.map((question) => (
-                <div key={question.id} className="flex flex-col items-center">
-                  <div className="flex flex-col items-center">
-                    <p className="text-lg font-bold">{question.question}</p>
-                  </div>
-                </div>
+                <QuestionCard
+                  key={question.id}
+                  question={question.question}
+                  answer={
+                    question.answers.find((ans) => ans.is_correct === true)!
+                      .answer
+                  }
+                />
               ))}
             </div>
           )}
         </div>
       </main>
     </>
+  );
+};
+
+const QuestionCard = ({
+  question,
+  answer,
+}: {
+  question: string;
+  answer: string;
+}) => {
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [showText, setShowText] = useState(false);
+  const revealAnswerHandler = () => {
+    setShowAnswer((prev) => !prev);
+  };
+  return (
+    <div className="scene scene--card mt-5">
+      <div
+        onClick={revealAnswerHandler}
+        className={showAnswer ? "card is-flipped" : "card"}
+      >
+        <div className="card__face card__face--front flex items-center justify-center">
+          <p>{question}?</p>
+        </div>
+        <div className="card__face card__face--back flex items-center justify-center">
+          <p>{answer}</p>
+        </div>
+      </div>
+    </div>
   );
 };
 

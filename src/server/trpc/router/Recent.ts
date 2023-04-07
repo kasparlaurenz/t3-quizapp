@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router } from "../trpc";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const recentAnswers = router({
   getRecentAnswerToQuestion: publicProcedure
@@ -15,5 +15,20 @@ export const recentAnswers = router({
         },
       });
       return recentAnswer;
+    }),
+
+  getQuestionsByChapterId: protectedProcedure
+    .input(z.object({ chapterId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const questions = await ctx.prisma.question.findMany({
+        where: {
+          chapterId: input.chapterId,
+        },
+        include: {
+          answers: true,
+        },
+      });
+
+      return questions;
     }),
 });
