@@ -77,15 +77,13 @@ a {
     color: white;
     text-align: center;
     backface-visibility: hidden;
-    @apply rounded-md;
+    @apply rounded-md bg-slate-600 hover:bg-slate-700;
   }
 
   .card__face--front {
-    @apply bg-slate-600 hover:bg-slate-700;
   }
 
   .card__face--back {
-    @apply bg-neutral-600 hover:bg-neutral-700;
     transform: rotateY(180deg);
   }
 }
