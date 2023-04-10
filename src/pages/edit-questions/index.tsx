@@ -117,7 +117,7 @@ const ManageChapters: NextPage = () => {
               <Link
                 href={`edit-questions/chapter/${chapter.number}`}
                 key={chapter.id}
-                className=" relative flex h-auto w-full items-center justify-between bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
+                className="relative flex h-auto w-full items-center justify-between rounded-md bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
               >
                 <h2>
                   <span className="font-bold">{chapter.number}.</span>{" "}

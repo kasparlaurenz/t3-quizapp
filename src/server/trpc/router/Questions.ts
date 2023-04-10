@@ -221,4 +221,14 @@ export const questionsRouter = router({
         console.log(error);
       }
     }),
+
+  getAnswer: publicProcedure
+    .input(z.object({ questionId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.answer.findMany({
+        where: {
+          questionId: input.questionId,
+        },
+      });
+    }),
 });

@@ -65,7 +65,7 @@ const NewQuestionInput: FC<NewQuestionInputProps> = ({
       <input
         value={value}
         onChange={handleInputChange}
-        className="bg-slate-700 p-2"
+        className="rounded-md bg-slate-700 p-2"
         id={htmlFor}
         required={isRequired}
         placeholder={placeholder}

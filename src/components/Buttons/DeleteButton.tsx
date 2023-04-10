@@ -16,7 +16,7 @@ const DeleteButton: FC<DeleteButtonProps> = ({
     <button
       type="button"
       onClick={(e) => handleClick(e, itemToDelete)}
-      className="rounded-m absolute right-0 h-full bg-red-400 py-1 px-3 transition hover:bg-red-500"
+      className="absolute right-0 h-full rounded-r-md bg-red-400 py-1 px-3 transition hover:bg-red-500"
     >
       {deleteItem.isLoading ? (
         <>

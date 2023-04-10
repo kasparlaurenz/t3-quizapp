@@ -1,28 +1,77 @@
+import type {
+  Answer,
+  Question,
+  RecentUserAnswerToQuestion,
+} from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
-
-import React from "react";
+import React, { useState } from "react";
 import ConfirmModal from "../../../components/ConfirmationModal";
 import Header from "../../../components/Header";
 import TopSection from "../../../components/TopSection";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import { trpc } from "../../../utils/trpc";
+import Paginate from "../../../components/Paginate";
+
+interface ResponseObject {
+  question: Question;
+  answer: Answer[];
+  recentAnswer: RecentUserAnswerToQuestion | undefined;
+}
 
 const ProfilePage: NextPage = () => {
-  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
-
+  const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
+  const [showUser, setShowUser] = useState(true);
+  const [showAnswerScreen, setShowAnswerScreen] = useState(false);
+  const [selectedChapter, setSelectedChapter] = useState<string | undefined>();
+  const [response, setResponse] = useState<ResponseObject[] | undefined>([]);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [userData, setUserData] = React.useState({
     username: "",
     oldPassword: "",
     newPassword: "",
   });
-  const [showConfirm, setShowConfirm] = React.useState(false);
 
-  const { data: user, refetch } = trpc.user.getUserById.useQuery();
+  // Pagination
+  const [page, setPage] = useState(1);
+  const [limit] = useState(3);
+  const indexOfLastData = page * limit;
+  const indexOfFirstData = indexOfLastData - limit;
+  const currentData = response?.slice(indexOfFirstData, indexOfLastData);
+
+  const paginate = (num: number) => {
+    setPage(num);
+  };
+
+  const nextPage = () => {
+    if (page < Math.ceil(response!.length / limit)) {
+      setPage(page + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const { refetch: getResponse } = trpc.recent.getResponse.useQuery(
+    {
+      chapterId: selectedChapter!,
+    },
+    {
+      enabled: !!selectedChapter,
+      onSuccess: (data) => {
+        setResponse(data);
+      },
+    }
+  );
+
+  const { data: chapters } = trpc.chapter.getChapters.useQuery();
+  const { data: user, refetch: getUser } = trpc.user.getUserById.useQuery();
 
   const updateUser = trpc.user.updateUser.useMutation({
     onSuccess: () => {
-      refetch();
+      getUser();
       resetForm();
       setShowConfirm(true);
     },
@@ -30,6 +79,16 @@ const ProfilePage: NextPage = () => {
       setErrorMsg(err.message);
     },
   });
+
+  const countOfCorrectAnswers = response?.filter(
+    (item) => item.recentAnswer?.answerState === true
+  ).length;
+
+  const countOfQuestions = response?.length;
+
+  const progressInPercent = Math.round(
+    (countOfCorrectAnswers! / countOfQuestions!) * 100
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,13 +103,27 @@ const ProfilePage: NextPage = () => {
     setShowConfirm((prev) => !prev);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const resetScore = trpc.recent.resetStatesOfChapter.useMutation({
+    onSuccess: () => {
+      getResponse();
+    },
+  });
+
+  const handleResetScore = () => {
+    resetScore.mutate({ chapterId: selectedChapter! });
+  };
+
   const resetForm = () => {
     setUserData({
       username: "",
       oldPassword: "",
       newPassword: "",
     });
-    setErrorMsg(null);
+    setErrorMsg(undefined);
   };
 
   return (
@@ -68,65 +141,194 @@ const ProfilePage: NextPage = () => {
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
-        <div className="flex w-full flex-col items-center">
+        <div className="flex w-full flex-col items-center justify-center">
+          <div className="flex items-center gap-5">
+            <button
+              onClick={() => {
+                setShowUser(true);
+                setShowAnswerScreen(false);
+              }}
+              className="menu-button"
+            >
+              Benutzer
+            </button>
+            <button
+              onClick={() => {
+                setShowUser(false);
+                setShowAnswerScreen(true);
+              }}
+              className="menu-button"
+            >
+              Antworten
+            </button>
+          </div>
+
           {errorMsg && (
             <div className="rounded-md bg-red-500 p-2 text-white">
               {errorMsg}
             </div>
           )}
-          <form
-            className="mt-6 w-full md:max-w-[650px]"
-            action="submit"
-            onSubmit={handleSubmit}
-          >
-            <div className="flex flex-col">
-              <label htmlFor="username">Username</label>
-              <input
-                type="text"
-                value={userData.username}
-                onChange={(e) =>
-                  setUserData({ ...userData, username: e.target.value })
-                }
-                placeholder={user?.username}
-                name="username"
-                id="username"
-                className="bg-slate-700 p-2"
-              />
+          {showUser && (
+            <form
+              className="mt-6 flex w-full flex-col items-center justify-center md:max-w-[300px]"
+              action="submit"
+              onSubmit={handleSubmit}
+            >
+              <div className="flex w-full flex-col">
+                <label htmlFor="username">Benutzername</label>
+                <input
+                  type="text"
+                  value={userData.username}
+                  onChange={handleInputChange}
+                  placeholder={user?.username}
+                  name="username"
+                  id="username"
+                  className="rounded-md bg-slate-700 p-2"
+                />
+              </div>
+              <div className="flex w-full flex-col">
+                <label htmlFor="oldPassword">Altes Passwort</label>
+                <input
+                  type="password"
+                  value={userData.oldPassword}
+                  onChange={handleInputChange}
+                  name="oldPassword"
+                  id="oldPassword"
+                  className="rounded-md bg-slate-700 p-2"
+                  required
+                />
+              </div>
+              <div className="flex w-full flex-col">
+                <label htmlFor="newPassword">Neues Passwort</label>
+                <input
+                  type="password"
+                  value={userData.newPassword}
+                  onChange={handleInputChange}
+                  name="newPassword"
+                  id="newPassword"
+                  className="rounded-md bg-slate-700 p-2"
+                />
+              </div>
+              <button type="submit" className="menu-button">
+                {userData.newPassword === ""
+                  ? "Benutzername ändern"
+                  : "Benutzername und Passwort ändern"}
+              </button>
+            </form>
+          )}
+          {showAnswerScreen && (
+            <div className="mt-2 flex h-[550px] flex-col items-center">
+              <select
+                className="mt-4 w-auto cursor-pointer rounded-lg bg-slate-400 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                name="filter"
+                id="filter"
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setSelectedChapter(undefined);
+                    setResponse(undefined);
+                  }
+                  setSelectedChapter(e.target.value);
+                }}
+              >
+                <option value="">Kapitel</option>
+                {chapters?.map((chapter) => (
+                  <option key={chapter.id} value={chapter.id}>
+                    {chapter.number}. {chapter.description}
+                  </option>
+                ))}
+              </select>
+              {!selectedChapter ? (
+                <div className="mt-4 text-center text-gray-400">
+                  <p>Wähle ein Kapitel</p>
+                </div>
+              ) : (
+                <div className="mt-4 flex w-80 flex-col items-center">
+                  <p className="text-xl font-bold">
+                    {countOfCorrectAnswers} aus {countOfQuestions} richtig.
+                  </p>
+                  <ProgressBar width={progressInPercent} />
+                  <p>Klicke um richtige Antwort zu sehen.</p>
+                  {countOfCorrectAnswers! > 0 && (
+                    <button
+                      onClick={handleResetScore}
+                      className="menu-button mt-4"
+                    >
+                      Zurücksetzen
+                    </button>
+                  )}
+                </div>
+              )}
+              <div className="flex h-[240px] flex-col">
+                {currentData?.map((data) => (
+                  <QuestionCard key={data.question.id} data={data} />
+                ))}
+              </div>
+              {response && response.length! > 3 && (
+                <Paginate
+                  page={page}
+                  dataPerPage={limit}
+                  totalData={response.length!}
+                  paginate={paginate}
+                  nextPage={nextPage}
+                  prevPage={prevPage}
+                />
+              )}
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="oldPassword">Old Password</label>
-              <input
-                type="password"
-                value={userData.oldPassword}
-                onChange={(e) =>
-                  setUserData({ ...userData, oldPassword: e.target.value })
-                }
-                name="oldPassword"
-                id="oldPassword"
-                className="bg-slate-700 p-2"
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="newPassword">New Password</label>
-              <input
-                type="password"
-                value={userData.newPassword}
-                onChange={(e) =>
-                  setUserData({ ...userData, newPassword: e.target.value })
-                }
-                name="newPassword"
-                id="newPassword"
-                className="bg-slate-700 p-2"
-              />
-            </div>
-            <button type="submit" className="menu-button">
-              {userData.newPassword === "" ? "Update Username" : "Update"}
-            </button>
-          </form>
+          )}
         </div>
       </main>
     </>
+  );
+};
+
+const QuestionCard = ({ data }: { data: ResponseObject }) => {
+  const [showAnswer, setShowAnswer] = useState(false);
+  const revealAnswerHandler = () => {
+    setShowAnswer((prev) => !prev);
+  };
+
+  const recentCorrect = data.recentAnswer?.answerState;
+
+  return (
+    <div className="scene scene--card mt-5">
+      <div
+        onClick={revealAnswerHandler}
+        className={showAnswer ? "card is-flipped" : "card"}
+      >
+        <div
+          className={
+            recentCorrect
+              ? "card__face card__face--front flex items-center justify-center border-2 border-green-500"
+              : "card__face card__face--front flex items-center justify-center border-2 border-red-500"
+          }
+        >
+          <p>{data.question.question}?</p>
+        </div>
+        <div
+          className={
+            recentCorrect
+              ? "card__face card__face--back flex items-center justify-center border-2 border-green-500"
+              : "card__face card__face--back flex items-center justify-center border-2 border-red-500"
+          }
+        >
+          <p>{data.answer.find((answer) => answer.is_correct)?.answer}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ProgressBar = ({ width }: { width: number }) => {
+  const color =
+    width >= 80 ? "bg-green-300" : width >= 50 ? "bg-yellow-300" : "bg-red-300";
+
+  return (
+    <div className="mb-4 mt-4 flex h-4 w-3/4 rounded-md bg-zinc-600 text-xs">
+      <div
+        style={{ width: `${width}%` }}
+        className={`flex h-full flex-col justify-center whitespace-nowrap rounded-md text-center text-white shadow-none ${color} `}
+      ></div>
+    </div>
   );
 };
 
@@ -137,7 +339,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     req: context.req,
     res: context.res,
   });
-  console.log("getServerSideProps", session);
 
   if (!session || !session.user || session.user.role === "GUEST") {
     return {

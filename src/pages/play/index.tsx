@@ -251,7 +251,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     req: context.req,
     res: context.res,
   });
-  console.log("getServerSideProps", session);
 
   if (!session || !session.user || session.user.role === "GUEST") {
     return {
