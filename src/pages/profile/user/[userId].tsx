@@ -142,13 +142,13 @@ const ProfilePage: NextPage = () => {
           </>
         )}
         <div className="flex w-full flex-col items-center justify-center">
-          <div className="flex items-center gap-5">
+          <div className="flex flex-col items-center gap-5 md:flex-row">
             <button
               onClick={() => {
                 setShowUser(true);
                 setShowAnswerScreen(false);
               }}
-              className="menu-button"
+              className="menu-button mt-4"
             >
               Benutzer
             </button>
@@ -157,7 +157,7 @@ const ProfilePage: NextPage = () => {
                 setShowUser(false);
                 setShowAnswerScreen(true);
               }}
-              className="menu-button"
+              className="menu-button mt-0 md:mt-4"
             >
               Antworten
             </button>
