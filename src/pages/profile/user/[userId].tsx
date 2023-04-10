@@ -32,25 +32,25 @@ const ProfilePage: NextPage = () => {
   });
 
   // Pagination
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(3);
-  const indexOfLastData = page * limit;
+  const indexOfLastData = currentPage * limit;
   const indexOfFirstData = indexOfLastData - limit;
   const currentData = response?.slice(indexOfFirstData, indexOfLastData);
 
   const paginate = (num: number) => {
-    setPage(num);
+    setCurrentPage(num);
   };
 
   const nextPage = () => {
-    if (page < Math.ceil(response!.length / limit)) {
-      setPage(page + 1);
+    if (currentPage < Math.ceil(response!.length / limit)) {
+      setCurrentPage(currentPage + 1);
     }
   };
 
   const prevPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
@@ -265,7 +265,7 @@ const ProfilePage: NextPage = () => {
               </div>
               {response && response.length! > 3 && (
                 <Paginate
-                  page={page}
+                  currentPage={currentPage}
                   dataPerPage={limit}
                   totalData={response.length!}
                   paginate={paginate}
@@ -323,7 +323,7 @@ const ProgressBar = ({ width }: { width: number }) => {
     width >= 80 ? "bg-green-300" : width >= 50 ? "bg-yellow-300" : "bg-red-300";
 
   return (
-    <div className="mb-4 mt-4 flex h-4 w-3/4 rounded-md bg-zinc-600 text-xs">
+    <div className="mb-4 mt-4 flex h-2 w-3/4 rounded-md bg-zinc-600 text-xs">
       <div
         style={{ width: `${width}%` }}
         className={`flex h-full flex-col justify-center whitespace-nowrap rounded-md text-center text-white shadow-none ${color} `}

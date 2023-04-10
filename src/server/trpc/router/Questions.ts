@@ -77,7 +77,7 @@ export const questionsRouter = router({
           },
         },
         orderBy: {
-          createdAt: "asc",
+          createdAt: "desc",
         },
         include: {
           chapter: {

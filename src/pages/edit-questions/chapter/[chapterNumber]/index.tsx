@@ -7,6 +7,8 @@ import Header from "../../../../components/Header";
 import TopSection from "../../../../components/TopSection";
 import { supabase } from "../../../../utils/supabase";
 import { trpc } from "../../../../utils/trpc";
+import { useState } from "react";
+import Paginate from "../../../../components/Paginate";
 
 const ManageQuestions: NextPage = () => {
   const { query, isReady } = useRouter();
@@ -31,6 +33,29 @@ const ManageQuestions: NextPage = () => {
     { chapter: parseInt(chapterNumber) },
     { enabled: isReady }
   );
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit] = useState(5);
+  const indexOfLastData = currentPage * limit;
+  const indexOfFirstData = indexOfLastData - limit;
+  const currentData = questions?.slice(indexOfFirstData, indexOfLastData);
+
+  const paginate = (num: number) => {
+    setCurrentPage(num);
+  };
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(questions!.length / limit)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -67,9 +92,9 @@ const ManageQuestions: NextPage = () => {
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <TopSection title={chapterDescription?.description ?? ""} />
 
-        <div className="relative mt-4 flex w-full flex-col items-center justify-start gap-5 p-2">
+        <div className="relative mt-4 flex h-[380px] w-full flex-col items-center justify-start gap-5 p-2">
           {questions.length > 0 ? (
-            questions.map((question) => (
+            currentData?.map((question) => (
               <Link
                 href={`/edit-questions/chapter/${chapterNumber}/question/${question.id}`}
                 key={question.id}
@@ -97,6 +122,16 @@ const ManageQuestions: NextPage = () => {
         >
           Neue Frage
         </Link>
+        {questions.length > 5 && (
+          <Paginate
+            currentPage={currentPage}
+            dataPerPage={limit}
+            nextPage={nextPage}
+            prevPage={prevPage}
+            paginate={paginate}
+            totalData={questions.length}
+          />
+        )}
       </main>
     </>
   );

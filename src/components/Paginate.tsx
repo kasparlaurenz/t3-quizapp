@@ -1,14 +1,14 @@
 import React from "react";
 
 const Paginate = ({
-  page,
+  currentPage,
   dataPerPage,
   totalData,
   paginate,
   nextPage,
   prevPage,
 }: {
-  page: number;
+  currentPage: number;
   dataPerPage: number;
   totalData: number;
   paginate: (num: number) => void;
@@ -33,7 +33,7 @@ const Paginate = ({
         {pageNumbers.map((number) => (
           <li
             className={
-              page === number
+              currentPage === number
                 ? "h-2 w-2 cursor-pointer rounded-full bg-gray-300 text-center font-bold text-gray-800 hover:bg-gray-300"
                 : "h-2 w-2 cursor-pointer rounded-full bg-gray-500 text-center font-bold text-gray-800 hover:bg-gray-300"
             }
