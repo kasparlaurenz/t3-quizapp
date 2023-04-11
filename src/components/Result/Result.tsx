@@ -51,7 +51,7 @@ const Result: FC<ResultProps> = ({
               <p className="hidden sm:block">
                 {idx + 1} / {questions.length}
               </p>
-              <div className="flex flex-col items-center">
+              <div className="flex max-w-xs flex-col items-center">
                 <p className="font-bol text-lg">{question.question}?</p>
                 <p className="mt-1 text-gray-400">
                   Aus Kapitel {resultList[idx]?.chapterNumber}:{" "}
@@ -104,7 +104,7 @@ const Result: FC<ResultProps> = ({
             </div>
           </div>
         ))}
-        <button onClick={resetGame} className="menu-button">
+        <button onClick={resetGame} className="menu-button self-center">
           Neustarten
         </button>
       </div>
