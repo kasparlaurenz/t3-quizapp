@@ -217,7 +217,7 @@ const ProfilePage: NextPage = () => {
             </form>
           )}
           {showAnswerScreen && (
-            <div className="mt-2 flex h-[550px] flex-col items-center">
+            <div className="mt-2 flex flex-col items-center">
               <select
                 className="mt-4 w-auto cursor-pointer rounded-lg bg-slate-400 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                 name="filter"
@@ -258,7 +258,7 @@ const ProfilePage: NextPage = () => {
                   )}
                 </div>
               )}
-              <div className="flex h-[240px] flex-col">
+              <div className="flex h-96 flex-col">
                 {currentData?.map((data) => (
                   <QuestionCard key={data.question.id} data={data} />
                 ))}
@@ -289,31 +289,23 @@ const QuestionCard = ({ data }: { data: ResponseObject }) => {
 
   const recentCorrect = data.recentAnswer?.answerState;
 
+  const cardStyle =
+    " flex items-center justify-center border-2 bg-slate-700 rounded-md p-2 m-2 h-28 w-80 cursor-pointer hover:bg-slate-600";
+
   return (
-    <div className="scene scene--card mt-5">
-      <div
-        onClick={revealAnswerHandler}
-        className={showAnswer ? "card is-flipped" : "card"}
-      >
-        <div
-          className={
-            recentCorrect
-              ? "card__face card__face--front flex items-center justify-center border-2 border-green-500"
-              : "card__face card__face--front flex items-center justify-center border-2 border-red-500"
-          }
-        >
-          <p>{data.question.question}?</p>
-        </div>
-        <div
-          className={
-            recentCorrect
-              ? "card__face card__face--back flex items-center justify-center border-2 border-green-500"
-              : "card__face card__face--back flex items-center justify-center border-2 border-red-500"
-          }
-        >
-          <p>{data.answer.find((answer) => answer.is_correct)?.answer}</p>
-        </div>
-      </div>
+    <div
+      className={
+        recentCorrect
+          ? "border-green-500" + cardStyle
+          : "border-red-500" + cardStyle
+      }
+      onClick={revealAnswerHandler}
+    >
+      <p>
+        {showAnswer
+          ? data.answer.find((answer) => answer.is_correct)?.answer
+          : data.question.question + "?"}
+      </p>
     </div>
   );
 };
