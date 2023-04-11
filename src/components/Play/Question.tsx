@@ -70,7 +70,7 @@ const Question: FC<QuestionProps> = ({
           ))}
         </div>
         {revealAnswer && (
-          <button onClick={handleNextClick} className="menu-button">
+          <button onClick={handleNextClick} className="menu-button bg-blue-500">
             {curQuestionIdx + 1 === questions.length ? "Beenden" : "Weiter"}
           </button>
         )}

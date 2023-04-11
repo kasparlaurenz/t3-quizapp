@@ -1,5 +1,5 @@
 import type { Answer, Question } from "@prisma/client";
-import type { FC } from "react";
+import type { Dispatch, FC, SetStateAction } from "react";
 
 export type QuestionWithAnswer = Question & {
   answers: Answer[];
@@ -15,6 +15,7 @@ interface ResultProps {
     chapterNumber: number;
   }[];
   resetGame: () => void;
+  setPlayOnlyWrongAnswered: Dispatch<SetStateAction<boolean>>;
 }
 
 const Result: FC<ResultProps> = ({
@@ -22,6 +23,7 @@ const Result: FC<ResultProps> = ({
   questions,
   resultList,
   resetGame,
+  setPlayOnlyWrongAnswered,
 }) => {
   return (
     <div className="mt-8 flex flex-col items-center justify-center">
@@ -88,7 +90,7 @@ const Result: FC<ResultProps> = ({
             <div className="answers mt-2 flex w-full flex-col items-start">
               {question.answers.map((answer: Answer, idx: number) => (
                 <p
-                  key={answer.answer}
+                  key={idx}
                   className={
                     answer.is_correct
                       ? "rounded-lg border-2 border-green-400 p-2"
@@ -104,9 +106,19 @@ const Result: FC<ResultProps> = ({
             </div>
           </div>
         ))}
-        <button onClick={resetGame} className="menu-button self-center">
-          Neustarten
-        </button>
+        <div className="mt-2 flex items-center gap-4 self-center">
+          <button onClick={resetGame} className="menu-button mt-0 bg-blue-500">
+            Neustarten
+          </button>
+          <label className="text-l text-sky-400">
+            <input
+              type="checkbox"
+              className="mr-1 h-[18px] w-[18px] accent-sky-500"
+              onChange={(e) => setPlayOnlyWrongAnswered(e.target.checked)}
+            />
+            Nur falsche Fragen wiederholen
+          </label>
+        </div>
       </div>
     </div>
   );

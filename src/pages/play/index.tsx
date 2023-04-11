@@ -7,31 +7,46 @@ import Question from "../../components/Play/Question";
 import Result from "../../components/Result/Result";
 import TopSection from "../../components/TopSection";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
-import { trpc } from "../../utils/trpc";
+import { trpc, RouterOutputs } from "../../utils/trpc";
 import type {
   AnswerObjectType,
   ChapterType,
   ResultList,
 } from "../../utils/types";
 
+type Questions =
+  RouterOutputs["question"]["getQuestionsWithAnswersByChapterSelection"][0];
+
 const Play: NextPage = () => {
   const [revealAnswer, setRevealAnswer] = useState(false);
   const [fetchQuestions, setFetchQuestions] = useState(false);
   const [playQuiz, setPlayQuiz] = useState(false);
+  const [playOnlyWrongAnswered, setPlayOnlyWrongAnswered] = useState(false);
   const [isCheckAll, setIsCheckAll] = useState(false);
 
   const [selectedChapters, setSelectedChapters] = useState<number[]>([]);
   const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
+  const [questions, setQuestions] = useState<Questions[]>([]);
+  const [wrongAnsweredQuestions, setWrongAnsweredQuestions] = useState<
+    Questions[]
+  >([]);
 
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
 
   const [resultList, setResultList] = useState<ResultList[]>([]);
 
-  const { data: questions } =
+  const { data } =
     trpc.question.getQuestionsWithAnswersByChapterSelection.useQuery(
       { chapter: selectedChapters },
-      { enabled: fetchQuestions === true, refetchOnWindowFocus: false }
+      {
+        enabled: fetchQuestions === true,
+        refetchOnWindowFocus: false,
+        onSuccess: (data: Questions[]) => {
+          setQuestions(data);
+          setWrongAnsweredQuestions(data);
+        },
+      }
     );
   const {
     data: chapters,
@@ -89,6 +104,9 @@ const Play: NextPage = () => {
   ) => {
     if (answer.is_correct) {
       setScore((prev) => prev + 1);
+      setWrongAnsweredQuestions(
+        wrongAnsweredQuestions.filter((q) => q.id !== questionId)
+      );
       setCurQuestionIdx((prev) => prev + 1);
     } else {
       setRevealAnswer(true);
@@ -128,7 +146,24 @@ const Play: NextPage = () => {
     }
   };
 
+  console.log("1wrongs", wrongAnsweredQuestions);
+  console.log("1questions", questions);
+  console.log("1data", data);
+  console.log("1index", curQuestionIdx);
+  console.log("1selectedChapters", selectedChapters);
+
   const resetGame = () => {
+    if (playOnlyWrongAnswered) {
+      setQuestions(wrongAnsweredQuestions);
+      setPlayOnlyWrongAnswered(false);
+    } else {
+      console.log("2data", data);
+      if (data) {
+        setQuestions(data);
+        setWrongAnsweredQuestions(data);
+      }
+    }
+
     setScore(0);
     setCurQuestionIdx(0);
     setResultList([]);
@@ -157,6 +192,7 @@ const Play: NextPage = () => {
                 questions={questions}
                 resetGame={resetGame}
                 resultList={resultList}
+                setPlayOnlyWrongAnswered={setPlayOnlyWrongAnswered}
               />
             ) : (
               <div className="flex flex-col items-center">
