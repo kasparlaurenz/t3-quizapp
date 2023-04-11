@@ -150,7 +150,7 @@ const ManageQuestion: NextPage = ({}) => {
     <>
       <Header>Neue Frage</Header>
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title="Neue Frage" />
+        <TopSection title="Frage" />
         {showConfirm && (
           <>
             <ConfirmModal status="updated" handleModal={handleModal} />
