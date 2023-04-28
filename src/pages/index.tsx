@@ -3,9 +3,15 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import LoginForm from "../components/Auth/LoginForm";
 import Header from "../components/Header";
+import { useRouter } from "next/router";
 
 const Index: NextPage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  if (session) {
+    router.push("/dashboard");
+  }
 
   return (
     <>
