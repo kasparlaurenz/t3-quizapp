@@ -44,7 +44,9 @@ const Question: FC<QuestionProps> = ({
         <span className="font-bold text-blue-400">
           {curQuestionIdx + 1} / {questions.length}
         </span>
-        <p className="text-2xl">{questions[curQuestionIdx]?.question}?</p>
+        <p className="text-center text-2xl">
+          {questions[curQuestionIdx]?.question}?
+        </p>
         {questions[curQuestionIdx] && questions[curQuestionIdx]?.imageUrl && (
           <div className="relative h-[400px] w-[200px]">
             <Image

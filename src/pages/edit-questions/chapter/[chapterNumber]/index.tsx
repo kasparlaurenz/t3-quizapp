@@ -92,15 +92,15 @@ const ManageQuestions: NextPage = () => {
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <TopSection title={chapterDescription?.description ?? ""} />
 
-        <div className="relative mt-4 flex h-[380px] w-full flex-col items-center justify-start gap-5 p-2">
+        <div className="relative mt-4 flex max-h-[780px] w-full flex-col items-center justify-start gap-5 p-2">
           {questions.length > 0 ? (
             currentData?.map((question) => (
               <Link
                 href={`/edit-questions/chapter/${chapterNumber}/question/${question.id}`}
                 key={question.id}
-                className="relative flex h-auto w-full items-center justify-between rounded-md bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
+                className="relative flex h-auto w-full items-center justify-between rounded-md bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[500px]"
               >
-                <h2>{question.question}</h2>
+                <h2 className="pr-6">{question.question}</h2>
                 <DeleteButton
                   handleClick={handleClick}
                   itemToDelete={question}

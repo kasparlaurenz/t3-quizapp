@@ -134,7 +134,7 @@ const ProfilePage: NextPage = () => {
         {showConfirm && (
           <>
             <ConfirmModal
-              status="updated"
+              status="geupdated"
               type="User"
               handleModal={handleModal}
             />
@@ -142,24 +142,15 @@ const ProfilePage: NextPage = () => {
           </>
         )}
         <div className="flex w-full flex-col items-center justify-center">
-          <div className="flex flex-col items-center gap-5 md:flex-row">
+          <div className="mt-2 flex flex-col items-center gap-5 md:flex-row">
             <button
               onClick={() => {
-                setShowUser(true);
-                setShowAnswerScreen(false);
+                setShowUser((prev) => !prev);
+                setShowAnswerScreen((prev) => !prev);
               }}
               className="menu-button mt-4"
             >
-              Benutzer
-            </button>
-            <button
-              onClick={() => {
-                setShowUser(false);
-                setShowAnswerScreen(true);
-              }}
-              className="menu-button mt-0 md:mt-4"
-            >
-              Antworten
+              {showAnswerScreen ? "Profil" : "Score"}
             </button>
           </div>
 
@@ -258,7 +249,7 @@ const ProfilePage: NextPage = () => {
                   )}
                 </div>
               )}
-              <div className="flex h-96 flex-col">
+              <div className="flex max-h-96 flex-col">
                 {currentData?.map((data) => (
                   <QuestionCard key={data.question.id} data={data} />
                 ))}
@@ -290,7 +281,7 @@ const QuestionCard = ({ data }: { data: ResponseObject }) => {
   const recentCorrect = data.recentAnswer?.answerState;
 
   const cardStyle =
-    " flex items-center justify-center border-2 bg-slate-700 rounded-md p-2 m-2 h-28 w-80 cursor-pointer hover:bg-slate-600";
+    " flex items-center justify-center border-2 bg-slate-700 rounded-md p-2 m-2 h-52 w-96 cursor-pointer hover:bg-slate-600";
 
   return (
     <div
@@ -301,7 +292,7 @@ const QuestionCard = ({ data }: { data: ResponseObject }) => {
       }
       onClick={revealAnswerHandler}
     >
-      <p>
+      <p className="text-center">
         {showAnswer
           ? data.answer.find((answer) => answer.is_correct)?.answer
           : data.question.question + "?"}

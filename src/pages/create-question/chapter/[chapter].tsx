@@ -110,7 +110,7 @@ const CreateQuestion: NextPage = () => {
         <TopSection title={`Kapitel ${chapter}`} />
         {showConfirm && (
           <>
-            <ConfirmModal status="created" handleModal={handleModal} />
+            <ConfirmModal status="erstellt" handleModal={handleModal} />
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}

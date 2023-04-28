@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-type statusType = "created" | "updated" | "deleted";
+type statusType = "erstellt" | "geupdated" | "gelöscht";
 interface ConfirmModalProps {
   handleModal: () => void;
   status: statusType;
@@ -10,7 +10,7 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ handleModal, status, type }) => {
   return (
     <div className="absolute z-50">
       <p className="text-lg">
-        {type ?? type} has been {status}{" "}
+        {type ?? type} wurde {status}{" "}
       </p>
       <button onClick={handleModal} className="reg-button">
         Close

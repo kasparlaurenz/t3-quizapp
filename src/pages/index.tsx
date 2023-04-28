@@ -25,22 +25,6 @@ const Index: NextPage = () => {
                 "Warte auf die Bestätigung deines Accounts durch einen Admin"}
             </p>
           </div>
-          {session && (
-            <div className="flex flex-col gap-4">
-              <Link
-                href={"/dashboard"}
-                className="menu-button  bg-sky-500 hover:bg-white hover:text-zinc-800"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={() => signOut()}
-                className="menu-button mt-0  bg-zinc-500 hover:bg-white hover:text-zinc-800"
-              >
-                Abmelden
-              </button>
-            </div>
-          )}
 
           {!session && (
             <div className="flex w-full max-w-sm flex-col items-center gap-4">
