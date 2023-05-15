@@ -70,4 +70,65 @@ export const recentAnswers = router({
         },
       });
     }),
+
+  getUserScoreForEachChapter: protectedProcedure.query(async ({ ctx }) => {
+    const chapters = await ctx.prisma.chapter.findMany();
+
+    const questions = await ctx.prisma.question.findMany({
+      where: {
+        chapterId: {
+          in: chapters.map((c) => c.id),
+        },
+      },
+    });
+
+    const answers = await ctx.prisma.answer.findMany({
+      where: {
+        questionId: {
+          in: questions.map((q) => q.id),
+        },
+      },
+    });
+
+    const recentAnswers = await ctx.prisma.recentUserAnswerToQuestion.findMany({
+      where: {
+        userId: ctx.session.user.id,
+        questionId: {
+          in: questions.map((q) => q.id),
+        },
+      },
+    });
+
+    const response = chapters.map((c) => {
+      const chapterQuestions = questions.filter((q) => q.chapterId === c.id);
+      const chapterAnswers = answers.filter((a) =>
+        chapterQuestions.map((q) => q.id).includes(a.questionId)
+      );
+      const chapterRecentAnswers = recentAnswers.filter((ra) =>
+        chapterQuestions.map((q) => q.id).includes(ra.questionId)
+      );
+
+      const questionsCount = chapterQuestions.length;
+
+      const correctCount = chapterRecentAnswers.filter((ra) => ra.answerState);
+
+      const chapterScoreInPercent = Math.round(
+        (chapterRecentAnswers.filter((ra) => ra.answerState).length /
+          chapterQuestions.length) *
+          100
+      );
+
+      return {
+        chapter: c,
+        userId: ctx.session.user.id,
+        chapterScoreInPercent,
+        questionsCount,
+        correctCount: correctCount.length,
+      };
+    });
+
+    console.log(response);
+
+    return response;
+  }),
 });

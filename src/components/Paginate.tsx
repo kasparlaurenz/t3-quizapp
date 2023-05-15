@@ -27,7 +27,7 @@ const Paginate = ({
         className="h-7 w-7 rounded-full bg-gray-500 font-bold text-white hover:bg-gray-700"
         onClick={prevPage}
       >
-        -
+        ⮜
       </button>
       <ul className="flex gap-2">
         {pageNumbers.map((number) => (
@@ -47,7 +47,7 @@ const Paginate = ({
         className="h-7 w-7 rounded-full bg-gray-500 font-bold text-white hover:bg-gray-700"
         onClick={nextPage}
       >
-        +
+        ⮞
       </button>
     </nav>
   );

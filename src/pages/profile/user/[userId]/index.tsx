@@ -5,12 +5,13 @@ import type {
 } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import React, { useState } from "react";
-import ConfirmModal from "../../../components/ConfirmationModal";
-import Header from "../../../components/Header";
-import TopSection from "../../../components/TopSection";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-import { trpc } from "../../../utils/trpc";
-import Paginate from "../../../components/Paginate";
+import ConfirmModal from "../../../../components/ConfirmationModal";
+import Header from "../../../../components/Header";
+import TopSection from "../../../../components/TopSection";
+import { getServerAuthSession } from "../../../../server/common/get-server-auth-session";
+import { trpc } from "../../../../utils/trpc";
+import Paginate from "../../../../components/Paginate";
+import Link from "next/link";
 
 interface ResponseObject {
   question: Question;
@@ -65,6 +66,10 @@ const ProfilePage: NextPage = () => {
       },
     }
   );
+
+  const { data: scores } = trpc.recent.getUserScoreForEachChapter.useQuery();
+
+  console.log("Scores", scores);
 
   const { data: chapters } = trpc.chapter.getChapters.useQuery();
   const { data: user, refetch: getUser } = trpc.user.getUserById.useQuery();
@@ -143,15 +148,12 @@ const ProfilePage: NextPage = () => {
         )}
         <div className="flex w-full flex-col items-center justify-center">
           <div className="mt-2 flex flex-col items-center gap-5 md:flex-row">
-            <button
-              onClick={() => {
-                setShowUser((prev) => !prev);
-                setShowAnswerScreen((prev) => !prev);
-              }}
-              className="menu-button mt-4"
+            <Link
+              className="menu-button"
+              href={`/profile/user/${user?.id}/scores`}
             >
-              {showAnswerScreen ? "Profil" : "Score"}
-            </button>
+              Scores
+            </Link>
           </div>
 
           {errorMsg && (

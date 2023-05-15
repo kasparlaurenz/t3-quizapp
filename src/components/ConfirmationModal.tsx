@@ -12,8 +12,8 @@ const ConfirmModal: FC<ConfirmModalProps> = ({ handleModal, status, type }) => {
       <p className="text-lg">
         {type ?? type} wurde {status}{" "}
       </p>
-      <button onClick={handleModal} className="reg-button">
-        Close
+      <button onClick={handleModal} className="reg-button mt-4">
+        Schließen
       </button>
     </div>
   );

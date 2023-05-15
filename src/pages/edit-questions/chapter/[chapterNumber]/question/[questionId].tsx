@@ -153,7 +153,11 @@ const ManageQuestion: NextPage = ({}) => {
         <TopSection title="Frage" />
         {showConfirm && (
           <>
-            <ConfirmModal status="geupdated" handleModal={handleModal} />
+            <ConfirmModal
+              type="Frage"
+              status="geupdated"
+              handleModal={handleModal}
+            />
             <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
