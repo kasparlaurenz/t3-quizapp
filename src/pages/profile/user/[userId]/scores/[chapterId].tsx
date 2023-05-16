@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { RouterOutputs, trpc } from "../../../../../utils/trpc";
 import Header from "../../../../../components/Header";
 import TopSection from "../../../../../components/TopSection";
+import { ProgressBar } from "../../../../../components/ProgressBar";
 
 type ResponseObject = RouterOutputs["recent"]["getChapterScore"];
 
@@ -19,6 +20,16 @@ const ChapterScorePage: NextPage = () => {
     { chapterId: chapterId },
     { enabled: isReady }
   );
+
+  const questionsCount = chapterScore?.question.length;
+  const correctAnswersCount = chapterScore?.question.filter(
+    (question) => question.recentAnswer?.answerState
+  ).length;
+
+  const score =
+    correctAnswersCount && questionsCount
+      ? Math.round((correctAnswersCount / questionsCount) * 100)
+      : 0;
 
   if (isLoading) {
     return (
@@ -36,21 +47,25 @@ const ChapterScorePage: NextPage = () => {
     );
   }
 
-  console.log(chapterScore);
-
   return (
     <>
       <Header />
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
+      <div className="h-4" />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4">
         <TopSection
           title={`${chapterScore.chapter?.number}. ${chapterScore.chapter?.description}`}
         />
         <div className="mt-2 flex flex-col items-center">
-          <div className="flex max-h-96 flex-col">
-            {chapterScore.question.map((question, idx) => (
-              <QuestionCard key={question.question.id} data={question} />
-            ))}
-          </div>
+          <p className="mt-2 text-lg">
+            {correctAnswersCount}/{questionsCount} richtig
+          </p>
+          <ProgressBar width={score} />
+
+          <p className="mt-2">Klicke um richtige Antwort zu sehen.</p>
+
+          {chapterScore.question.map((question, idx) => (
+            <QuestionCard key={question.question.id} data={question} />
+          ))}
         </div>
       </main>
     </>
@@ -81,7 +96,7 @@ const QuestionCard = ({ data }: { data: QuestionCardProps }) => {
       }
       onClick={revealAnswerHandler}
     >
-      <p className="text-center">
+      <p className="select-none text-center">
         {showAnswer
           ? data.answer.find((answer) => answer.is_correct)?.answer
           : data.question.question + "?"}
