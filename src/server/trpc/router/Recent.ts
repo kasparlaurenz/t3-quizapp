@@ -17,9 +17,14 @@ export const recentAnswers = router({
       return recentAnswer;
     }),
 
-  getResponse: protectedProcedure
+  getChapterScore: protectedProcedure
     .input(z.object({ chapterId: z.string() }))
     .query(async ({ ctx, input }) => {
+      const chapter = await ctx.prisma.chapter.findFirst({
+        where: {
+          id: input.chapterId,
+        },
+      });
       const questions = await ctx.prisma.question.findMany({
         where: {
           chapterId: input.chapterId,
@@ -44,7 +49,7 @@ export const recentAnswers = router({
           },
         });
 
-      const response = questions.map((q) => {
+      const question = questions.map((q) => {
         const answer = answers.filter((a) => a.questionId === q.id);
         const recentAnswer = recentAnswers.find((ra) => ra.questionId === q.id);
         return {
@@ -53,6 +58,11 @@ export const recentAnswers = router({
           recentAnswer,
         };
       });
+
+      const response = {
+        chapter,
+        question,
+      };
 
       return response;
     }),

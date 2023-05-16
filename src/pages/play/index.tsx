@@ -146,12 +146,6 @@ const Play: NextPage = () => {
     }
   };
 
-  console.log("1wrongs", wrongAnsweredQuestions);
-  console.log("1questions", questions);
-  console.log("1data", data);
-  console.log("1index", curQuestionIdx);
-  console.log("1selectedChapters", selectedChapters);
-
   const resetGame = () => {
     if (playOnlyWrongAnswered) {
       setQuestions(wrongAnsweredQuestions);

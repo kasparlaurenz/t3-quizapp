@@ -9,15 +9,11 @@ import ConfirmModal from "../../../../components/ConfirmationModal";
 import Header from "../../../../components/Header";
 import TopSection from "../../../../components/TopSection";
 import { getServerAuthSession } from "../../../../server/common/get-server-auth-session";
-import { trpc } from "../../../../utils/trpc";
+import { RouterOutputs, trpc } from "../../../../utils/trpc";
 import Paginate from "../../../../components/Paginate";
 import Link from "next/link";
 
-interface ResponseObject {
-  question: Question;
-  answer: Answer[];
-  recentAnswer: RecentUserAnswerToQuestion | undefined;
-}
+type ResponseObject = RouterOutputs["recent"]["getUserScoreForEachChapter"][0];
 
 const ProfilePage: NextPage = () => {
   const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
@@ -55,23 +51,6 @@ const ProfilePage: NextPage = () => {
     }
   };
 
-  const { refetch: getResponse } = trpc.recent.getResponse.useQuery(
-    {
-      chapterId: selectedChapter!,
-    },
-    {
-      enabled: !!selectedChapter,
-      onSuccess: (data) => {
-        setResponse(data);
-      },
-    }
-  );
-
-  const { data: scores } = trpc.recent.getUserScoreForEachChapter.useQuery();
-
-  console.log("Scores", scores);
-
-  const { data: chapters } = trpc.chapter.getChapters.useQuery();
   const { data: user, refetch: getUser } = trpc.user.getUserById.useQuery();
 
   const updateUser = trpc.user.updateUser.useMutation({
@@ -84,16 +63,6 @@ const ProfilePage: NextPage = () => {
       setErrorMsg(err.message);
     },
   });
-
-  const countOfCorrectAnswers = response?.filter(
-    (item) => item.recentAnswer?.answerState === true
-  ).length;
-
-  const countOfQuestions = response?.length;
-
-  const progressInPercent = Math.round(
-    (countOfCorrectAnswers! / countOfQuestions!) * 100
-  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -110,16 +79,6 @@ const ProfilePage: NextPage = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
-
-  const resetScore = trpc.recent.resetStatesOfChapter.useMutation({
-    onSuccess: () => {
-      getResponse();
-    },
-  });
-
-  const handleResetScore = () => {
-    resetScore.mutate({ chapterId: selectedChapter! });
   };
 
   const resetForm = () => {
@@ -271,35 +230,6 @@ const ProfilePage: NextPage = () => {
         </div>
       </main>
     </>
-  );
-};
-
-const QuestionCard = ({ data }: { data: ResponseObject }) => {
-  const [showAnswer, setShowAnswer] = useState(false);
-  const revealAnswerHandler = () => {
-    setShowAnswer((prev) => !prev);
-  };
-
-  const recentCorrect = data.recentAnswer?.answerState;
-
-  const cardStyle =
-    " flex items-center justify-center border-2 bg-slate-700 rounded-md p-2 m-2 h-52 w-96 cursor-pointer hover:bg-slate-600";
-
-  return (
-    <div
-      className={
-        recentCorrect
-          ? "border-green-500" + cardStyle
-          : "border-red-500" + cardStyle
-      }
-      onClick={revealAnswerHandler}
-    >
-      <p className="text-center">
-        {showAnswer
-          ? data.answer.find((answer) => answer.is_correct)?.answer
-          : data.question.question + "?"}
-      </p>
-    </div>
   );
 };
 
