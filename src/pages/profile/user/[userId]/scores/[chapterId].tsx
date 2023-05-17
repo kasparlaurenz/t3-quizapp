@@ -16,10 +16,15 @@ const ChapterScorePage: NextPage = () => {
     data: chapterScore,
     isLoading,
     isError,
+    refetch,
   } = trpc.recent.getChapterScore.useQuery(
     { chapterId: chapterId },
     { enabled: isReady }
   );
+
+  const resetScore = trpc.recent.resetStatesOfChapter.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   const questionsCount = chapterScore?.question.length;
   const correctAnswersCount = chapterScore?.question.filter(
@@ -60,11 +65,20 @@ const ChapterScorePage: NextPage = () => {
           </p>
           <ProgressBar width={score} />
 
-          <p className="mt-2">Klicke um richtige Antwort zu sehen.</p>
+          <button
+            className="menu-button mt-2"
+            onClick={() => resetScore.mutate({ chapterId: chapterId })}
+          >
+            Zurücksetzen
+          </button>
 
-          {chapterScore.question.map((question, idx) => (
-            <QuestionCard key={question.question.id} data={question} />
-          ))}
+          <p className="mt-4">Klicke um richtige Antwort zu sehen.</p>
+
+          <div className="mt-2">
+            {chapterScore.question.map((question, idx) => (
+              <QuestionCard key={question.question.id} data={question} />
+            ))}
+          </div>
         </div>
       </main>
     </>

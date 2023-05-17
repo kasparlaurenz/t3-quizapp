@@ -17,36 +17,12 @@ type ResponseObject = RouterOutputs["recent"]["getUserScoreForEachChapter"][0];
 
 const ProfilePage: NextPage = () => {
   const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
-  const [response, setResponse] = useState<ResponseObject[] | undefined>([]);
   const [showConfirm, setShowConfirm] = useState(false);
   const [userData, setUserData] = React.useState({
     username: "",
     oldPassword: "",
     newPassword: "",
   });
-
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [limit] = useState(3);
-  const indexOfLastData = currentPage * limit;
-  const indexOfFirstData = indexOfLastData - limit;
-  const currentData = response?.slice(indexOfFirstData, indexOfLastData);
-
-  const paginate = (num: number) => {
-    setCurrentPage(num);
-  };
-
-  const nextPage = () => {
-    if (currentPage < Math.ceil(response!.length / limit)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   const { data: user, refetch: getUser } = trpc.user.getUserById.useQuery();
 

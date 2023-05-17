@@ -44,8 +44,8 @@ const Result: FC<ResultProps> = ({
             key={question.id}
             className={
               resultList[idx]?.isCorrect === true
-                ? "result flex flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200 md:w-[500px]"
-                : "result flex flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200 md:w-[500px]"
+                ? "result flex flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200 md:w-[600px]"
+                : "result flex flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200 md:w-[600px]"
             }
           >
             {" "}
@@ -54,7 +54,9 @@ const Result: FC<ResultProps> = ({
                 {idx + 1} / {questions.length}
               </p>
               <div className="flex max-w-xs flex-col items-center">
-                <p className="font-bol text-lg">{question.question}?</p>
+                <p className="font-bol text-center text-lg">
+                  {question.question}?
+                </p>
                 <p className="mt-1 text-gray-400">
                   Aus Kapitel {resultList[idx]?.chapterNumber}:{" "}
                   {resultList[idx]?.chapterDescription}
@@ -62,8 +64,8 @@ const Result: FC<ResultProps> = ({
                 <p
                   className={
                     resultList[idx]?.isCorrect === true
-                      ? "mt-1 text-green-400"
-                      : "mt-1 text-red-400"
+                      ? "mt-1 text-center text-green-400"
+                      : "mt-1 text-center text-red-400"
                   }
                 >
                   Deine Antwort: {resultList[idx]?.answer}
