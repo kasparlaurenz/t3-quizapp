@@ -38,14 +38,14 @@ const Question: FC<QuestionProps> = ({
   handleNextClick,
 }) => {
   return (
-    <div className="max-w-lg">
+    <div className="w-[600px]">
       <div className="flex flex-col items-center justify-center">
         <h3 className="mt-10">Frage</h3>
         <span className="font-bold text-blue-400">
           {curQuestionIdx + 1} / {questions.length}
         </span>
         <p className="text-center text-2xl">
-          {questions[curQuestionIdx]?.question}?
+          {questions[curQuestionIdx]?.question}
         </p>
         {questions[curQuestionIdx] && questions[curQuestionIdx]?.imageUrl && (
           <div className="relative h-[400px] w-[200px]">

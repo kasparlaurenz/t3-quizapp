@@ -146,12 +146,6 @@ const Play: NextPage = () => {
     }
   };
 
-  console.log("1wrongs", wrongAnsweredQuestions);
-  console.log("1questions", questions);
-  console.log("1data", data);
-  console.log("1index", curQuestionIdx);
-  console.log("1selectedChapters", selectedChapters);
-
   const resetGame = () => {
     if (playOnlyWrongAnswered) {
       setQuestions(wrongAnsweredQuestions);
@@ -173,8 +167,8 @@ const Play: NextPage = () => {
   return (
     <>
       <Header>Fragebogen</Header>
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title="Kapitel" />
+      <TopSection title="Kapitel" />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         {playQuiz && questions ? (
           <>
             {questions.length > 0 && curQuestionIdx < questions.length ? (
