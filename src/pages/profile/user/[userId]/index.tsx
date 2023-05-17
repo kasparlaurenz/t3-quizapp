@@ -17,9 +17,6 @@ type ResponseObject = RouterOutputs["recent"]["getUserScoreForEachChapter"][0];
 
 const ProfilePage: NextPage = () => {
   const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
-  const [showUser, setShowUser] = useState(true);
-  const [showAnswerScreen, setShowAnswerScreen] = useState(false);
-  const [selectedChapter, setSelectedChapter] = useState<string | undefined>();
   const [response, setResponse] = useState<ResponseObject[] | undefined>([]);
   const [showConfirm, setShowConfirm] = useState(false);
   const [userData, setUserData] = React.useState({
@@ -93,8 +90,8 @@ const ProfilePage: NextPage = () => {
   return (
     <>
       <Header />
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={user?.username} />
+      <TopSection title={user?.username} />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         {showConfirm && (
           <>
             <ConfirmModal
@@ -106,7 +103,7 @@ const ProfilePage: NextPage = () => {
           </>
         )}
         <div className="flex w-full flex-col items-center justify-center">
-          <div className="mt-2 flex flex-col items-center gap-5 md:flex-row">
+          <div className="flex flex-col items-center gap-5 md:flex-row">
             <Link
               className="menu-button"
               href={`/profile/user/${user?.id}/scores`}
@@ -120,54 +117,53 @@ const ProfilePage: NextPage = () => {
               {errorMsg}
             </div>
           )}
-          {showUser && (
-            <form
-              className="mt-6 flex w-full flex-col items-center justify-center md:max-w-[300px]"
-              action="submit"
-              onSubmit={handleSubmit}
-            >
-              <div className="flex w-full flex-col">
-                <label htmlFor="username">Benutzername</label>
-                <input
-                  type="text"
-                  value={userData.username}
-                  onChange={handleInputChange}
-                  placeholder={user?.username}
-                  name="username"
-                  id="username"
-                  className="rounded-md bg-slate-700 p-2"
-                />
-              </div>
-              <div className="flex w-full flex-col">
-                <label htmlFor="oldPassword">Altes Passwort</label>
-                <input
-                  type="password"
-                  value={userData.oldPassword}
-                  onChange={handleInputChange}
-                  name="oldPassword"
-                  id="oldPassword"
-                  className="rounded-md bg-slate-700 p-2"
-                  required
-                />
-              </div>
-              <div className="flex w-full flex-col">
-                <label htmlFor="newPassword">Neues Passwort</label>
-                <input
-                  type="password"
-                  value={userData.newPassword}
-                  onChange={handleInputChange}
-                  name="newPassword"
-                  id="newPassword"
-                  className="rounded-md bg-slate-700 p-2"
-                />
-              </div>
-              <button type="submit" className="menu-button">
-                {userData.newPassword === ""
-                  ? "Benutzername ändern"
-                  : "Benutzername und Passwort ändern"}
-              </button>
-            </form>
-          )}
+
+          <form
+            className="mt-6 flex w-full flex-col items-center justify-center md:max-w-[300px]"
+            action="submit"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex w-full flex-col">
+              <label htmlFor="username">Benutzername</label>
+              <input
+                type="text"
+                value={userData.username}
+                onChange={handleInputChange}
+                placeholder={user?.username}
+                name="username"
+                id="username"
+                className="rounded-md bg-slate-700 p-2"
+              />
+            </div>
+            <div className="flex w-full flex-col">
+              <label htmlFor="oldPassword">Altes Passwort</label>
+              <input
+                type="password"
+                value={userData.oldPassword}
+                onChange={handleInputChange}
+                name="oldPassword"
+                id="oldPassword"
+                className="rounded-md bg-slate-700 p-2"
+                required
+              />
+            </div>
+            <div className="flex w-full flex-col">
+              <label htmlFor="newPassword">Neues Passwort</label>
+              <input
+                type="password"
+                value={userData.newPassword}
+                onChange={handleInputChange}
+                name="newPassword"
+                id="newPassword"
+                className="rounded-md bg-slate-700 p-2"
+              />
+            </div>
+            <button type="submit" className="menu-button">
+              {userData.newPassword === ""
+                ? "Benutzername ändern"
+                : "Benutzername und Passwort ändern"}
+            </button>
+          </form>
         </div>
       </main>
     </>

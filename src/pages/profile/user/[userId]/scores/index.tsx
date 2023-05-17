@@ -34,9 +34,8 @@ const Scores: NextPage = () => {
   return (
     <>
       <Header />
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title="Scores" />
-
+      <TopSection title="Scores" />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-24">
         <div className="relative mt-6 w-2/3 overflow-x-auto rounded-lg shadow-md">
           <table className="w-full text-left text-sm text-gray-50">
             <thead className="bg-neutral-200 text-xs uppercase text-gray-700">

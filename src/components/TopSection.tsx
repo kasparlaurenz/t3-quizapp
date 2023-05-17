@@ -9,7 +9,7 @@ interface TopSectionProps {
 const TopSection: FC<TopSectionProps> = ({ title }) => {
   const router = useRouter();
   return (
-    <div className="flex w-full items-center justify-center gap-8">
+    <div className="fixed flex w-full items-center justify-center gap-8 bg-neutral-900 p-6">
       <button
         onClick={() => router.back()}
         className="menu-button mt-0 w-fit bg-slate-400 text-gray-900"

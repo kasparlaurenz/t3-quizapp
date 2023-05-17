@@ -89,9 +89,8 @@ const ManageQuestions: NextPage = () => {
   return (
     <>
       <Header>Fragen</Header>
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={chapterDescription?.description ?? ""} />
-
+      <TopSection title={chapterDescription?.description ?? ""} />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         <div className="relative mt-4 flex max-h-[780px] w-full flex-col items-center justify-start gap-5 p-2">
           {questions.length > 0 ? (
             currentData?.map((question) => (

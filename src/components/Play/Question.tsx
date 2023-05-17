@@ -38,7 +38,7 @@ const Question: FC<QuestionProps> = ({
   handleNextClick,
 }) => {
   return (
-    <div className="max-w-lg">
+    <div className="w-[600px]">
       <div className="flex flex-col items-center justify-center">
         <h3 className="mt-10">Frage</h3>
         <span className="font-bold text-blue-400">

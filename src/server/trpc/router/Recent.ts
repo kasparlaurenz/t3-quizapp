@@ -137,8 +137,6 @@ export const recentAnswers = router({
       };
     });
 
-    console.log(response);
-
     return response;
   }),
 });

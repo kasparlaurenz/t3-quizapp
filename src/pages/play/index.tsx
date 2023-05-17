@@ -167,8 +167,8 @@ const Play: NextPage = () => {
   return (
     <>
       <Header>Fragebogen</Header>
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title="Kapitel" />
+      <TopSection title="Kapitel" />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         {playQuiz && questions ? (
           <>
             {questions.length > 0 && curQuestionIdx < questions.length ? (
