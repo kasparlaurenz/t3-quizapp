@@ -17,6 +17,7 @@ model Question {
     chapter                    Chapter                      @relation(fields: [chapterId], references: [id], onDelete: Cascade)
     answers                    Answer[]
     RecentUserAnswerToQuestion RecentUserAnswerToQuestion[]
+    isHidden                   Boolean                      @default(false)
 }
 
 model Answer {
@@ -34,6 +35,7 @@ model Chapter {
     questions                  Question[]
     isOriginal                 Boolean
     RecentUserAnswerToQuestion RecentUserAnswerToQuestion[]
+    isHidden                   Boolean                      @default(false)
 }
 
 model User {

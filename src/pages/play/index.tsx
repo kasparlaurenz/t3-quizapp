@@ -13,11 +13,13 @@ import type {
   ChapterType,
   ResultList,
 } from "../../utils/types";
+import { useSession } from "next-auth/react";
 
 type Questions =
   RouterOutputs["question"]["getQuestionsWithAnswersByChapterSelection"][0];
 
 const Play: NextPage = () => {
+  const { data: session } = useSession();
   const [revealAnswer, setRevealAnswer] = useState(false);
   const [fetchQuestions, setFetchQuestions] = useState(false);
   const [playQuiz, setPlayQuiz] = useState(false);
@@ -264,9 +266,11 @@ const Play: NextPage = () => {
           <>
             <p className="mt-2 text-lg font-bold text-red-500">Keine Kapitel</p>
 
-            <Link className="menu-button mt-2" href="edit-questions">
-              Erstelle Kapitel
-            </Link>
+            {session?.user?.role === "ADMIN" && (
+              <Link className="menu-button mt-2" href="edit-questions">
+                Erstelle Kapitel
+              </Link>
+            )}
           </>
         )}
       </main>
