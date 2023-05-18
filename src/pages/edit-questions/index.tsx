@@ -7,17 +7,20 @@ import DeleteButton from "../../components/Buttons/DeleteButton";
 import Header from "../../components/Header";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
+import HiddenIcon from "../../components/Icons/HiddenIcon";
+import VisibleIcon from "../../components/Icons/VisibleIcon";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
   const [isOriginal, setIsOriginal] = useState<boolean>(true);
+  const [hidden, setHidden] = useState<boolean>(false);
   const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
   const {
     data: chapters,
     isLoading,
     isError,
     refetch: refetchChapters,
-  } = trpc.chapter.getChapters.useQuery(undefined, {
+  } = trpc.chapter.getAllChapters.useQuery(undefined, {
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
       setFilteredChapters(data);
@@ -36,6 +39,12 @@ const ManageChapters: NextPage = () => {
     },
     onError: ({ message }) => {
       console.log("ERROR FE", message);
+    },
+  });
+
+  const hideChapter = trpc.chapter.updateChapterVisibility.useMutation({
+    onSuccess: () => {
+      refetchChapters();
     },
   });
 
@@ -84,6 +93,14 @@ const ManageChapters: NextPage = () => {
       setFilteredChapters(chapters.filter((c) => !c.isOriginal));
     }
   };
+
+  const handleVisibilityClick = (chapter: Chapter) => {
+    hideChapter.mutate({
+      id: chapter.id,
+      isHidden: !chapter.isHidden,
+    });
+  };
+
   return (
     <>
       <Header>Kapitel</Header>
@@ -114,21 +131,33 @@ const ManageChapters: NextPage = () => {
           </select>
           {filteredChapters.length > 0 ? (
             filteredChapters.map((chapter) => (
-              <Link
-                href={`edit-questions/chapter/${chapter.number}`}
-                key={chapter.id}
-                className="relative flex h-auto w-full items-center justify-between rounded-md bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
-              >
-                <h2>
-                  <span className="font-bold">{chapter.number}.</span>{" "}
-                  {chapter.description}
-                </h2>
-                <DeleteButton
-                  handleClick={handleDeleteClick}
-                  itemToDelete={chapter}
-                  deleteItem={deleteChapter}
-                />
-              </Link>
+              <div key={chapter.id} className="flex w-full justify-center">
+                <button
+                  onClick={() => {
+                    handleVisibilityClick(chapter);
+                  }}
+                  className="p-4"
+                >
+                  {chapter.isHidden ? <HiddenIcon /> : <VisibleIcon />}
+                </button>
+
+                <Link
+                  href={`edit-questions/chapter/${chapter.number}`}
+                  key={chapter.id}
+                  className="relative flex h-auto w-full items-center justify-start rounded-md bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
+                >
+                  <h2>
+                    <span className="font-bold">{chapter.number}.</span>{" "}
+                    {chapter.description}
+                  </h2>
+
+                  <DeleteButton
+                    handleClick={handleDeleteClick}
+                    itemToDelete={chapter}
+                    deleteItem={deleteChapter}
+                  />
+                </Link>
+              </div>
             ))
           ) : (
             <div className="flex flex-col items-center">

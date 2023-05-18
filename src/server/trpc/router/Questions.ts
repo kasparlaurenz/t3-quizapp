@@ -75,6 +75,29 @@ export const questionsRouter = router({
           chapter: {
             number: input.chapter,
           },
+          isHidden: false,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          chapter: {
+            select: {
+              description: true,
+            },
+          },
+        },
+      });
+    }),
+
+  getAllQuestionsByChapter: adminProcedure
+    .input(z.object({ chapter: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.question.findMany({
+        where: {
+          chapter: {
+            number: input.chapter,
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -111,6 +134,7 @@ export const questionsRouter = router({
               in: input.chapter,
             },
           },
+          isHidden: false,
         },
         include: {
           answers: true,
@@ -230,5 +254,24 @@ export const questionsRouter = router({
           questionId: input.questionId,
         },
       });
+    }),
+
+  updateQuestionVisibility: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isHidden: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const question = await ctx.prisma.question.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isHidden: input.isHidden,
+        },
+      });
+      return question;
     }),
 });

@@ -44,6 +44,17 @@ export const chaptersRouter = router({
       orderBy: {
         number: "asc",
       },
+      where: {
+        isHidden: false,
+      },
+    });
+  }),
+
+  getAllChapters: adminProcedure.query(({ ctx }) => {
+    return ctx.prisma.chapter.findMany({
+      orderBy: {
+        number: "asc",
+      },
     });
   }),
 
@@ -64,5 +75,24 @@ export const chaptersRouter = router({
         },
       });
       return description;
+    }),
+
+  updateChapterVisibility: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isHidden: z.boolean(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const chapter = await ctx.prisma.chapter.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isHidden: input.isHidden,
+        },
+      });
+      return chapter;
     }),
 });
