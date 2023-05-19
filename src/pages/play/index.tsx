@@ -138,16 +138,6 @@ const Play: NextPage = () => {
     setResultList((prev) => [...prev, tempResult]);
   };
 
-  const handleSelectedFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "alle") {
-      setFilteredChapters(chapters);
-    } else if (e.target.value === "original") {
-      setFilteredChapters(chapters.filter((c) => c.isOriginal));
-    } else if (e.target.value === "eigene") {
-      setFilteredChapters(chapters.filter((c) => !c.isOriginal));
-    }
-  };
-
   const resetGame = () => {
     if (playOnlyWrongAnswered) {
       setQuestions(wrongAnsweredQuestions);
@@ -200,19 +190,9 @@ const Play: NextPage = () => {
           </>
         ) : chapters.length > 0 ? (
           <>
-            <select
-              className="mt-4 cursor-pointer rounded-lg bg-slate-400 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-              name="filter"
-              id="filter"
-              onChange={handleSelectedFilter}
-            >
-              <option value="alle">Alle</option>
-              <option value="original">Original</option>
-              <option value="eigene">Eigene</option>
-            </select>
             <form
               id="chapter-selection"
-              className="mt-4 flex flex-col items-center justify-center"
+              className="mt-2 flex flex-col items-center justify-center"
             >
               {filteredChapters.length > 1 && (
                 <>

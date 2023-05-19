@@ -9,12 +9,15 @@ import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
 import HiddenIcon from "../../components/Icons/HiddenIcon";
 import VisibleIcon from "../../components/Icons/VisibleIcon";
+import PlusIcon from "../../components/Icons/PlusIcon";
+import TrashIcon from "../../components/Icons/TrashIcon";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
   const [isOriginal, setIsOriginal] = useState<boolean>(true);
   const [hidden, setHidden] = useState<boolean>(false);
   const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
+  const [newCategory, setNewCategory] = useState<string>("");
   const {
     data: chapters,
     isLoading,
@@ -26,6 +29,9 @@ const ManageChapters: NextPage = () => {
       setFilteredChapters(data);
     },
   });
+
+  const { data: categories, refetch: refetchCategories } =
+    trpc.category.getCategories.useQuery();
 
   const deleteChapter = trpc.chapter.deleteChapter.useMutation({
     onSuccess: () => {
@@ -39,6 +45,19 @@ const ManageChapters: NextPage = () => {
     },
     onError: ({ message }) => {
       console.log("ERROR FE", message);
+    },
+  });
+
+  const createNewCategory = trpc.category.createNewCategory.useMutation({
+    onSuccess: () => {
+      refetchCategories();
+      setNewCategory("");
+    },
+  });
+
+  const deleteCategory = trpc.category.deleteCategory.useMutation({
+    onSuccess: () => {
+      refetchCategories();
     },
   });
 
@@ -75,7 +94,17 @@ const ManageChapters: NextPage = () => {
     });
   };
 
-  const handleCreateClick = (desc: string) => {
+  const handleDeleteCategoryClick = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: string
+  ) => {
+    e.preventDefault();
+    deleteCategory.mutate({
+      id: id,
+    });
+  };
+
+  const handleCreateChapterClick = (desc: string) => {
     createNewChapter.mutate({
       chapter: currentLastChapter,
       description: desc,
@@ -84,14 +113,10 @@ const ManageChapters: NextPage = () => {
     setShowChapterDetails(false);
   };
 
-  const handleSelectedFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "alle") {
-      setFilteredChapters(chapters);
-    } else if (e.target.value === "original") {
-      setFilteredChapters(chapters.filter((c) => c.isOriginal));
-    } else if (e.target.value === "eigene") {
-      setFilteredChapters(chapters.filter((c) => !c.isOriginal));
-    }
+  const handleCreateCategoryClick = () => {
+    createNewCategory.mutate({
+      name: newCategory,
+    });
   };
 
   const handleVisibilityClick = (chapter: Chapter) => {
@@ -110,25 +135,71 @@ const ManageChapters: NextPage = () => {
           <>
             <ChapterModal
               setShowChapterDetails={setShowChapterDetails}
-              handleClick={handleCreateClick}
+              handleClick={handleCreateChapterClick}
               chapter={currentLastChapter}
               isOriginal={isOriginal}
               setIsOriginal={setIsOriginal}
             />
-            <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
+            <div className="absolute top-0 z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
         <div className=" relative mt-4 flex  w-full flex-col items-center justify-start gap-5 p-2">
-          <select
-            className="cursor-pointer rounded-lg bg-slate-400 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-            name="filter"
-            id="filter"
-            onChange={handleSelectedFilter}
+          <button
+            onClick={() => setHidden(!hidden)}
+            className={`${hidden ? "" : "bg-slate-500"} menu-button`}
           >
-            <option value="alle">Alle</option>
-            <option value="original">Original</option>
-            <option value="eigene">Eigene</option>
-          </select>
+            Kategorien
+          </button>
+          <div
+            className={`${
+              hidden ? "hidden" : "block"
+            } flex w-[300px] flex-col items-center justify-center gap-1 rounded-md p-6 pt-0`}
+          >
+            {categories?.map((category) => (
+              <div
+                key={category.id}
+                className="relative flex w-full items-center justify-between rounded-md bg-slate-500 p-1"
+              >
+                <DeleteButton
+                  handleClick={handleDeleteCategoryClick}
+                  itemToDelete={category.id}
+                  deleteItem={deleteCategory}
+                />
+                <div className="flex items-center gap-2">
+                  <input
+                    className=" ml-2 h-[16px] w-[16px] accent-sky-500"
+                    type="checkbox"
+                  />
+                  <label className="text-lg">{category.name}</label>
+                </div>
+              </div>
+            ))}
+            <div className="relative mt-2 flex w-full flex-1">
+              <input
+                className="w-full cursor-pointer rounded-md bg-slate-700 p-2"
+                type="text"
+                id="neue-kategorie"
+                name="neue-kategorie"
+                placeholder="Neue Kategorie"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+              <button
+                onClick={handleCreateCategoryClick}
+                className="absolute top-1 right-0 flex scale-75 items-center justify-center hover:scale-100"
+              >
+                <PlusIcon />
+              </button>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowChapterDetails(true)}
+            className="menu-button mt-0"
+          >
+            Neues Kapitel {currentLastChapter}
+          </button>
+
           {filteredChapters.length > 0 ? (
             filteredChapters.map((chapter) => (
               <div key={chapter.id} className="flex w-full justify-center">
@@ -137,6 +208,11 @@ const ManageChapters: NextPage = () => {
                     handleVisibilityClick(chapter);
                   }}
                   className="p-4"
+                  title={
+                    chapter.isHidden
+                      ? "Kapitel einblenden"
+                      : "Kapitel ausblenden"
+                  }
                 >
                   {chapter.isHidden ? <HiddenIcon /> : <VisibleIcon />}
                 </button>
@@ -144,7 +220,11 @@ const ManageChapters: NextPage = () => {
                 <Link
                   href={`edit-questions/chapter/${chapter.number}`}
                   key={chapter.id}
-                  className="relative flex h-auto w-full items-center justify-start rounded-md bg-slate-500 p-4 transition hover:bg-slate-700 md:max-w-[400px]"
+                  className={`${
+                    chapter.isHidden
+                      ? "bg-zinc-700 text-zinc-500"
+                      : "bg-slate-500"
+                  } relative flex h-auto w-full items-center justify-start rounded-md p-4 transition hover:bg-slate-700 md:max-w-[400px]`}
                 >
                   <h2>
                     <span className="font-bold">{chapter.number}.</span>{" "}
@@ -167,12 +247,6 @@ const ManageChapters: NextPage = () => {
             </div>
           )}
         </div>
-        <button
-          onClick={() => setShowChapterDetails(true)}
-          className="menu-button mt-2"
-        >
-          Neues Kapitel {currentLastChapter}
-        </button>
       </main>
     </>
   );

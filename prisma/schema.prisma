@@ -36,6 +36,15 @@ model Chapter {
     isOriginal                 Boolean
     RecentUserAnswerToQuestion RecentUserAnswerToQuestion[]
     isHidden                   Boolean                      @default(false)
+    catgeories                 Category[]
+    categoryId                 String?
+}
+
+model Category {
+    id       String    @id @default(cuid())
+    name     String    @unique
+    chapters Chapter[]
+    isHidden Boolean   @default(false)
 }
 
 model User {
