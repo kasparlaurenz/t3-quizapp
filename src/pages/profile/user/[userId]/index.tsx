@@ -1,19 +1,11 @@
-import type {
-  Answer,
-  Question,
-  RecentUserAnswerToQuestion,
-} from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
+import Link from "next/link";
 import React, { useState } from "react";
 import ConfirmModal from "../../../../components/ConfirmationModal";
 import Header from "../../../../components/Header";
 import TopSection from "../../../../components/TopSection";
 import { getServerAuthSession } from "../../../../server/common/get-server-auth-session";
-import { RouterOutputs, trpc } from "../../../../utils/trpc";
-import Paginate from "../../../../components/Paginate";
-import Link from "next/link";
-
-type ResponseObject = RouterOutputs["recent"]["getUserScoreForEachChapter"][0];
+import { trpc } from "../../../../utils/trpc";
 
 const ProfilePage: NextPage = () => {
   const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);

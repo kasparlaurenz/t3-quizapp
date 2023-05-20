@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import LoginForm from "../components/Auth/LoginForm";
 import Header from "../components/Header";
-import { useRouter } from "next/router";
 
 const Index: NextPage = () => {
   const { data: session } = useSession();

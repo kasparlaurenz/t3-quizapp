@@ -111,9 +111,6 @@ export const recentAnswers = router({
 
     const response = chapters.map((c) => {
       const chapterQuestions = questions.filter((q) => q.chapterId === c.id);
-      const chapterAnswers = answers.filter((a) =>
-        chapterQuestions.map((q) => q.id).includes(a.questionId)
-      );
       const chapterRecentAnswers = recentAnswers.filter((ra) =>
         chapterQuestions.map((q) => q.id).includes(ra.questionId)
       );

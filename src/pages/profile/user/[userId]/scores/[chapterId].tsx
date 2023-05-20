@@ -1,7 +1,7 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { RouterOutputs, trpc } from "../../../../../utils/trpc";
+import { type RouterOutputs, trpc } from "../../../../../utils/trpc";
 import Header from "../../../../../components/Header";
 import TopSection from "../../../../../components/TopSection";
 import { ProgressBar } from "../../../../../components/ProgressBar";
@@ -75,7 +75,7 @@ const ChapterScorePage: NextPage = () => {
           <p className="mt-4">Klicke um richtige Antwort zu sehen.</p>
 
           <div className="mt-2">
-            {chapterScore.question.map((question, idx) => (
+            {chapterScore.question.map((question) => (
               <QuestionCard key={question.question.id} data={question} />
             ))}
           </div>

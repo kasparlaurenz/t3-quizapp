@@ -1,4 +1,4 @@
-import type { CategoriesOnChapter, Chapter } from "@prisma/client";
+import type { Chapter } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -8,13 +8,12 @@ import Question from "../../components/Play/Question";
 import Result from "../../components/Result/Result";
 import TopSection from "../../components/TopSection";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
-import { RouterOutputs, trpc } from "../../utils/trpc";
+import { type RouterOutputs, trpc } from "../../utils/trpc";
 import type {
   AnswerObjectType,
   ChapterType,
   ResultList,
 } from "../../utils/types";
-import { set } from "zod";
 
 type Questions =
   RouterOutputs["question"]["getQuestionsWithAnswersByChapterSelection"][0];
@@ -248,7 +247,13 @@ const Play: NextPage = () => {
                 <div
                   className={`${
                     showCategories ? "grid" : "hidden"
-                  } max-w-96 mt-6 grid-cols-3 gap-x-6`}
+                  } max-w-96 mt-6 ${
+                    categories.length === 1
+                      ? "gird-cols-1"
+                      : categories.length === 2
+                      ? "grid-cols-2"
+                      : "grid-cols-3"
+                  } gap-x-6`}
                 >
                   {categories?.map((category) => (
                     <div key={category.id} className="flex items-center gap-1">

@@ -183,7 +183,7 @@ const ManageChapters: NextPage = () => {
                 <button onClick={() => handleCategoryVisibilityClick(category)}>
                   {category.isHidden ? <HiddenIcon /> : <VisibleIcon />}
                 </button>
-                <p>{category.name}</p>
+                <p className="w-[70%] break-words">{category.name}</p>
               </div>
             ))}
             <div className="relative flex w-full flex-1">

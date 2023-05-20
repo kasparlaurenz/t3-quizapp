@@ -1,16 +1,14 @@
-import React from "react";
+import { type NextPage } from "next";
+import Link from "next/link";
 import Header from "../../../../../components/Header";
+import { ProgressBar } from "../../../../../components/ProgressBar";
 import TopSection from "../../../../../components/TopSection";
 import { trpc } from "../../../../../utils/trpc";
-import Link from "next/link";
-import { NextPage } from "next";
-import { ProgressBar } from "../../../../../components/ProgressBar";
 
 const Scores: NextPage = () => {
   const {
     data: scores,
     isLoading,
-    refetch,
     isError,
   } = trpc.recent.getUserScoreForEachChapter.useQuery();
 
