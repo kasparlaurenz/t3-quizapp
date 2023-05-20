@@ -7,10 +7,21 @@ import {
 } from "../trpc";
 
 export const categories = router({
-  getCategories: publicProcedure.query(({ ctx }) => {
+  getAllCategories: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.category.findMany({
       orderBy: {
         name: "asc",
+      },
+    });
+  }),
+
+  getCategories: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+      where: {
+        isHidden: false,
       },
     });
   }),
@@ -41,5 +52,69 @@ export const categories = router({
           id: input.id,
         },
       });
+    }),
+
+  updateCategoryVisibility: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isHidden: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.category.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isHidden: input.isHidden,
+        },
+      });
+    }),
+
+  getCategoriesOfChapter: adminProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.category.findMany({
+        where: {
+          chapters: {
+            some: {
+              chapterId: input.chapterId,
+            },
+          },
+        },
+      });
+    }),
+
+  removeCategoryFromChapter: adminProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+        categoryId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const category = await ctx.prisma.category.update({
+        where: {
+          id: input.categoryId,
+        },
+        data: {
+          chapters: {
+            delete: [
+              {
+                chapterId_categoryId: {
+                  chapterId: input.chapterId,
+                  categoryId: input.categoryId,
+                },
+              },
+            ],
+          },
+        },
+      });
+      return category;
     }),
 });

@@ -1,21 +1,19 @@
-import type { Chapter } from "@prisma/client";
+import type { Category, Chapter } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import type { FC, SetStateAction } from "react";
 import { useState } from "react";
 import DeleteButton from "../../components/Buttons/DeleteButton";
 import Header from "../../components/Header";
+import HiddenIcon from "../../components/Icons/HiddenIcon";
+import PlusIcon from "../../components/Icons/PlusIcon";
+import VisibleIcon from "../../components/Icons/VisibleIcon";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
-import HiddenIcon from "../../components/Icons/HiddenIcon";
-import VisibleIcon from "../../components/Icons/VisibleIcon";
-import PlusIcon from "../../components/Icons/PlusIcon";
-import TrashIcon from "../../components/Icons/TrashIcon";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
-  const [isOriginal, setIsOriginal] = useState<boolean>(true);
-  const [hidden, setHidden] = useState<boolean>(false);
+  const [hidden, setHidden] = useState<boolean>(true);
   const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
   const [newCategory, setNewCategory] = useState<string>("");
   const {
@@ -31,7 +29,7 @@ const ManageChapters: NextPage = () => {
   });
 
   const { data: categories, refetch: refetchCategories } =
-    trpc.category.getCategories.useQuery();
+    trpc.category.getAllCategories.useQuery();
 
   const deleteChapter = trpc.chapter.deleteChapter.useMutation({
     onSuccess: () => {
@@ -56,6 +54,12 @@ const ManageChapters: NextPage = () => {
   });
 
   const deleteCategory = trpc.category.deleteCategory.useMutation({
+    onSuccess: () => {
+      refetchCategories();
+    },
+  });
+
+  const hideCategory = trpc.category.updateCategoryVisibility.useMutation({
     onSuccess: () => {
       refetchCategories();
     },
@@ -108,7 +112,6 @@ const ManageChapters: NextPage = () => {
     createNewChapter.mutate({
       chapter: currentLastChapter,
       description: desc,
-      isOriginal,
     });
     setShowChapterDetails(false);
   };
@@ -126,6 +129,13 @@ const ManageChapters: NextPage = () => {
     });
   };
 
+  const handleCategoryVisibilityClick = (category: Category) => {
+    hideCategory.mutate({
+      id: category.id,
+      isHidden: !category.isHidden,
+    });
+  };
+
   return (
     <>
       <Header>Kapitel</Header>
@@ -137,8 +147,6 @@ const ManageChapters: NextPage = () => {
               setShowChapterDetails={setShowChapterDetails}
               handleClick={handleCreateChapterClick}
               chapter={currentLastChapter}
-              isOriginal={isOriginal}
-              setIsOriginal={setIsOriginal}
             />
             <div className="absolute top-0 z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
@@ -153,28 +161,32 @@ const ManageChapters: NextPage = () => {
           <div
             className={`${
               hidden ? "hidden" : "block"
-            } flex w-[300px] flex-col items-center justify-center gap-1 rounded-md p-6 pt-0`}
+            } flex w-[300px] flex-col items-center justify-center gap-4 rounded-md p-6 pt-0`}
           >
             {categories?.map((category) => (
               <div
                 key={category.id}
-                className="relative flex w-full items-center justify-between rounded-md bg-slate-500 p-1"
+                className={`
+                ${
+                  category.isHidden
+                    ? "bg-zinc-700 text-zinc-500"
+                    : "bg-slate-500"
+                } relative flex h-auto w-full select-none items-center justify-start gap-2 rounded-md p-2 transition
+
+                `}
               >
                 <DeleteButton
                   handleClick={handleDeleteCategoryClick}
                   itemToDelete={category.id}
                   deleteItem={deleteCategory}
                 />
-                <div className="flex items-center gap-2">
-                  <input
-                    className=" ml-2 h-[16px] w-[16px] accent-sky-500"
-                    type="checkbox"
-                  />
-                  <label className="text-lg">{category.name}</label>
-                </div>
+                <button onClick={() => handleCategoryVisibilityClick(category)}>
+                  {category.isHidden ? <HiddenIcon /> : <VisibleIcon />}
+                </button>
+                <p>{category.name}</p>
               </div>
             ))}
-            <div className="relative mt-2 flex w-full flex-1">
+            <div className="relative flex w-full flex-1">
               <input
                 className="w-full cursor-pointer rounded-md bg-slate-700 p-2"
                 type="text"
@@ -183,6 +195,11 @@ const ManageChapters: NextPage = () => {
                 placeholder="Neue Kategorie"
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleCreateCategoryClick();
+                  }
+                }}
               />
               <button
                 onClick={handleCreateCategoryClick}
@@ -258,15 +275,11 @@ interface ChapterModalProps {
   handleClick: (desc: string) => void;
   chapter: number;
   setShowChapterDetails: React.Dispatch<SetStateAction<boolean>>;
-  isOriginal: boolean;
-  setIsOriginal: React.Dispatch<SetStateAction<boolean>>;
 }
 const ChapterModal: FC<ChapterModalProps> = ({
   handleClick,
   chapter,
   setShowChapterDetails,
-  isOriginal,
-  setIsOriginal,
 }) => {
   const [description, setDescription] = useState<string>("");
   return (
@@ -286,15 +299,6 @@ const ChapterModal: FC<ChapterModalProps> = ({
         placeholder="Titel"
         required
       />
-      <label className="text-l mt-2 text-sky-400">
-        <input
-          type="checkbox"
-          className="mr-1 h-[18px] w-[18px] accent-sky-500"
-          checked={isOriginal}
-          onChange={() => setIsOriginal(!isOriginal)}
-        />
-        Original
-      </label>
       <button
         onClick={() => handleClick(description)}
         className="menu-button mt-4"

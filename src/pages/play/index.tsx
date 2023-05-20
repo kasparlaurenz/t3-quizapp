@@ -1,5 +1,6 @@
-import type { Chapter } from "@prisma/client";
+import type { CategoriesOnChapter, Chapter } from "@prisma/client";
 import type { GetServerSideProps, NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import Header from "../../components/Header";
@@ -7,16 +8,18 @@ import Question from "../../components/Play/Question";
 import Result from "../../components/Result/Result";
 import TopSection from "../../components/TopSection";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
-import { trpc, RouterOutputs } from "../../utils/trpc";
+import { RouterOutputs, trpc } from "../../utils/trpc";
 import type {
   AnswerObjectType,
   ChapterType,
   ResultList,
 } from "../../utils/types";
-import { useSession } from "next-auth/react";
+import { set } from "zod";
 
 type Questions =
   RouterOutputs["question"]["getQuestionsWithAnswersByChapterSelection"][0];
+
+type ChapterWithCategories = RouterOutputs["chapter"]["getChapters"][0];
 
 const Play: NextPage = () => {
   const { data: session } = useSession();
@@ -27,11 +30,16 @@ const Play: NextPage = () => {
   const [isCheckAll, setIsCheckAll] = useState(false);
 
   const [selectedChapters, setSelectedChapters] = useState<number[]>([]);
-  const [filteredChapters, setFilteredChapters] = useState<Chapter[]>([]);
+  const [filteredChapters, setFilteredChapters] = useState<
+    ChapterWithCategories[]
+  >([]);
   const [questions, setQuestions] = useState<Questions[]>([]);
   const [wrongAnsweredQuestions, setWrongAnsweredQuestions] = useState<
     Questions[]
   >([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const [showCategories, setShowCategories] = useState(false);
 
   const [curQuestionIdx, setCurQuestionIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
@@ -60,6 +68,10 @@ const Play: NextPage = () => {
     },
     refetchOnWindowFocus: false,
   });
+
+  const { data: categories } = trpc.category.getCategories.useQuery();
+
+  console.log("categories", categories);
 
   const updateUserAnswer = trpc.user.updateRecentAnswerToQuestion.useMutation();
 
@@ -99,6 +111,39 @@ const Play: NextPage = () => {
       setIsCheckAll(false);
     }
   };
+
+  const handleCategoryClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const categoryId = e.target.id;
+    if (e.target.checked) {
+      setSelectedCategories([...selectedCategories, categoryId]);
+      filterByCategories([...selectedCategories, categoryId]);
+    } else {
+      setSelectedCategories(selectedCategories.filter((c) => c !== categoryId));
+      filterByCategories(selectedCategories.filter((c) => c !== categoryId));
+    }
+  };
+
+  const filterByCategories = (selectedCategories: string[]) => {
+    if (selectedCategories.length === 0) {
+      setFilteredChapters(chapters);
+      return;
+    }
+    const filteredChapters = chapters.filter((chapter) => {
+      const categories = chapter.categories;
+      const categoriesOnChapter = categories.map(
+        (category) => category.categoryId
+      );
+      return selectedCategories.some((category) =>
+        categoriesOnChapter.includes(category)
+      );
+    });
+    setFilteredChapters(filteredChapters);
+  };
+
+  console.log("filteredChapters", filteredChapters);
+  console.log("selectedChapters", selectedChapters);
+  console.log("selectedCategories", selectedCategories);
+  console.log("chapters", chapters);
 
   const handleAnswerClicked = (
     answer: AnswerObjectType,
@@ -159,7 +204,7 @@ const Play: NextPage = () => {
   return (
     <>
       <Header>Fragebogen</Header>
-      <TopSection title="Kapitel" />
+      <TopSection isPlay={playQuiz} title="Kapitel" />
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         {playQuiz && questions ? (
           <>
@@ -190,9 +235,43 @@ const Play: NextPage = () => {
           </>
         ) : chapters.length > 0 ? (
           <>
+            {categories && categories.length > 1 && (
+              <>
+                <button
+                  onClick={() => setShowCategories(!showCategories)}
+                  className={`${
+                    showCategories ? "bg-slate-500" : ""
+                  } menu-button`}
+                >
+                  Kategorien
+                </button>
+                <div
+                  className={`${
+                    showCategories ? "grid" : "hidden"
+                  } max-w-96 mt-6 grid-cols-3 gap-x-6`}
+                >
+                  {categories?.map((category) => (
+                    <div key={category.id} className="flex items-center gap-1">
+                      <input
+                        className="mr-2 h-[18px] w-[18px] accent-sky-500"
+                        type="checkbox"
+                        id={category.id}
+                        onChange={handleCategoryClick}
+                      />
+                      <label
+                        className="text-lg text-white"
+                        htmlFor={category.name}
+                      >
+                        {category.name}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             <form
               id="chapter-selection"
-              className="mt-2 flex flex-col items-center justify-center"
+              className="mt-4 flex flex-col items-center justify-center"
             >
               {filteredChapters.length > 1 && (
                 <>

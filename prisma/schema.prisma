@@ -33,18 +33,25 @@ model Chapter {
     number                     Int                          @unique
     description                String
     questions                  Question[]
-    isOriginal                 Boolean
     RecentUserAnswerToQuestion RecentUserAnswerToQuestion[]
     isHidden                   Boolean                      @default(false)
-    catgeories                 Category[]
-    categoryId                 String?
+    categories                 CategoriesOnChapter[]
 }
 
 model Category {
-    id       String    @id @default(cuid())
-    name     String    @unique
-    chapters Chapter[]
-    isHidden Boolean   @default(false)
+    id       String                @id @default(cuid())
+    name     String                @unique
+    isHidden Boolean               @default(false)
+    chapters CategoriesOnChapter[]
+}
+
+model CategoriesOnChapter {
+    chapterId  String
+    chapter    Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+    categoryId String
+    category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+    @@id([chapterId, categoryId])
 }
 
 model User {

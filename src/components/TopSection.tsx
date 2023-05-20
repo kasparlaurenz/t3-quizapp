@@ -4,14 +4,19 @@ import type { FC } from "react";
 
 interface TopSectionProps {
   title?: string;
+  isPlay?: boolean;
 }
 
-const TopSection: FC<TopSectionProps> = ({ title }) => {
+const TopSection: FC<TopSectionProps> = ({ title, isPlay }) => {
   const router = useRouter();
+
+  console.log(router.pathname);
   return (
-    <div className="fixed flex w-full items-center justify-center gap-8 bg-neutral-900 p-6">
+    <div className="fixed z-10 flex w-full items-center justify-center gap-8 bg-neutral-900 p-6">
       <button
-        onClick={() => router.back()}
+        onClick={() => {
+          isPlay ? router.reload() : router.back();
+        }}
         className="menu-button mt-0 w-fit bg-slate-400 text-gray-900"
       >
         Zurück
