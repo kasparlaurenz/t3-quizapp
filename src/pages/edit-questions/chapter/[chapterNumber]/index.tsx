@@ -132,23 +132,30 @@ const ManageQuestions: NextPage = () => {
       <TopSection title={chapterDescription?.description ?? ""} />
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         <div className="relative mt-4 flex w-full flex-col items-center justify-start gap-5 p-2">
-          <h3 className="text-xl">Kategorien</h3>
-          <div className="max-w-96 grid grid-cols-3 gap-x-4">
-            {categories?.map((category) => (
-              <div key={category.id} className="flex items-center gap-1">
-                <input
-                  className="mr-2 h-[18px] w-[18px] accent-sky-500"
-                  type="checkbox"
-                  id={category.id}
-                  checked={checkIfCategoryIsInChapter(category.name)}
-                  onChange={handleInputChange}
-                />
-                <label className="text-lg text-white" htmlFor={category.name}>
-                  {category.name}
-                </label>
+          {categories && categories.length > 0 && (
+            <>
+              <h3 className="text-xl">Kategorien</h3>
+              <div className="max-w-96 grid grid-cols-3 gap-x-4">
+                {categories?.map((category) => (
+                  <div key={category.id} className="flex items-center gap-1">
+                    <input
+                      className="mr-2 h-[18px] w-[18px] accent-sky-500"
+                      type="checkbox"
+                      id={category.id}
+                      checked={checkIfCategoryIsInChapter(category.name)}
+                      onChange={handleInputChange}
+                    />
+                    <label
+                      className="text-lg text-white"
+                      htmlFor={category.name}
+                    >
+                      {category.name}
+                    </label>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
           <Link
             className="menu-button mt-2"
             href={`/create-question/chapter/${chapterNumber}`}
@@ -175,7 +182,10 @@ const ManageQuestions: NextPage = () => {
                       : "bg-slate-500"
                   } relative flex h-auto w-full items-center justify-start rounded-md p-4 transition hover:bg-slate-700 md:max-w-[400px]`}
                 >
-                  <h2 className="pr-6">{question.question}</h2>
+                  <h2>
+                    <span className="font-bold">{question.number}.</span>{" "}
+                    {question.question}
+                  </h2>
                   <DeleteButton
                     handleClick={handleClick}
                     itemToDelete={question}

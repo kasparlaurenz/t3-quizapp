@@ -235,7 +235,7 @@ const Play: NextPage = () => {
           </>
         ) : chapters.length > 0 ? (
           <>
-            {categories && categories.length > 1 && (
+            {categories && categories.length > 0 && (
               <>
                 <button
                   onClick={() => setShowCategories(!showCategories)}

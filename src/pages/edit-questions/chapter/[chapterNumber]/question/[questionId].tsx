@@ -149,7 +149,7 @@ const ManageQuestion: NextPage = ({}) => {
   return (
     <>
       <Header>Neue Frage</Header>
-      <TopSection title="Frage" />
+      <TopSection title={`Frage ${question?.number}`} />
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         {showConfirm && (
           <>

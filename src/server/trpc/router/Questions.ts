@@ -18,12 +18,21 @@ export const questionsRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const questionsOfChapter = await ctx.prisma.question.findMany({
+        where: {
+          chapter: {
+            number: input.chapter,
+          },
+        },
+      });
+
       try {
         await ctx.prisma.question.create({
           data: {
             question: input.question,
             imageUrl: input.imageUrl,
             imageName: input.imageName,
+            number: questionsOfChapter.length + 1,
             chapter: {
               connectOrCreate: {
                 where: {

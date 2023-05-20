@@ -18,6 +18,7 @@ model Question {
     answers                    Answer[]
     RecentUserAnswerToQuestion RecentUserAnswerToQuestion[]
     isHidden                   Boolean                      @default(false)
+    number                     Int
 }
 
 model Answer {
