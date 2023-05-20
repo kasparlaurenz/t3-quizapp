@@ -154,14 +154,14 @@ const ManageChapters: NextPage = () => {
         <div className=" relative mt-4 flex  w-full flex-col items-center justify-start gap-5 p-2">
           <button
             onClick={() => setHidden(!hidden)}
-            className={`${hidden ? "" : "bg-slate-500"} menu-button`}
+            className={`${hidden ? "" : "bg-slate-500"} menu-button mt-0`}
           >
             Kategorien
           </button>
           <div
             className={`${
               hidden ? "hidden" : "block"
-            } flex w-[300px] flex-col items-center justify-center gap-4 rounded-md p-6 pt-0`}
+            } flex w-[300px] flex-col items-center justify-center gap-4 rounded-md px-6`}
           >
             {categories?.map((category) => (
               <div
