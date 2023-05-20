@@ -8,7 +8,6 @@ export const chaptersRouter = router({
       z.object({
         chapter: z.number(),
         description: z.string(),
-        isOriginal: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -16,7 +15,6 @@ export const chaptersRouter = router({
         data: {
           number: input.chapter,
           description: input.description,
-          isOriginal: input.isOriginal,
         },
       });
     }),
@@ -43,6 +41,9 @@ export const chaptersRouter = router({
     return ctx.prisma.chapter.findMany({
       orderBy: {
         number: "asc",
+      },
+      include: {
+        categories: true,
       },
       where: {
         isHidden: false,
@@ -71,7 +72,7 @@ export const chaptersRouter = router({
         },
         select: {
           description: true,
-          isOriginal: true,
+          id: true,
         },
       });
       return description;
@@ -91,6 +92,31 @@ export const chaptersRouter = router({
         },
         data: {
           isHidden: input.isHidden,
+        },
+      });
+      return chapter;
+    }),
+
+  addChapterToCategory: adminProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+        categoryId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const chapter = await ctx.prisma.chapter.update({
+        where: {
+          id: input.chapterId,
+        },
+        data: {
+          categories: {
+            create: [
+              {
+                categoryId: input.categoryId,
+              },
+            ],
+          },
         },
       });
       return chapter;

@@ -98,7 +98,6 @@ const CreateQuestion: NextPage = () => {
       correct: newQuestion.correct_answer.answer,
       chapter: parseInt(chapter),
       description: chapterDescription?.description ?? "",
-      isOriginal: chapterDescription?.isOriginal ?? false,
     });
     resetForm();
   };
@@ -115,7 +114,7 @@ const CreateQuestion: NextPage = () => {
               handleModal={handleModal}
               type="Frage"
             />
-            <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
+            <div className="absolute top-0 z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
         <div className="flex w-full flex-col items-center">

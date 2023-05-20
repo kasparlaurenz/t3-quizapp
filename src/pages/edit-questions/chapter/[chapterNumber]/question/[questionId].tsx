@@ -158,7 +158,7 @@ const ManageQuestion: NextPage = ({}) => {
               status="geupdated"
               handleModal={handleModal}
             />
-            <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
+            <div className="absolute top-0 z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
         <div className="flex w-full flex-col items-center">

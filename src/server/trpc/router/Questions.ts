@@ -15,7 +15,6 @@ export const questionsRouter = router({
         imageName: z.string(),
         chapter: z.number(),
         description: z.string(),
-        isOriginal: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -33,7 +32,6 @@ export const questionsRouter = router({
                 create: {
                   number: input.chapter,
                   description: input.description,
-                  isOriginal: input.isOriginal,
                 },
               },
             },
