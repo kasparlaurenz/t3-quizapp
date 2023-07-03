@@ -85,7 +85,7 @@ export const questionsRouter = router({
           isHidden: false,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
         include: {
           chapter: {
@@ -107,7 +107,7 @@ export const questionsRouter = router({
           },
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
         include: {
           chapter: {

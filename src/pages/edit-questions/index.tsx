@@ -187,26 +187,37 @@ const ManageChapters: NextPage = () => {
               </div>
             ))}
             <div className="relative flex w-full flex-1">
-              <input
-                className="w-full cursor-pointer rounded-md bg-slate-700 p-2"
-                type="text"
-                id="neue-kategorie"
-                name="neue-kategorie"
-                placeholder="Neue Kategorie"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
+              <form
+                className="relative flex w-full items-center justify-center gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (newCategory.length > 0) {
                     handleCreateCategoryClick();
                   }
                 }}
-              />
-              <button
-                onClick={handleCreateCategoryClick}
-                className="absolute top-1 right-0 flex scale-75 items-center justify-center hover:scale-100"
               >
-                <PlusIcon />
-              </button>
+                <input
+                  className="w-full cursor-pointer rounded-md bg-slate-700 p-2"
+                  type="text"
+                  id="neue-kategorie"
+                  name="neue-kategorie"
+                  placeholder="Neue Kategorie"
+                  required
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleCreateCategoryClick();
+                    }
+                  }}
+                />
+                <button
+                  type="submit"
+                  className="absolute top-1 right-0 flex scale-75 items-center justify-center hover:scale-100"
+                >
+                  <PlusIcon />
+                </button>
+              </form>
             </div>
           </div>
 
