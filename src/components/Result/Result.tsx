@@ -1,7 +1,7 @@
 import type { Answer, Question } from "@prisma/client";
-import type { FC } from "react";
+import type { Dispatch, FC, SetStateAction } from "react";
 
-type QuestionWithAnswer = Question & {
+export type QuestionWithAnswer = Question & {
   answers: Answer[];
 };
 
@@ -15,6 +15,7 @@ interface ResultProps {
     chapterNumber: number;
   }[];
   resetGame: () => void;
+  setPlayOnlyWrongAnswered: Dispatch<SetStateAction<boolean>>;
 }
 
 const Result: FC<ResultProps> = ({
@@ -22,6 +23,7 @@ const Result: FC<ResultProps> = ({
   questions,
   resultList,
   resetGame,
+  setPlayOnlyWrongAnswered,
 }) => {
   return (
     <div className="mt-8 flex flex-col items-center justify-center">
@@ -42,8 +44,8 @@ const Result: FC<ResultProps> = ({
             key={question.id}
             className={
               resultList[idx]?.isCorrect === true
-                ? "result flex flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200 md:w-[500px]"
-                : "result flex flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200 md:w-[500px]"
+                ? "result flex flex-col items-center justify-center rounded-md border-2 border-green-500 bg-zinc-800 p-4 text-gray-200 md:w-[600px]"
+                : "result flex flex-col items-center justify-center rounded-md border-2 border-red-500 bg-zinc-800 p-4 text-gray-200 md:w-[600px]"
             }
           >
             {" "}
@@ -51,8 +53,10 @@ const Result: FC<ResultProps> = ({
               <p className="hidden sm:block">
                 {idx + 1} / {questions.length}
               </p>
-              <div className="flex flex-col items-center">
-                <p className="font-bol text-lg">{question.question}?</p>
+              <div className="flex max-w-xs flex-col items-center">
+                <p className="font-bol text-center text-lg">
+                  {question.question}?
+                </p>
                 <p className="mt-1 text-gray-400">
                   Aus Kapitel {resultList[idx]?.chapterNumber}:{" "}
                   {resultList[idx]?.chapterDescription}
@@ -60,8 +64,8 @@ const Result: FC<ResultProps> = ({
                 <p
                   className={
                     resultList[idx]?.isCorrect === true
-                      ? "mt-1 text-green-400"
-                      : "mt-1 text-red-400"
+                      ? "mt-1 text-center text-green-400"
+                      : "mt-1 text-center text-red-400"
                   }
                 >
                   Deine Antwort: {resultList[idx]?.answer}
@@ -88,7 +92,7 @@ const Result: FC<ResultProps> = ({
             <div className="answers mt-2 flex w-full flex-col items-start">
               {question.answers.map((answer: Answer, idx: number) => (
                 <p
-                  key={answer.answer}
+                  key={idx}
                   className={
                     answer.is_correct
                       ? "rounded-lg border-2 border-green-400 p-2"
@@ -104,9 +108,19 @@ const Result: FC<ResultProps> = ({
             </div>
           </div>
         ))}
-        <button onClick={resetGame} className="menu-button">
-          Neustarten
-        </button>
+        <div className="mt-2 flex items-center gap-4 self-center">
+          <button onClick={resetGame} className="menu-button mt-0 bg-blue-500">
+            Neustarten
+          </button>
+          <label className="text-l text-sky-400">
+            <input
+              type="checkbox"
+              className="mr-1 h-[18px] w-[18px] accent-sky-500"
+              onChange={(e) => setPlayOnlyWrongAnswered(e.target.checked)}
+            />
+            Nur falsche Fragen wiederholen
+          </label>
+        </div>
       </div>
     </div>
   );

@@ -32,47 +32,23 @@ const ManageQuestion: NextPage = ({}) => {
     data: question,
     isLoading,
     isError,
+    refetch: refetchQuestion,
   } = trpc.question.getQuestionById.useQuery(
     { id: questionId },
     { enabled: isReady }
   );
 
-  console.log("---Question", question);
-
-  const utils = trpc.useContext();
   const updateQuestion = trpc.question.updateQuestion.useMutation({
-    onMutate: () => {
-      utils.question.getQuestionById.cancel();
-      const optimisticUpdate = utils.question.getQuestionById.getData({
-        id: questionId,
-      });
-
-      if (optimisticUpdate) {
-        utils.question.getQuestionById.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.question.getQuestionById.invalidate();
-    },
     onSuccess: () => {
+      refetchQuestion();
       setShowConfirm(true);
       resetForm();
     },
   });
 
   const deleteImage = trpc.question.deleteImageOfQuestion.useMutation({
-    onMutate: () => {
-      utils.question.getQuestions.cancel();
-      const optimisticUpdate = utils.question.getQuestionById.getData({
-        id: questionId,
-      });
-
-      if (optimisticUpdate) {
-        utils.question.getQuestionById.setData(optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      utils.question.getQuestionById.invalidate();
+    onSuccess: () => {
+      refetchQuestion();
     },
   });
 
@@ -90,12 +66,16 @@ const ManageQuestion: NextPage = ({}) => {
       question: newQuestion.question || question!.question,
       imageUrl: question?.imageUrl || publicUrl,
       imageName: question?.imageName || imageName,
-      incorrect_one:
-        newQuestion.wrong_answer1.answer || question!.answers[0]!.answer,
-      incorrect_one_id: question!.answers[0]!.id,
-      incorrect_two:
-        newQuestion.wrong_answer2.answer || question!.answers[1]!.answer,
-      incorrect_two_id: question!.answers[1]!.id,
+      incorrect_one: {
+        answer:
+          newQuestion.wrong_answer1.answer || question!.answers[0]!.answer,
+        id: question!.answers[0]!.id,
+      },
+      incorrect_two: {
+        answer:
+          newQuestion.wrong_answer2.answer || question!.answers[1]!.answer,
+        id: question!.answers[1]!.id,
+      },
       correct:
         newQuestion.correct_answer.answer || question!.answers[2]!.answer,
     });
@@ -169,12 +149,16 @@ const ManageQuestion: NextPage = ({}) => {
   return (
     <>
       <Header>Neue Frage</Header>
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title="Neue Frage" />
+      <TopSection title={`Frage ${question?.number}`} />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         {showConfirm && (
           <>
-            <ConfirmModal status="updated" handleModal={handleModal} />
-            <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
+            <ConfirmModal
+              type="Frage"
+              status="geupdated"
+              handleModal={handleModal}
+            />
+            <div className="absolute top-0 z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
         <div className="flex w-full flex-col items-center">

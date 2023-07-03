@@ -1,12 +1,17 @@
-import type { GetServerSideProps, NextPage } from "next";
-import { signOut, useSession } from "next-auth/react";
+import type { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import LoginForm from "../components/Auth/LoginForm";
 import Header from "../components/Header";
-import { getServerAuthSession } from "../server/common/get-server-auth-session";
 
 const Index: NextPage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  if (session) {
+    router.push("/dashboard");
+  }
 
   return (
     <>
@@ -26,22 +31,6 @@ const Index: NextPage = () => {
                 "Warte auf die Bestätigung deines Accounts durch einen Admin"}
             </p>
           </div>
-          {session && (
-            <div className="flex flex-col gap-4">
-              <Link
-                href={"/dashboard"}
-                className="menu-button  bg-sky-500 hover:bg-white hover:text-zinc-800"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={() => signOut()}
-                className="menu-button mt-0  bg-zinc-500 hover:bg-white hover:text-zinc-800"
-              >
-                Abmelden
-              </button>
-            </div>
-          )}
 
           {!session && (
             <div className="flex w-full max-w-sm flex-col items-center gap-4">
@@ -64,21 +53,3 @@ const Index: NextPage = () => {
 };
 
 export default Index;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession({
-    req: context.req,
-    res: context.res,
-  });
-
-  if (session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return { props: {} };
-};

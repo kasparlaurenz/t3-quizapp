@@ -58,7 +58,7 @@ const CreateQuestion: NextPage = () => {
         .upload(imageName, image);
 
       if (error) {
-        console.log(error);
+        console.log("error", error);
       }
 
       if (data) {
@@ -105,12 +105,16 @@ const CreateQuestion: NextPage = () => {
   return (
     <>
       <Header>Create Question</Header>
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <TopSection title={`Question for Chapter ${chapter}`} />
+      <TopSection title={`Kapitel ${chapter}`} />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-start p-4 pt-20">
         {showConfirm && (
           <>
-            <ConfirmModal status="created" handleModal={handleModal} />
-            <div className="absolute z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
+            <ConfirmModal
+              status="erstellt"
+              handleModal={handleModal}
+              type="Frage"
+            />
+            <div className="absolute top-0 z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
         )}
         <div className="flex w-full flex-col items-center">

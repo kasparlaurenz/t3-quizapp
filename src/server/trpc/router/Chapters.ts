@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { publicProcedure, router } from "../trpc";
+import { publicProcedure, router, adminProcedure } from "../trpc";
 
 export const chaptersRouter = router({
-  createChapter: publicProcedure
+  createChapter: adminProcedure
     .input(
       z.object({
         chapter: z.number(),
@@ -11,19 +11,15 @@ export const chaptersRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.prisma.chapter.create({
-          data: {
-            number: input.chapter,
-            description: input.description,
-          },
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      await ctx.prisma.chapter.create({
+        data: {
+          number: input.chapter,
+          description: input.description,
+        },
+      });
     }),
 
-  deleteChapter: publicProcedure
+  deleteChapter: adminProcedure
     .input(
       z.object({
         id: z.string(),
@@ -46,6 +42,20 @@ export const chaptersRouter = router({
       orderBy: {
         number: "asc",
       },
+      include: {
+        categories: true,
+      },
+      where: {
+        isHidden: false,
+      },
+    });
+  }),
+
+  getAllChapters: adminProcedure.query(({ ctx }) => {
+    return ctx.prisma.chapter.findMany({
+      orderBy: {
+        number: "asc",
+      },
     });
   }),
 
@@ -62,8 +72,53 @@ export const chaptersRouter = router({
         },
         select: {
           description: true,
+          id: true,
         },
       });
       return description;
+    }),
+
+  updateChapterVisibility: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isHidden: z.boolean(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const chapter = await ctx.prisma.chapter.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          isHidden: input.isHidden,
+        },
+      });
+      return chapter;
+    }),
+
+  addChapterToCategory: adminProcedure
+    .input(
+      z.object({
+        chapterId: z.string(),
+        categoryId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const chapter = await ctx.prisma.chapter.update({
+        where: {
+          id: input.chapterId,
+        },
+        data: {
+          categories: {
+            create: [
+              {
+                categoryId: input.categoryId,
+              },
+            ],
+          },
+        },
+      });
+      return chapter;
     }),
 });

@@ -1,7 +1,7 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { ILogin } from "../../utils/authValidation";
+import { type ILogin } from "../../utils/authValidation";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -14,7 +14,7 @@ const LoginForm = () => {
   } = useForm<ILogin>();
 
   const onSubmit: SubmitHandler<ILogin> = async (data) => {
-    await signIn("credentials", { ...data, callbackUrl: "/" });
+    await signIn("credentials", { ...data, callbackUrl: "/dashboard" });
   };
 
   return (
