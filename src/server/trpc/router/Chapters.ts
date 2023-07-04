@@ -1,19 +1,19 @@
 import { z } from "zod";
 
 import { publicProcedure, router, adminProcedure } from "../trpc";
+import { trpc } from "../../../utils/trpc";
 
 export const chaptersRouter = router({
   createChapter: adminProcedure
     .input(
       z.object({
-        chapter: z.number(),
         description: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       await ctx.prisma.chapter.create({
         data: {
-          number: input.chapter,
+          number: (await ctx.prisma.chapter.count()) + 1,
           description: input.description,
         },
       });
@@ -120,5 +120,65 @@ export const chaptersRouter = router({
         },
       });
       return chapter;
+    }),
+
+  updateChapterPosition: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        position: z.number(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const currentChapter = await ctx.prisma.chapter.findFirst({
+        where: {
+          number: input.position,
+        },
+      });
+
+      if (!currentChapter) {
+        throw new Error("Chapter not found");
+      }
+
+      const newPosition = currentChapter.number;
+
+      await ctx.prisma.chapter.update({
+        where: {
+          id: currentChapter.id,
+        },
+        data: {
+          number: -100,
+        },
+      });
+
+      const chapter = await ctx.prisma.chapter.findFirst({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!chapter) {
+        throw new Error("Chapter not found");
+      }
+
+      const oldPosition = chapter.number;
+
+      await ctx.prisma.chapter.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          number: newPosition,
+        },
+      });
+
+      await ctx.prisma.chapter.update({
+        where: {
+          id: currentChapter.id,
+        },
+        data: {
+          number: oldPosition,
+        },
+      });
     }),
 });
