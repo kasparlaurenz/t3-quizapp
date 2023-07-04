@@ -259,7 +259,7 @@ const ManageChapters: NextPage = () => {
 
           {filteredChapters.length > 0 ? (
             <DragDropContext onDragEnd={dragEnd}>
-              <Droppable droppableId="chapters">
+              <Droppable droppableId="chapters" direction="vertical">
                 {(provided) => (
                   <div
                     {...provided.droppableProps}
