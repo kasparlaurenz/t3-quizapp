@@ -17,7 +17,7 @@ interface Props {
   index: number;
 }
 
-const Chapter: FC<Props> = ({
+const ChapterComponent: FC<Props> = ({
   chapter,
   handleVisibilityClick,
   handleDeleteClick,
@@ -69,4 +69,4 @@ const Chapter: FC<Props> = ({
   );
 };
 
-export default Chapter;
+export default ChapterComponent;

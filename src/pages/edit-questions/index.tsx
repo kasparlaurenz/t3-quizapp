@@ -1,4 +1,4 @@
-import type { Category } from "@prisma/client";
+import type { Category, Chapter } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import type { FC, SetStateAction } from "react";
@@ -10,8 +10,8 @@ import PlusIcon from "../../components/Icons/PlusIcon";
 import VisibleIcon from "../../components/Icons/VisibleIcon";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
-import Chapter from "../../components/Chapter";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import ChapterComponent from "../../components/Chapter";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
@@ -267,7 +267,7 @@ const ManageChapters: NextPage = () => {
                     className="flex w-full flex-col gap-2"
                   >
                     {filteredChapters.map((chapter, index) => (
-                      <Chapter
+                      <ChapterComponent
                         key={chapter.id}
                         chapter={chapter}
                         handleVisibilityClick={handleVisibilityClick}
