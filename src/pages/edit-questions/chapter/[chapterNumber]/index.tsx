@@ -2,26 +2,30 @@ import type { Question } from "@prisma/client";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import DeleteButton from "../../../../components/Buttons/DeleteButton";
 import Header from "../../../../components/Header";
 import HiddenIcon from "../../../../components/Icons/HiddenIcon";
 import VisibleIcon from "../../../../components/Icons/VisibleIcon";
 import TopSection from "../../../../components/TopSection";
+import { getStyle } from "../../../../utils/lockDragAxis";
 import { supabase } from "../../../../utils/supabase";
 import { trpc } from "../../../../utils/trpc";
+import { useState } from "react";
 
 const ManageQuestions: NextPage = () => {
   const { query, isReady } = useRouter();
   const chapterNumber = query.chapterNumber as string;
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   const {
-    data: questions,
+    data,
     isLoading,
     isError,
     refetch: refetchQuestions,
   } = trpc.question.getAllQuestionsByChapter.useQuery(
     { chapter: parseInt(chapterNumber) },
-    { enabled: isReady }
+    { enabled: isReady, onSuccess: (data) => setQuestions(data) }
   );
   const deleteQuestion = trpc.question.deleteQuestion.useMutation({
     onSuccess: () => {
@@ -58,13 +62,14 @@ const ManageQuestions: NextPage = () => {
       },
     });
 
-  console.log(categories);
-
   const hideQuestion = trpc.question.updateQuestionVisibility.useMutation({
     onSuccess: () => {
       refetchQuestions();
     },
   });
+
+  const updateQuestionPosition =
+    trpc.question.updateQuestionPosition.useMutation({});
 
   if (isLoading) {
     return (
@@ -126,6 +131,40 @@ const ManageQuestions: NextPage = () => {
     }
   };
 
+  const handleDragEnd = (result: any) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const draggedQuestionId = draggableId;
+
+    updateQuestionPosition.mutate({
+      id: draggedQuestionId,
+      chapter: parseInt(chapterNumber),
+      position: destination.index + 1,
+    });
+
+    const newQuestions = Array.from(questions);
+    const question = newQuestions.find(
+      (question) => question.id === draggableId
+    );
+    if (question) {
+      newQuestions.splice(source.index, 1);
+      newQuestions.splice(destination.index, 0, question);
+    }
+
+    setQuestions(newQuestions);
+  };
+
   return (
     <>
       <Header>Fragen</Header>
@@ -163,37 +202,70 @@ const ManageQuestions: NextPage = () => {
             Neue Frage
           </Link>
           {questions.length > 0 ? (
-            questions?.map((question) => (
-              <div key={question.id} className="flex w-full justify-center">
-                <button
-                  onClick={() => {
-                    handleVisibilityClick(question);
-                  }}
-                  className="p-4"
-                >
-                  {question.isHidden ? <HiddenIcon /> : <VisibleIcon />}
-                </button>
-                <Link
-                  href={`/edit-questions/chapter/${chapterNumber}/question/${question.id}`}
-                  key={question.id}
-                  className={`${
-                    question.isHidden
-                      ? "bg-zinc-700 text-zinc-500"
-                      : "bg-slate-500"
-                  } relative flex h-auto w-full items-center justify-start rounded-md p-4 transition hover:bg-slate-700 md:max-w-[400px]`}
-                >
-                  <h2>
-                    <span className="font-bold">{question.number}.</span>{" "}
-                    {question.question}
-                  </h2>
-                  <DeleteButton
-                    handleClick={handleClick}
-                    itemToDelete={question}
-                    deleteItem={deleteQuestion}
-                  />
-                </Link>
-              </div>
-            ))
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="questions">
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="flex w-1/2 flex-col items-center gap-5"
+                  >
+                    {questions?.map((question, index) => (
+                      <Draggable
+                        draggableId={question.id}
+                        index={index}
+                        key={question.id}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                            className="flex w-full justify-center"
+                            style={getStyle({
+                              ...provided.draggableProps.style,
+                            })}
+                          >
+                            <button
+                              onClick={() => {
+                                handleVisibilityClick(question);
+                              }}
+                              className="p-4"
+                            >
+                              {question.isHidden ? (
+                                <HiddenIcon />
+                              ) : (
+                                <VisibleIcon />
+                              )}
+                            </button>
+                            <Link
+                              href={`/edit-questions/chapter/${chapterNumber}/question/${question.id}`}
+                              key={question.id}
+                              className={`${
+                                question.isHidden
+                                  ? "bg-zinc-700 text-zinc-500"
+                                  : "bg-slate-500"
+                              } relative flex h-auto w-full items-center justify-start rounded-md p-4 transition hover:bg-slate-700 md:max-w-[400px]`}
+                            >
+                              <h2>
+                                <span className="font-bold">{index + 1}.</span>{" "}
+                                {question.question}
+                              </h2>
+                              <DeleteButton
+                                handleClick={handleClick}
+                                itemToDelete={question}
+                                deleteItem={deleteQuestion}
+                              />
+                            </Link>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           ) : (
             <div className="flex flex-col items-center">
               <p className="mt-5 text-3xl font-bold text-red-500">

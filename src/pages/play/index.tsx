@@ -70,8 +70,6 @@ const Play: NextPage = () => {
 
   const { data: categories } = trpc.category.getCategories.useQuery();
 
-  console.log("categories", categories);
-
   const updateUserAnswer = trpc.user.updateRecentAnswerToQuestion.useMutation();
 
   if (isLoading) {
@@ -139,11 +137,6 @@ const Play: NextPage = () => {
     setFilteredChapters(filteredChapters);
   };
 
-  console.log("filteredChapters", filteredChapters);
-  console.log("selectedChapters", selectedChapters);
-  console.log("selectedCategories", selectedCategories);
-  console.log("chapters", chapters);
-
   const handleAnswerClicked = (
     answer: AnswerObjectType,
     questionId: string
@@ -187,7 +180,6 @@ const Play: NextPage = () => {
       setQuestions(wrongAnsweredQuestions);
       setPlayOnlyWrongAnswered(false);
     } else {
-      console.log("2data", data);
       if (data) {
         setQuestions(data);
         setWrongAnsweredQuestions(data);

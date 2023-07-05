@@ -107,7 +107,7 @@ export const questionsRouter = router({
           },
         },
         orderBy: {
-          createdAt: "asc",
+          number: "asc",
         },
         include: {
           chapter: {
@@ -280,5 +280,77 @@ export const questionsRouter = router({
         },
       });
       return question;
+    }),
+
+  updateQuestionPosition: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        chapter: z.number(),
+        position: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      console.log("BACKEND", input);
+
+      const currentQuestion = await ctx.prisma.question.findFirst({
+        where: {
+          AND: [
+            {
+              chapter: {
+                number: input.chapter,
+              },
+            },
+            {
+              number: input.position,
+            },
+          ],
+        },
+      });
+
+      if (!currentQuestion) {
+        throw new Error("No question found");
+      }
+
+      const newPosition = currentQuestion.number;
+
+      await ctx.prisma.question.update({
+        where: {
+          id: currentQuestion.id,
+        },
+        data: {
+          number: -100,
+        },
+      });
+
+      const question = await ctx.prisma.question.findFirst({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!question) {
+        throw new Error("No question found");
+      }
+
+      const oldPosition = question.number;
+
+      await ctx.prisma.question.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          number: newPosition,
+        },
+      });
+
+      await ctx.prisma.question.update({
+        where: {
+          id: currentQuestion.id,
+        },
+        data: {
+          number: oldPosition,
+        },
+      });
     }),
 });

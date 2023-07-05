@@ -27,8 +27,6 @@ const Scores: NextPage = () => {
       </main>
     );
   }
-
-  console.log(scores);
   return (
     <>
       <Header />

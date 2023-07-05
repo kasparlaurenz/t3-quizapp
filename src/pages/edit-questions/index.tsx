@@ -10,6 +10,8 @@ import PlusIcon from "../../components/Icons/PlusIcon";
 import VisibleIcon from "../../components/Icons/VisibleIcon";
 import TopSection from "../../components/TopSection";
 import { trpc } from "../../utils/trpc";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import ChapterComponent from "../../components/Chapter";
 
 const ManageChapters: NextPage = () => {
   const [showChapterDetails, setShowChapterDetails] = useState<boolean>(false);
@@ -71,6 +73,9 @@ const ManageChapters: NextPage = () => {
     },
   });
 
+  const updateChapterPosition =
+    trpc.chapter.updateChapterPosition.useMutation();
+
   if (isLoading) {
     return (
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
@@ -86,7 +91,6 @@ const ManageChapters: NextPage = () => {
       </main>
     );
   }
-  const currentLastChapter = chapters.length + 1;
 
   const handleDeleteClick = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -110,7 +114,6 @@ const ManageChapters: NextPage = () => {
 
   const handleCreateChapterClick = (desc: string) => {
     createNewChapter.mutate({
-      chapter: currentLastChapter,
       description: desc,
     });
     setShowChapterDetails(false);
@@ -136,6 +139,32 @@ const ManageChapters: NextPage = () => {
     });
   };
 
+  const dragEnd = (result: any) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    const draggedChapterId = draggableId;
+
+    updateChapterPosition.mutate({
+      id: draggedChapterId,
+      position: destination.index + 1,
+    });
+
+    const newChapters = Array.from(filteredChapters);
+    const [removed] = newChapters.splice(source.index, 1);
+    if (!removed) return;
+    newChapters.splice(destination.index, 0, removed);
+    setFilteredChapters(newChapters);
+  };
+
   return (
     <>
       <Header>Kapitel</Header>
@@ -146,7 +175,6 @@ const ManageChapters: NextPage = () => {
             <ChapterModal
               setShowChapterDetails={setShowChapterDetails}
               handleClick={handleCreateChapterClick}
-              chapter={currentLastChapter}
             />
             <div className="absolute top-0 z-10 h-screen w-screen bg-slate-900 opacity-95"></div>
           </>
@@ -225,48 +253,33 @@ const ManageChapters: NextPage = () => {
             onClick={() => setShowChapterDetails(true)}
             className="menu-button mt-0"
           >
-            Neues Kapitel {currentLastChapter}
+            Neues Kapitel
           </button>
 
           {filteredChapters.length > 0 ? (
-            filteredChapters.map((chapter) => (
-              <div key={chapter.id} className="flex w-full justify-center">
-                <button
-                  onClick={() => {
-                    handleVisibilityClick(chapter);
-                  }}
-                  className="p-4"
-                  title={
-                    chapter.isHidden
-                      ? "Kapitel einblenden"
-                      : "Kapitel ausblenden"
-                  }
-                >
-                  {chapter.isHidden ? <HiddenIcon /> : <VisibleIcon />}
-                </button>
-
-                <Link
-                  href={`edit-questions/chapter/${chapter.number}`}
-                  key={chapter.id}
-                  className={`${
-                    chapter.isHidden
-                      ? "bg-zinc-700 text-zinc-500"
-                      : "bg-slate-500"
-                  } relative flex h-auto w-full items-center justify-start rounded-md p-4 transition hover:bg-slate-700 md:max-w-[400px]`}
-                >
-                  <h2>
-                    <span className="font-bold">{chapter.number}.</span>{" "}
-                    {chapter.description}
-                  </h2>
-
-                  <DeleteButton
-                    handleClick={handleDeleteClick}
-                    itemToDelete={chapter}
-                    deleteItem={deleteChapter}
-                  />
-                </Link>
-              </div>
-            ))
+            <DragDropContext onDragEnd={dragEnd}>
+              <Droppable droppableId="chapters">
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="flex w-full flex-col gap-2"
+                  >
+                    {filteredChapters.map((chapter, index) => (
+                      <ChapterComponent
+                        key={chapter.id}
+                        chapter={chapter}
+                        handleVisibilityClick={handleVisibilityClick}
+                        handleDeleteClick={handleDeleteClick}
+                        deleteChapter={deleteChapter}
+                        index={index}
+                      />
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           ) : (
             <div className="flex flex-col items-center">
               <p className="mt-2 text-lg font-bold text-red-500">
@@ -284,12 +297,10 @@ export default ManageChapters;
 
 interface ChapterModalProps {
   handleClick: (desc: string) => void;
-  chapter: number;
   setShowChapterDetails: React.Dispatch<SetStateAction<boolean>>;
 }
 const ChapterModal: FC<ChapterModalProps> = ({
   handleClick,
-  chapter,
   setShowChapterDetails,
 }) => {
   const [description, setDescription] = useState<string>("");
@@ -301,7 +312,7 @@ const ChapterModal: FC<ChapterModalProps> = ({
       >
         X
       </button>
-      <p className="text-2xl font-bold">Kapitel {chapter}</p>
+      <p className="text-2xl font-bold">Kapitel</p>
       <input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
