@@ -24,7 +24,7 @@ const ChapterComponent: FC<Props> = ({
   deleteChapter,
   index,
 }) => {
-  function getStyle(style: any) {
+  const getStyle = (style: any) => {
     if (style?.transform) {
       const axisLockY = `translate(0px, ${style.transform.split(",").pop()}`;
       return {
@@ -33,7 +33,7 @@ const ChapterComponent: FC<Props> = ({
       };
     }
     return style;
-  }
+  };
 
   return (
     <Draggable draggableId={chapter.id} index={index}>

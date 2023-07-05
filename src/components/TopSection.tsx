@@ -9,8 +9,6 @@ interface TopSectionProps {
 
 const TopSection: FC<TopSectionProps> = ({ title, isPlay }) => {
   const router = useRouter();
-
-  console.log(router.pathname);
   return (
     <div className="fixed z-10 flex w-full items-center justify-center gap-8 bg-neutral-900 p-6">
       <button

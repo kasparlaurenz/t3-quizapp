@@ -140,7 +140,6 @@ const ManageChapters: NextPage = () => {
   };
 
   const dragEnd = (result: any) => {
-    console.log("RESULT", result);
     const { destination, source, draggableId } = result;
 
     if (!destination) {
@@ -259,7 +258,7 @@ const ManageChapters: NextPage = () => {
 
           {filteredChapters.length > 0 ? (
             <DragDropContext onDragEnd={dragEnd}>
-              <Droppable droppableId="chapters" direction="vertical">
+              <Droppable droppableId="chapters">
                 {(provided) => (
                   <div
                     {...provided.droppableProps}
