@@ -58,8 +58,6 @@ const ManageQuestions: NextPage = () => {
       },
     });
 
-  console.log(categories);
-
   const hideQuestion = trpc.question.updateQuestionVisibility.useMutation({
     onSuccess: () => {
       refetchQuestions();
