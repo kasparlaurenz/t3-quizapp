@@ -24,6 +24,17 @@ const ChapterComponent: FC<Props> = ({
   deleteChapter,
   index,
 }) => {
+  function getStyle(style: any) {
+    if (style?.transform) {
+      const axisLockY = `translate(0px, ${style.transform.split(",").pop()}`;
+      return {
+        ...style,
+        transform: axisLockY,
+      };
+    }
+    return style;
+  }
+
   return (
     <Draggable draggableId={chapter.id} index={index}>
       {(provided) => (
@@ -32,6 +43,9 @@ const ChapterComponent: FC<Props> = ({
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           className="flex w-full justify-center"
+          style={getStyle({
+            ...provided.draggableProps.style,
+          })}
         >
           <button
             onClick={() => {
