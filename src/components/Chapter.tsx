@@ -5,6 +5,7 @@ import Link from "next/link";
 import HiddenIcon from "./Icons/HiddenIcon";
 import VisibleIcon from "./Icons/VisibleIcon";
 import { Draggable } from "react-beautiful-dnd";
+import { getStyle } from "../utils/lockDragAxis";
 
 interface Props {
   chapter: Chapter;
@@ -24,20 +25,9 @@ const ChapterComponent: FC<Props> = ({
   deleteChapter,
   index,
 }) => {
-  const getStyle = (style: any) => {
-    if (style?.transform) {
-      const axisLockY = `translate(0px, ${style.transform.split(",").pop()}`;
-      return {
-        ...style,
-        transform: axisLockY,
-      };
-    }
-    return style;
-  };
-
   return (
     <Draggable draggableId={chapter.id} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
           {...provided.draggableProps}
           {...provided.dragHandleProps}
